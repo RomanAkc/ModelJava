@@ -3,45 +3,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class RoundSystem {
-    public static class Meet {
-        private boolean alreadyCalculated = false;
-        private SimpleTeam teamHome;
-        private SimpleTeam teamAway;
-        private Result result;
-
-        public Meet(SimpleTeam teamHome, SimpleTeam teamAway) {
-            this.teamHome = teamHome;
-            this.teamAway = teamAway;
-        }
-
-        public void calc() {
-            if(alreadyCalculated) {
-                return;
-            }
-
-            result = ResultCalculator.calc(teamHome.getPower(), teamAway.getPower());
-            alreadyCalculated = true;
-        }
-
-        public String getString() {
-            return teamHome.getName() + " - " + teamAway.getName() + " " + result.getString();
-        }
-    }
-
-    public static class WinMeet extends Meet {
-        private Result resultAdd;
-        private Result resultPen;
-
-        public WinMeet(SimpleTeam teamHome, SimpleTeam teamAway) {
-            super(teamHome, teamAway);
-        }
-    }
-
-    public static class WinTwoMeet {
-        private Meet firstMeet;
-        private WinMeet secondMeet;
-    }
-
     public static class Day {
         private boolean alreadyCalculated = false;
         private ArrayList<Meet> meetings = new ArrayList<Meet>();
@@ -49,14 +10,25 @@ public class RoundSystem {
             meetings.add(meet);
         }
         public void calc() {
+            calculate(false);
+        }
+
+        public void calcUseOwner() {
+            calculate(true);
+        }
+
+        private void calculate(boolean useOwner) {
             if(alreadyCalculated) {
                 return;
             }
 
             for(var meet : meetings) {
-                meet.calc();
+                if(useOwner) {
+                    meet.calcUseOwner();
+                } else {
+                    meet.calc();
+                }
             }
-
             alreadyCalculated = true;
         }
 
@@ -80,44 +52,64 @@ public class RoundSystem {
     }
 
     private static class TeamPair {
-        public SimpleTeam home;
-        public SimpleTeam away;
+        public SimpleTeam home = null;
+        public SimpleTeam away = null;
         public TeamPair(SimpleTeam home, SimpleTeam away) {
             this.home = home;
             this.away = away;
         }
     }
 
+    public static ArrayList<Day> fillDays2Round(ArrayList<SimpleTeam> teams) {
+        var days = fillDays(teams);
+        int size = days.size();
+
+        for(int i = 0; i < size; ++i) {
+            var day = new Day();
+            for(var m : days.get(i).meetings) {
+                day.addMeet(new Meet(m.getTeamAway(), m.getTeamHome()));
+            }
+            days.add(day);
+        }
+
+        return days;
+    }
+
     public static ArrayList<Day> fillDays(ArrayList<SimpleTeam> teams) {
         var days = new ArrayList<Day>();
+
         if(teams.size() < 2) {
             return days;
         }
 
-        var index0 = new TeamWithHome(teams.get(0), true);
-        var prevDayOrder = new ArrayList<TeamWithHome>();
-        int size = teams.size();
-        
-        for(int i = 0; i < size - 1; ++i) {
-            var day = new Day();
+        var teamFirst = new TeamWithHome(teams.get(0), true);
+        var dayOrder = getInitialTeamWithHome(teams);
 
-            if(i == 0) {
-                for(int j = 1; j < size; ++j)
-                prevDayOrder.add(new TeamWithHome(teams.get(j), true));
-            } else {
-                Collections.rotate(prevDayOrder, 1);
+        for(int i = 0; i < teams.size() - 1; ++i) {
+            var day = new Day();
+            //Круговая система, вращаем все команды кроме первой, чтобы обеспечить встречу каждой с каждой
+            if(i != 0) {
+                Collections.rotate(dayOrder, 1);
             }
 
-            addMeetToDay(index0, prevDayOrder.get(0), day);
-            for(int j = 0; j < (size / 2) - 1; ++j) {
+            addMeetToDay(teamFirst, dayOrder.get(0), day);
+            for(int j = 0; j < (teams.size() / 2) - 1; ++j) {
                 var index = (2 * j) + 1;
-                addMeetToDay(prevDayOrder.get(index), prevDayOrder.get(index + 1), day);
+                addMeetToDay(dayOrder.get(index), dayOrder.get(index + 1), day);
             }
 
             days.add(day);
         }
 
         return  days;
+    }
+
+    private static ArrayList<TeamWithHome> getInitialTeamWithHome(ArrayList<SimpleTeam> teams) {
+        var prevDayOrder = new ArrayList<TeamWithHome>();
+        for(int i = 1; i < teams.size(); ++i) {
+            prevDayOrder.add(new TeamWithHome(teams.get(i), true));
+        }
+        return prevDayOrder;
     }
 
     private static void addMeetToDay(TeamWithHome first, TeamWithHome second, Day day) {

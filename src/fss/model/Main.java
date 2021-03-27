@@ -7,16 +7,27 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        var teams = new ArrayList<SimpleTeam>();
+        /*var teams = new ArrayList<SimpleTeam>();
         teams.add(new NationalTeam(1, "Italy", SimpleTeam.WorldPart.EUROPE, 30, 0, 0));
         teams.add(new NationalTeam(2, "USA", SimpleTeam.WorldPart.NORD_AMERICA, 27, 0, 0));
         teams.add(new NationalTeam(3, "Russia", SimpleTeam.WorldPart.EUROPE, 26, 0, 0));
         teams.add(new NationalTeam(4, "South Korea", SimpleTeam.WorldPart.ASIA, 24, 0, 0));
-
         var days = RoundSystem.fillDays(teams);
-
         for(var day : days) {
             day.calc();
+            System.out.println(day.getString());
+        }
+        */
+
+        var teams = new ArrayList<SimpleTeam>();
+        teams.add(new ClubTeam(1, "Real Madrid", "Spain", SimpleTeam.WorldPart.EUROPE, 30, 0, 0));
+        teams.add(new ClubTeam(2, "Borussia M", "Germany", SimpleTeam.WorldPart.EUROPE, 27, 0, 0));
+        teams.add(new ClubTeam(3, "Shakhtar D", "Ukraine", SimpleTeam.WorldPart.EUROPE, 25, 0, 0));
+        teams.add(new ClubTeam(4, "Internazionale", "Italy", SimpleTeam.WorldPart.EUROPE, 28, 0, 0));
+
+        var days = RoundSystem.fillDays2Round(teams);
+        for(var day : days) {
+            day.calcUseOwner();
             System.out.println(day.getString());
         }
 
