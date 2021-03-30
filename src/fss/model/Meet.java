@@ -40,6 +40,10 @@ public class Meet {
     public SimpleTeam getTeamAway() {
         return teamAway;
     }
+
+    public Result getResult() {
+        return result;
+    }
 }
 
 class WinMeet extends Meet {

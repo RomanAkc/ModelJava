@@ -6,13 +6,16 @@ public class RoundSystem {
     public static class Day {
         private boolean alreadyCalculated = false;
         private ArrayList<Meet> meetings = new ArrayList<Meet>();
+        private int numDay = 0;
+        public Day(int numDay) {
+            this.numDay = numDay;
+        }
         public void addMeet(Meet meet) {
             meetings.add(meet);
         }
         public void calc() {
             calculate(false);
         }
-
         public void calcUseOwner() {
             calculate(true);
         }
@@ -34,11 +37,17 @@ public class RoundSystem {
 
         public String getString() {
             var result = new StringBuffer();
+            result.append(Integer.toString(numDay) + " day");
+            result.append(System.lineSeparator());
             for(var meet : meetings) {
                 result.append(meet.getString());
                 result.append(System.lineSeparator());
             }
             return result.toString();
+        }
+
+        public ArrayList<Meet> getMeetings() {
+            return meetings;
         }
     }
 
@@ -65,7 +74,7 @@ public class RoundSystem {
         int size = days.size();
 
         for(int i = 0; i < size; ++i) {
-            var day = new Day();
+            var day = new Day(size + 1 + i);
             for(var m : days.get(i).meetings) {
                 day.addMeet(new Meet(m.getTeamAway(), m.getTeamHome()));
             }
@@ -86,7 +95,7 @@ public class RoundSystem {
         var dayOrder = getInitialTeamWithHome(teams);
 
         for(int i = 0; i < teams.size() - 1; ++i) {
-            var day = new Day();
+            var day = new Day(i + 1);
             //Круговая система, вращаем все команды кроме первой, чтобы обеспечить встречу каждой с каждой
             if(i != 0) {
                 Collections.rotate(dayOrder, 1);

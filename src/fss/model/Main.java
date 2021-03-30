@@ -7,7 +7,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        /*var teams = new ArrayList<SimpleTeam>();
+        var teams = new ArrayList<SimpleTeam>();
         teams.add(new NationalTeam(1, "Italy", SimpleTeam.WorldPart.EUROPE, 30, 0, 0));
         teams.add(new NationalTeam(2, "USA", SimpleTeam.WorldPart.NORD_AMERICA, 27, 0, 0));
         teams.add(new NationalTeam(3, "Russia", SimpleTeam.WorldPart.EUROPE, 26, 0, 0));
@@ -17,9 +17,15 @@ public class Main {
             day.calc();
             System.out.println(day.getString());
         }
-        */
 
-        var teams = new ArrayList<SimpleTeam>();
+        var table = new Table(days);
+        table.calc();
+
+
+
+
+
+        /*var teams = new ArrayList<SimpleTeam>();
         teams.add(new ClubTeam(1, "Real Madrid", "Spain", SimpleTeam.WorldPart.EUROPE, 30, 0, 0));
         teams.add(new ClubTeam(2, "Borussia M", "Germany", SimpleTeam.WorldPart.EUROPE, 27, 0, 0));
         teams.add(new ClubTeam(3, "Shakhtar D", "Ukraine", SimpleTeam.WorldPart.EUROPE, 25, 0, 0));
@@ -29,7 +35,7 @@ public class Main {
         for(var day : days) {
             day.calcUseOwner();
             System.out.println(day.getString());
-        }
+        }*/
 
         /*for(int i = 0; i < 100; ++i) {
             int powerHome = 30;
