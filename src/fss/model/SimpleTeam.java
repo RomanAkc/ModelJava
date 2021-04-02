@@ -40,11 +40,21 @@ public abstract class SimpleTeam implements Serializable {
         if(power < minPower)
             power = minPower;
     }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }
 
 class NationalTeam extends SimpleTeam {
     public NationalTeam(int id, String name, WorldPart worldPart, int power, int minPower, int maxPower) {
         super(id, name, worldPart, power, minPower, maxPower);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
     }
 }
 
@@ -54,6 +64,11 @@ class ClubTeam extends SimpleTeam {
     public ClubTeam(int id, String name, String country, WorldPart worldPart, int power, int minPower, int maxPower) {
         super(id, name, worldPart, power, minPower, maxPower);
         this.country = country;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
     }
 }
 

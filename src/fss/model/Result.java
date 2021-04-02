@@ -14,7 +14,8 @@ public class Result {
     public boolean isDraw() { return goalHome == goalAway; }
     public boolean isWin() { return  goalHome > goalAway; }
     public boolean isLose() { return goalHome < goalAway; }
-    public String getString() {
+    @Override
+    public String toString() {
         return Integer.toString(goalHome) + " - " + Integer.toString(goalAway);
     }
 }

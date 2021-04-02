@@ -1,13 +1,11 @@
 package fss.model;
-import java.awt.desktop.SystemEventListener;
-import java.io.*;
 import java.util.ArrayList;
 
 public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        var teams = new ArrayList<SimpleTeam>();
+       /* var teams = new ArrayList<SimpleTeam>();
         teams.add(new NationalTeam(1, "Italy", SimpleTeam.WorldPart.EUROPE, 30, 0, 0));
         teams.add(new NationalTeam(2, "USA", SimpleTeam.WorldPart.NORD_AMERICA, 27, 0, 0));
         teams.add(new NationalTeam(3, "Russia", SimpleTeam.WorldPart.EUROPE, 26, 0, 0));
@@ -15,14 +13,11 @@ public class Main {
         var days = RoundSystem.fillDays(teams);
         for(var day : days) {
             day.calc();
-            System.out.println(day.getString());
         }
 
         var table = new Table(days);
         table.calc();
-
-
-
+        System.out.println(table.toString());*/
 
 
         /*var teams = new ArrayList<SimpleTeam>();
@@ -34,29 +29,43 @@ public class Main {
         var days = RoundSystem.fillDays2Round(teams);
         for(var day : days) {
             day.calcUseOwner();
-            System.out.println(day.getString());
-        }*/
+        }
 
-        /*for(int i = 0; i < 100; ++i) {
-            int powerHome = 30;
-            int powerAway = 30;
+        var table = new Table(days);
+        table.calc();
+        System.out.println(table.toString());*/
 
-            var res = ResultCalculator.calc(powerHome,powerAway);
-            if(res.isDraw()) {
-                var resAdd = ResultCalculator.calcAddTime(powerHome, powerAway);
+        var teams = new ArrayList<SimpleTeam>();
+        teams.add(new ClubTeam(1, "Atalanta", "Italy", SimpleTeam.WorldPart.EUROPE, 25, 0, 0));
+        teams.add(new ClubTeam(2, "Juventus", "Italy", SimpleTeam.WorldPart.EUROPE, 29, 0, 0));
+        teams.add(new ClubTeam(3, "Milan", "Italy", SimpleTeam.WorldPart.EUROPE, 26, 0, 0));
+        teams.add(new ClubTeam(4, "Internazionale", "Italy", SimpleTeam.WorldPart.EUROPE, 28, 0, 0));
+        teams.add(new ClubTeam(3, "Napoli", "Italy", SimpleTeam.WorldPart.EUROPE, 25, 0, 0));
+        teams.add(new ClubTeam(3, "Roma", "Italy", SimpleTeam.WorldPart.EUROPE, 26, 0, 0));
+        teams.add(new ClubTeam(3, "Lazio", "Italy", SimpleTeam.WorldPart.EUROPE, 25, 0, 0));
+        teams.add(new ClubTeam(3, "Sassuolo", "Italy", SimpleTeam.WorldPart.EUROPE, 22, 0, 0));
+        teams.add(new ClubTeam(3, "Hellas Verona", "Italy", SimpleTeam.WorldPart.EUROPE, 21, 0, 0));
+        teams.add(new ClubTeam(3, "Sampdoria", "Italy", SimpleTeam.WorldPart.EUROPE, 24, 0, 0));
+        teams.add(new ClubTeam(3, "Bologna", "Italy", SimpleTeam.WorldPart.EUROPE, 21, 0, 0));
+        teams.add(new ClubTeam(3, "Udinese", "Italy", SimpleTeam.WorldPart.EUROPE, 22, 0, 0));
+        teams.add(new ClubTeam(3, "Genoa", "Italy", SimpleTeam.WorldPart.EUROPE, 20, 0, 0));
+        teams.add(new ClubTeam(3, "Fiorentina", "Italy", SimpleTeam.WorldPart.EUROPE, 25, 0, 0));
+        teams.add(new ClubTeam(3, "Spezia", "Italy", SimpleTeam.WorldPart.EUROPE, 19, 0, 0));
+        teams.add(new ClubTeam(3, "Benevento", "Italy", SimpleTeam.WorldPart.EUROPE, 19, 0, 0));
+        teams.add(new ClubTeam(3, "Torino", "Italy", SimpleTeam.WorldPart.EUROPE, 20, 0, 0));
+        teams.add(new ClubTeam(3, "Cagliari", "Italy", SimpleTeam.WorldPart.EUROPE, 20, 0, 0));
+        teams.add(new ClubTeam(3, "Parma", "Italy", SimpleTeam.WorldPart.EUROPE, 22, 0, 0));
+        teams.add(new ClubTeam(3, "Crotone", "Italy", SimpleTeam.WorldPart.EUROPE, 18, 0, 0));
 
-                if(resAdd.isDraw()) {
-                    var resPen = ResultCalculator.calcPen();
-                    System.out.println(res.getGoalHome() + " " + res.getGoalAway()
-                            + " Add: " + resAdd.getGoalHome() + " " + resAdd.getGoalAway()
-                            + " Pen: " + resPen.getGoalHome() + " " + resPen.getGoalAway());
-                }
-                else {
-                    System.out.println(res.getGoalHome() + " " + res.getGoalAway() + " Add: " + resAdd.getGoalHome() + " " + resAdd.getGoalAway());
-                }
-            } else {
-                System.out.println(res.getGoalHome() + " " + res.getGoalAway());
-            }
-        }*/
+        var days = RoundSystem.fillDays2Round(teams);
+        for(var day : days) {
+            day.calcUseOwner();
+        }
+
+        var table = new Table(days);
+        table.calc();
+        System.out.println(table.toString());
+
+
     }
 }

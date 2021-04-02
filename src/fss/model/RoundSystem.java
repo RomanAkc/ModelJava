@@ -35,14 +35,17 @@ public class RoundSystem {
             alreadyCalculated = true;
         }
 
-        public String getString() {
+        @Override
+        public String toString() {
             var result = new StringBuffer();
             result.append(Integer.toString(numDay) + " day");
             result.append(System.lineSeparator());
+
             for(var meet : meetings) {
-                result.append(meet.getString());
+                result.append(meet.toString());
                 result.append(System.lineSeparator());
-            }
+             }
+
             return result.toString();
         }
 
@@ -57,6 +60,11 @@ public class RoundSystem {
         public TeamWithHome(SimpleTeam team, boolean isHome) {
             this.team = team;
             this.isHome = isHome;
+        }
+
+        @Override
+        public String toString() {
+            return team.toString();
         }
     }
 
@@ -103,8 +111,9 @@ public class RoundSystem {
 
             addMeetToDay(teamFirst, dayOrder.get(0), day);
             for(int j = 0; j < (teams.size() / 2) - 1; ++j) {
-                var index = (2 * j) + 1;
-                addMeetToDay(dayOrder.get(index), dayOrder.get(index + 1), day);
+                var idx1 = j + 1;
+                var idx2 = dayOrder.size() - 1 - j;
+                addMeetToDay(dayOrder.get(idx1), dayOrder.get(idx2), day);
             }
 
             days.add(day);

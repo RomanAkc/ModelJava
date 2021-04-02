@@ -134,8 +134,8 @@ public class Table {
                     rowHome = new Row(meet.getTeamHome());
                     rowAway = new Row(meet.getTeamAway());
                 } else {
-                    rowHome = new Row(td.rowsByTeam.get(meet.getTeamHome()));
-                    rowAway = new Row(td.rowsByTeam.get(meet.getTeamAway()));
+                    rowHome = new Row(tables.get(tables.size() - 1).rowsByTeam.get(meet.getTeamHome()));
+                    rowAway = new Row(tables.get(tables.size() - 1).rowsByTeam.get(meet.getTeamAway()));
                 }
 
                 addMeetToRows(meet, rowHome, rowAway);
@@ -148,7 +148,7 @@ public class Table {
 
             Collections.sort(td.rows, new Comparator<Row>() {
                 public int compare(Row r1, Row r2) {
-                    return r1.point - r2.point;
+                    return r2.point - r1.point;
                 }});
 
 
@@ -158,12 +158,25 @@ public class Table {
         alreadyCalculated = true;
     }
 
-    public String getString() {
+    @Override
+    public String toString() {
         var result = new StringBuffer();
 
         for(var t : tables) {
-            result.append(t.day.getString());
-            //to do: печать строки
+            result.append(t.day.toString());
+            result.append(System.lineSeparator());
+            result.append(String.format("%10$-4s%1$-20s%2$3s%3$3s%4$3s%5$3s%6$4s%7$4s-%8$-4s%9$4s",
+                    "Team", "G", "W", "D", "L", "P", "GF", "GA", "GD", "P."));
+            result.append(System.lineSeparator());
+
+            for(int i = 0; i < t.rows.size(); ++i) {
+                var row = t.rows.get(i);
+                result.append(String.format("%10$-4d%1$-20s%2$3d%3$3d%4$3d%5$3d%6$4d%7$4d-%8$-4d%9$4d"
+                        , row.team.getName(), row.meet, row.win, row.draw, row.lose
+                        , row.point, row.goalFor, row.goalAgainst, row.goalDif, i + 1));
+                result.append(System.lineSeparator());
+            }
+
             result.append(System.lineSeparator());
         }
 

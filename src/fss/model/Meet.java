@@ -29,8 +29,19 @@ public class Meet {
         alreadyCalculated = true;
     }
 
-    public String getString() {
-        return teamHome.getName() + " - " + teamAway.getName() + " " + result.getString();
+    @Override
+    public String toString() {
+        var res = new StringBuffer();
+        res.append(teamHome.getName());
+        res.append(" - ");
+        res.append(teamAway.getName());
+
+        if (alreadyCalculated) {
+            res.append(" ");
+            res.append(result.toString());
+        }
+
+        return  res.toString();
     }
 
     public SimpleTeam getTeamHome() {
