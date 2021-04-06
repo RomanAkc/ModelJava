@@ -16,6 +16,10 @@ public class Result {
     public boolean isLose() { return goalHome < goalAway; }
     @Override
     public String toString() {
-        return Integer.toString(goalHome) + " - " + Integer.toString(goalAway);
+        var res = new StringBuffer();
+        res.append(Integer.toString(goalHome));
+        res.append(" - ");
+        res.append(Integer.toString(goalAway));
+        return  res.toString();
     }
 }

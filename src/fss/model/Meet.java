@@ -3,8 +3,8 @@ package fss.model;
 public class Meet {
     private boolean alreadyCalculated = false;
     private SimpleTeam teamHome = null;
-    private SimpleTeam teamAway= null;
-    private Result result= null;
+    private SimpleTeam teamAway = null;
+    private Result result = null;
 
     public Meet(SimpleTeam teamHome, SimpleTeam teamAway) {
         this.teamHome = teamHome;
@@ -27,6 +27,10 @@ public class Meet {
         result = useOwner ? ResultCalculator.calcUseOwner(teamHome.getPower(), teamAway.getPower())
                 : ResultCalculator.calc(teamHome.getPower(), teamAway.getPower());
         alreadyCalculated = true;
+    }
+
+    boolean isAlreadyCalculated() {
+        return alreadyCalculated;
     }
 
     @Override
@@ -64,9 +68,33 @@ class WinMeet extends Meet {
     public WinMeet(SimpleTeam teamHome, SimpleTeam teamAway) {
         super(teamHome, teamAway);
     }
+
+    @Override
+    public String toString() {
+        var res = new StringBuffer();
+        res.append(super.toString());
+        res.append(", add ");
+        res.append(resultAdd.toString());
+
+        if(resultAdd.isDraw()) {
+            res.append(", pen ");
+            res.append(resultAdd.toString());
+        }
+
+        return res.toString();
+    }
 }
 
 class WinTwoMeet {
-    private Meet firstMeet;
-    private WinMeet secondMeet;
+    private Meet firstMeet = null;
+    private WinMeet secondMeet = null;
+
+    @Override
+    public String toString() {
+        var res = new StringBuffer();
+        res.append(firstMeet.toString());
+        res.append(System.lineSeparator());
+        res.append(secondMeet.toString());
+        return res.toString();
+    }
 }

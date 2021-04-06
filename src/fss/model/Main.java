@@ -20,7 +20,7 @@ public class Main {
         System.out.println(table.toString());*/
 
 
-        /*var teams = new ArrayList<SimpleTeam>();
+       /* var teams = new ArrayList<SimpleTeam>();
         teams.add(new ClubTeam(1, "Real Madrid", "Spain", SimpleTeam.WorldPart.EUROPE, 30, 0, 0));
         teams.add(new ClubTeam(2, "Borussia M", "Germany", SimpleTeam.WorldPart.EUROPE, 27, 0, 0));
         teams.add(new ClubTeam(3, "Shakhtar D", "Ukraine", SimpleTeam.WorldPart.EUROPE, 25, 0, 0));
@@ -32,6 +32,11 @@ public class Main {
         }
 
         var table = new Table(days);
+        table.clearRules();
+        table.addWinRule(Table.WinRules.BY_MEET);
+        table.addWinRule(Table.WinRules.BY_COUNT_WIN);
+        table.addWinRule(Table.WinRules.BY_DIFFERENCE_GOAL);
+        table.addWinRule(Table.WinRules.BY_GOAL_FOR);
         table.calc();
         System.out.println(table.toString());*/
 
@@ -63,6 +68,11 @@ public class Main {
         }
 
         var table = new Table(days);
+        table.clearRules();
+        table.addWinRule(Table.WinRules.BY_MEET);
+        table.addWinRule(Table.WinRules.BY_COUNT_WIN);
+        table.addWinRule(Table.WinRules.BY_DIFFERENCE_GOAL);
+        table.addWinRule(Table.WinRules.BY_GOAL_FOR);
         table.calc();
         System.out.println(table.toString());
 

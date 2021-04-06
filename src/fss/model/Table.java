@@ -2,7 +2,6 @@ package fss.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 
 public class Table {
@@ -10,7 +9,7 @@ public class Table {
         BY_DIFFERENCE_GOAL,
         BY_MEET,
         BY_GOAL_FOR,
-        BY_RATING
+        BY_COUNT_WIN,
     }
 
     private class MeetData {
@@ -26,6 +25,29 @@ public class Table {
         public PairTeam(SimpleTeam teamHome, SimpleTeam teamAway) {
             this.teamHome = teamHome;
             this.teamAway = teamAway;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) {
+                return false;
+            }
+
+            if (obj.getClass() != this.getClass()) {
+                return false;
+            }
+
+            final PairTeam other = (PairTeam) obj;
+
+            return other.teamHome == teamHome && other.teamAway == teamAway;
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 3;
+            hash = 53 * hash + (this.teamHome != null ? this.teamHome.hashCode() : 0);
+            hash = 53 * hash + (this.teamAway != null ? this.teamAway.hashCode() : 0);
+            return hash;
         }
     }
 
@@ -69,8 +91,11 @@ public class Table {
     private ArrayList<TableDay> tables = null;
 
     public Table() {
+        days = new ArrayList<>();
         rules = new ArrayList<>();
-        rules.add(WinRules.BY_MEET);
+        rules.add(WinRules.BY_COUNT_WIN);
+        rules.add(WinRules.BY_DIFFERENCE_GOAL);
+        rules.add(WinRules.BY_GOAL_FOR);
     }
 
     public Table(ArrayList<RoundSystem.Day> days) {
@@ -105,6 +130,118 @@ public class Table {
         rowAway.goalDif = rowAway.goalFor - rowAway.goalAgainst;
     }
 
+    private void addMeetToPair(Meet meet, HashMap<PairTeam, ArrayList<Meet>> meetByPairTeam) {
+        var key = new PairTeam(meet.getTeamHome(), meet.getTeamAway());
+        var val = meetByPairTeam.get(key);
+        if(val == null) {
+            val = new ArrayList<>();
+            meetByPairTeam.put(key, val);
+        }
+        val.add(meet);
+    }
+
+    private Row getRowByTeam(SimpleTeam team) {
+        if(tables.isEmpty()) {
+            return new Row(team);
+        }
+        return new Row(tables.get(tables.size() - 1).rowsByTeam.get(team));
+    }
+
+    private void addRowToTableDay(Row row, TableDay td) {
+        td.rowsByTeam.put(row.team, row);
+        td.rows.add(row);
+    }
+
+    private int addMeetAsDayToTempTable(ArrayList<Meet> meets, Table tempTable, int dayFrom) {
+        if(meets != null) {
+            for(var m : meets) {
+                tempTable.days.add(new RoundSystem.Day(dayFrom + 1));
+                tempTable.days.get(dayFrom).addMeet(m);
+                tempTable.days.get(dayFrom).updateAlreadyCalculated();
+                dayFrom++;
+            }
+        }
+        return dayFrom;
+    }
+
+    private int getWinnerByMeets(ArrayList<Meet> meets12, ArrayList<Meet> meets21, SimpleTeam team) {
+        if(meets12 != null || meets21 != null) {
+            var tempTable = new Table();
+            int dayFrom = addMeetAsDayToTempTable(meets12, tempTable, 0);
+            addMeetAsDayToTempTable(meets21, tempTable, dayFrom);
+
+            tempTable.calc();
+            return tempTable.tables.get(tempTable.tables.size() - 1).rows.get(0).team == team ? 1 : -1;
+        }
+
+        return 0;
+    }
+
+    private void sortTableDay(TableDay td, HashMap<PairTeam, ArrayList<Meet>> meetByPairTeam) {
+        Collections.sort(td.rows, (r1, r2) -> {
+            if(r1.point != r2.point) {
+                return r2.point - r1.point;
+            } else {
+                for(var r : rules) {
+                    switch (r) {
+                        case BY_COUNT_WIN: {
+                            if(r2.win != r1.win) {
+                                return  r2.win - r1.win;
+                            }
+                            break;
+                        }
+                        case BY_DIFFERENCE_GOAL: {
+                            if(r2.goalDif != r1.goalDif){
+                                return r2.goalDif - r1.goalDif;
+                            }
+                            break;
+                        }
+                        case BY_GOAL_FOR: {
+                            if(r2.goalFor != r1.goalFor){
+                                return r2.goalFor - r1.goalFor;
+                            }
+                            break;
+                        }
+                        case BY_MEET: {
+                            var meets1 = meetByPairTeam.get(new PairTeam(r1.team, r2.team));
+                            var meets2 = meetByPairTeam.get(new PairTeam(r2.team, r1.team));
+
+                            return getWinnerByMeets(meets1, meets2, r2.team);
+
+                            /*if(meets1 != null || meets2 != null) {
+                                var tempTable = new Table();
+                                int cnt = 0;
+                                if(meets1 != null) {
+                                    for(var m : meets1) {
+                                        tempTable.days.add(new RoundSystem.Day(cnt + 1));
+                                        tempTable.days.get(cnt).addMeet(m);
+                                        tempTable.days.get(cnt).updateAlreadyCalculated();
+                                        cnt++;
+                                    }
+                                }
+
+                                if(meets2 != null) {
+                                    for(var m : meets2) {
+                                        tempTable.days.add(new RoundSystem.Day(cnt + 1));
+                                        tempTable.days.get(cnt).addMeet(m);
+                                        tempTable.days.get(cnt).updateAlreadyCalculated();
+                                        cnt++;
+                                    }
+                                }
+
+                                tempTable.calc();
+                                return tempTable.tables.get(tempTable.tables.size() - 1).rows.get(0).team == r2.team ? 1 : -1;
+
+                            }*/
+                        }
+                    }
+                }
+
+                return 0;
+            }
+        });
+    }
+
     public void calc() {
         if(alreadyCalculated) {
             return;
@@ -113,45 +250,23 @@ public class Table {
         tables = new ArrayList<>();
         var meetByPairTeam = new HashMap<PairTeam, ArrayList<Meet>>();
 
-
         for(var day : days) {
             var td = new TableDay();
             td.day = day;
 
             for(var meet : day.getMeetings()) {
-                var key = new PairTeam(meet.getTeamHome(), meet.getTeamAway());
-                var val = meetByPairTeam.get(key);
-                if(val == null) {
-                    val = new ArrayList<>();
-                    meetByPairTeam.put(key, val);
-                }
-                val.add(meet);
+                addMeetToPair(meet, meetByPairTeam);
 
-                Row rowHome = null;
-                Row rowAway = null;
-
-                if(tables.isEmpty()) {
-                    rowHome = new Row(meet.getTeamHome());
-                    rowAway = new Row(meet.getTeamAway());
-                } else {
-                    rowHome = new Row(tables.get(tables.size() - 1).rowsByTeam.get(meet.getTeamHome()));
-                    rowAway = new Row(tables.get(tables.size() - 1).rowsByTeam.get(meet.getTeamAway()));
-                }
+                var rowHome = getRowByTeam(meet.getTeamHome());
+                var rowAway = getRowByTeam(meet.getTeamAway());;
 
                 addMeetToRows(meet, rowHome, rowAway);
 
-                td.rowsByTeam.put(meet.getTeamHome(), rowHome);
-                td.rowsByTeam.put(meet.getTeamAway(), rowAway);
-                td.rows.add(rowHome);
-                td.rows.add(rowAway);
+                addRowToTableDay(rowHome, td);
+                addRowToTableDay(rowAway, td);
             }
 
-            Collections.sort(td.rows, new Comparator<Row>() {
-                public int compare(Row r1, Row r2) {
-                    return r2.point - r1.point;
-                }});
-
-
+            sortTableDay(td, meetByPairTeam);
             tables.add(td);
         }
 

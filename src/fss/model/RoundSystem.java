@@ -13,11 +13,23 @@ public class RoundSystem {
         public void addMeet(Meet meet) {
             meetings.add(meet);
         }
+
         public void calc() {
             calculate(false);
         }
         public void calcUseOwner() {
             calculate(true);
+        }
+
+        public void updateAlreadyCalculated() {
+            boolean already = true;
+            for(var m : meetings) {
+                if(!m.isAlreadyCalculated()) {
+                    already = false;
+                    break;
+                }
+            }
+            alreadyCalculated = already;
         }
 
         private void calculate(boolean useOwner) {
