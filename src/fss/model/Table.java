@@ -10,6 +10,7 @@ public class Table {
         BY_MEET,
         BY_GOAL_FOR,
         BY_COUNT_WIN,
+        BY_GOAL_AWAY_MEET,
     }
 
     private class MeetData {
@@ -93,9 +94,8 @@ public class Table {
     public Table() {
         days = new ArrayList<>();
         rules = new ArrayList<>();
-        rules.add(WinRules.BY_COUNT_WIN);
         rules.add(WinRules.BY_DIFFERENCE_GOAL);
-        rules.add(WinRules.BY_GOAL_FOR);
+        rules.add(WinRules.BY_GOAL_AWAY_MEET);
     }
 
     public Table(ArrayList<RoundSystem.Day> days) {
@@ -171,7 +171,52 @@ public class Table {
             addMeetAsDayToTempTable(meets21, tempTable, dayFrom);
 
             tempTable.calc();
+            if(tempTable.tables.isEmpty()) {
+                return  0;
+            }
+
             return tempTable.tables.get(tempTable.tables.size() - 1).rows.get(0).team == team ? 1 : -1;
+        }
+
+        return 0;
+    }
+
+    private int getWinnerByAwayMeetGoals(ArrayList<Meet> meets12, ArrayList<Meet> meets21, SimpleTeam team) {
+        if (meets12 != null || meets21 != null) {
+            class NestedPair {
+                SimpleTeam team1 = null;
+                int goalTeam1 = 0;
+                SimpleTeam team2 = null;
+                int goalTeam2 = 0;
+            };
+
+            var nestedPair = new NestedPair();
+
+            if(meets12 != null && !meets12.isEmpty()) {
+                nestedPair.team1 = meets12.get(0).getTeamHome();
+                nestedPair.team2 = meets12.get(0).getTeamAway();
+                for (var m : meets12) {
+                    nestedPair.goalTeam2 += m.getResult().getGoalAway();
+                }
+            }
+
+            if(meets21 != null && !meets21.isEmpty()) {
+                if(nestedPair.team1 == null || nestedPair.team2 == null) {
+                    nestedPair.team1 = meets21.get(0).getTeamAway();
+                    nestedPair.team2 = meets21.get(0).getTeamHome();
+                }
+                for (var m : meets21) {
+                    nestedPair.goalTeam1 += m.getResult().getGoalAway();
+                }
+            }
+
+            if(nestedPair.goalTeam1 != nestedPair.goalTeam2) {
+                if(nestedPair.goalTeam1 > nestedPair.goalTeam2) {
+                    return nestedPair.team1 == team ? 1 : -1;
+                } else {
+                    return nestedPair.team2 == team ? 1 : -1;
+                }
+            }
         }
 
         return 0;
@@ -203,36 +248,20 @@ public class Table {
                             break;
                         }
                         case BY_MEET: {
-                            var meets1 = meetByPairTeam.get(new PairTeam(r1.team, r2.team));
-                            var meets2 = meetByPairTeam.get(new PairTeam(r2.team, r1.team));
-
-                            return getWinnerByMeets(meets1, meets2, r2.team);
-
-                            /*if(meets1 != null || meets2 != null) {
-                                var tempTable = new Table();
-                                int cnt = 0;
-                                if(meets1 != null) {
-                                    for(var m : meets1) {
-                                        tempTable.days.add(new RoundSystem.Day(cnt + 1));
-                                        tempTable.days.get(cnt).addMeet(m);
-                                        tempTable.days.get(cnt).updateAlreadyCalculated();
-                                        cnt++;
-                                    }
-                                }
-
-                                if(meets2 != null) {
-                                    for(var m : meets2) {
-                                        tempTable.days.add(new RoundSystem.Day(cnt + 1));
-                                        tempTable.days.get(cnt).addMeet(m);
-                                        tempTable.days.get(cnt).updateAlreadyCalculated();
-                                        cnt++;
-                                    }
-                                }
-
-                                tempTable.calc();
-                                return tempTable.tables.get(tempTable.tables.size() - 1).rows.get(0).team == r2.team ? 1 : -1;
-
-                            }*/
+                            var meets12 = meetByPairTeam.get(new PairTeam(r1.team, r2.team));
+                            var meets21 = meetByPairTeam.get(new PairTeam(r2.team, r1.team));
+                            var res = getWinnerByMeets(meets12, meets21, r2.team);
+                            if(res != 0)
+                                return res;
+                            break;
+                        }
+                        case BY_GOAL_AWAY_MEET: {
+                            var meets12 = meetByPairTeam.get(new PairTeam(r1.team, r2.team));
+                            var meets21 = meetByPairTeam.get(new PairTeam(r2.team, r1.team));
+                            var res = getWinnerByAwayMeetGoals(meets12, meets21, r2.team);
+                            if(res != 0)
+                                return res;
+                            break;
                         }
                     }
                 }
