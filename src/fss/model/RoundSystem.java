@@ -1,6 +1,7 @@
 package fss.model;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class RoundSystem {
     public static class Day {
@@ -87,6 +88,45 @@ public class RoundSystem {
             this.home = home;
             this.away = away;
         }
+    }
+
+    private static ArrayList<Day> fillDaysByIsEven(ArrayList<SimpleTeam> teams, boolean isEven) {
+        if(isEven) {
+            return fillDays2Round(teams);
+        }
+        return fillDays(teams);
+    }
+
+    private static int decCntRound(int cntRound, boolean isEven) {
+        if(isEven) {
+            return cntRound - 2;
+        }
+        return cntRound - 1;
+    }
+
+    public static ArrayList<Day> fillDaysNRound(ArrayList<SimpleTeam> teams, int cntRound) {
+        switch (cntRound) {
+            case 0: {
+                return new ArrayList<>();
+            }
+            case 1: {
+                return fillDays(teams);
+            }
+            case 2: {
+                return fillDays2Round(teams);
+            }
+        }
+
+        boolean isEven = cntRound % 2 == 0;
+        var days = new ArrayList<Day>();
+
+        do  {
+            var tmpDays = fillDaysByIsEven(teams, isEven);
+            cntRound = decCntRound(cntRound, isEven);
+            days.addAll(tmpDays);
+        }  while (cntRound > 0);
+
+        return days;
     }
 
     public static ArrayList<Day> fillDays2Round(ArrayList<SimpleTeam> teams) {

@@ -91,15 +91,16 @@ public class Table {
     private ArrayList<RoundSystem.Day> days = null;
     private ArrayList<TableDay> tables = null;
 
-    public Table() {
+    private Table() {
         days = new ArrayList<>();
         rules = new ArrayList<>();
         rules.add(WinRules.BY_DIFFERENCE_GOAL);
         rules.add(WinRules.BY_GOAL_AWAY_MEET);
     }
 
-    public Table(ArrayList<RoundSystem.Day> days) {
+    public Table(ArrayList<RoundSystem.Day> days, ArrayList<WinRules> rules) {
         this.days = days;
+        this.rules = rules;
     }
     public void addWinRule(WinRules rule) {
         rules.add(rule);

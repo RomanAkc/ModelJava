@@ -67,8 +67,7 @@ public class Main {
             day.calcUseOwner();
         }
 
-        var table = new Table(days);
-        table.clearRules();
+        var table = new Table(days, new ArrayList<>());
         table.addWinRule(Table.WinRules.BY_MEET);
         table.addWinRule(Table.WinRules.BY_COUNT_WIN);
         table.addWinRule(Table.WinRules.BY_DIFFERENCE_GOAL);
