@@ -40,7 +40,7 @@ public class Main {
         table.calc();
         System.out.println(table.toString());*/
 
-        var teams = new ArrayList<SimpleTeam>();
+        /*var teams = new ArrayList<SimpleTeam>();
         teams.add(new ClubTeam(1, "Atalanta", "Italy", SimpleTeam.WorldPart.EUROPE, 25, 0, 0));
         teams.add(new ClubTeam(2, "Juventus", "Italy", SimpleTeam.WorldPart.EUROPE, 29, 0, 0));
         teams.add(new ClubTeam(3, "Milan", "Italy", SimpleTeam.WorldPart.EUROPE, 26, 0, 0));
@@ -73,8 +73,35 @@ public class Main {
         table.addWinRule(Table.WinRules.BY_DIFFERENCE_GOAL);
         table.addWinRule(Table.WinRules.BY_GOAL_FOR);
         table.calc();
-        System.out.println(table.toString());
+        System.out.println(table.toString());*/
 
+        /*var tournamentStage = new TournamentStage("WC Qualifying Group H", 2);
+        tournamentStage.AddTeam(new NationalTeam(1, "Croatia", SimpleTeam.WorldPart.EUROPE, 27, 26,26));
+        tournamentStage.AddTeam(new NationalTeam(1, "Russia", SimpleTeam.WorldPart.EUROPE, 26, 26,26));
+        tournamentStage.AddTeam(new NationalTeam(1, "Slovakia", SimpleTeam.WorldPart.EUROPE, 24, 26,26));
+        tournamentStage.AddTeam(new NationalTeam(1, "Cyrpus", SimpleTeam.WorldPart.EUROPE, 22, 26,26));
+        tournamentStage.AddTeam(new NationalTeam(1, "Slovenia", SimpleTeam.WorldPart.EUROPE, 24, 26,26));
+        tournamentStage.AddTeam(new NationalTeam(1, "Malta", SimpleTeam.WorldPart.EUROPE, 18, 26,26));
+        tournamentStage.addWinRules(Table.WinRules.BY_MEET);
+        tournamentStage.addWinRules(Table.WinRules.BY_DIFFERENCE_GOAL);
+        tournamentStage.addWinRules(Table.WinRules.BY_GOAL_FOR);
+        tournamentStage.calc();
+        System.out.println(tournamentStage.toString());*/
 
+        var poStage = new PlayOffStage("League Champions 1/2", true);
+        poStage.AddTeam(new ClubTeam(1, "Real Madrid", "Spain", SimpleTeam.WorldPart.EUROPE, 30, 0, 0));
+        poStage.AddTeam(new ClubTeam(1, "Chelsea", "England", SimpleTeam.WorldPart.EUROPE, 30, 0, 0));
+        poStage.AddTeam(new ClubTeam(1, "PSG", "France", SimpleTeam.WorldPart.EUROPE, 30, 0, 0));
+        poStage.AddTeam(new ClubTeam(1, "Manchester City", "England", SimpleTeam.WorldPart.EUROPE, 30, 0, 0));
+        poStage.setSortTeams(false);
+        poStage.calc();
+        System.out.println(poStage.toString());
+
+        System.out.println("Winners: ");
+        System.out.println(System.lineSeparator());
+        var winners = poStage.getWinners();
+        for(var w : winners) {
+            System.out.println(w);
+        }
     }
 }

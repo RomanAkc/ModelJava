@@ -110,7 +110,7 @@ public class Table {
     }
 
     private void addMeetToRows(Meet meet, Row rowHome, Row rowAway) {
-        var res = meet.getResult();
+        var res = meet.getResultMeet();
 
         rowHome.meet++;
         rowHome.win += (res.isWin() ? 1 : 0);
@@ -197,7 +197,7 @@ public class Table {
                 nestedPair.team1 = meets12.get(0).getTeamHome();
                 nestedPair.team2 = meets12.get(0).getTeamAway();
                 for (var m : meets12) {
-                    nestedPair.goalTeam2 += m.getResult().getGoalAway();
+                    nestedPair.goalTeam2 += m.getResultMeet().getGoalAway();
                 }
             }
 
@@ -207,7 +207,7 @@ public class Table {
                     nestedPair.team2 = meets21.get(0).getTeamHome();
                 }
                 for (var m : meets21) {
-                    nestedPair.goalTeam1 += m.getResult().getGoalAway();
+                    nestedPair.goalTeam1 += m.getResultMeet().getGoalAway();
                 }
             }
 

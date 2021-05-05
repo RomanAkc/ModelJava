@@ -12,21 +12,24 @@ public class Meet {
     }
 
     public void calc() {
-        calculate(false);
+        result = calculate(false);
     }
 
     public void calcUseOwner() {
-        calculate(true);
+        result = calculate(true);
     }
 
-    private void calculate(boolean useOwner) {
+    protected Result calculate(boolean useOwner) {
         if(alreadyCalculated) {
-            return;
+            //TODO: бросить исключение
+            return new Result(-1, -1);
         }
 
-        result = useOwner ? ResultCalculator.calcUseOwner(teamHome.getPower(), teamAway.getPower())
+        var res = useOwner ? ResultCalculator.calcUseOwner(teamHome.getPower(), teamAway.getPower())
                 : ResultCalculator.calc(teamHome.getPower(), teamAway.getPower());
         alreadyCalculated = true;
+
+        return res;
     }
 
     boolean isAlreadyCalculated() {
@@ -56,8 +59,24 @@ public class Meet {
         return teamAway;
     }
 
-    public Result getResult() {
+    public Result getResultMeet() {
         return result;
+    }
+
+    public boolean isWinnerHomeTeam() {
+        return result.isWin();
+    }
+
+    public SimpleTeam getWinner() {
+        if(result.isWin()) {
+            return teamHome;
+        }
+
+        if(result.isLose()) {
+            return teamAway;
+        }
+
+        return null;
     }
 }
 
@@ -67,6 +86,52 @@ class WinMeet extends Meet {
 
     public WinMeet(SimpleTeam teamHome, SimpleTeam teamAway) {
         super(teamHome, teamAway);
+    }
+
+    @Override
+    public boolean isWinnerHomeTeam() {
+        if(!getResultMeet().isDraw()) {
+            if(getResultMeet().isWin()) {
+                return true;
+            }
+            return false;
+        }
+
+        if(!resultAdd.isDraw()) {
+            if(resultAdd.isWin()) {
+                return true;
+            }
+            return false;
+        }
+
+        if(resultPen.isWin()) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public SimpleTeam getWinner() {
+        if(isWinnerHomeTeam()) {
+            return getTeamHome();
+        }
+        return getTeamAway();
+    }
+
+    @Override
+    public void calc() {
+        if(isAlreadyCalculated()) {
+            return;
+        }
+
+        super.calc();
+        if(getResultMeet().isDraw()) {
+            resultAdd = calculate(false);
+        }
+
+        if(resultAdd.isDraw()) {
+            resultPen = ResultCalculator.calcPen();
+        }
     }
 
     @Override
@@ -85,16 +150,84 @@ class WinMeet extends Meet {
     }
 }
 
-class WinTwoMeet {
+class WinTwoMeet extends Meet {
     private Meet firstMeet = null;
-    private WinMeet secondMeet = null;
+    private Result resultAdd = null;
+    private Result resultPen = null;
+
+    public WinTwoMeet(SimpleTeam teamHome, SimpleTeam teamAway) {
+        super(teamAway, teamHome);
+        firstMeet = new Meet(teamHome, teamAway);
+    }
+
+    private int getGoalsFirstTeam() {
+        return firstMeet.getResultMeet().getGoalHome() + super.getResultMeet().getGoalAway();
+    }
+
+    private int getGoalsSecondTeam() {
+        return firstMeet.getResultMeet().getGoalAway() + super.getResultMeet().getGoalHome();
+    }
+
+    private boolean isDraw() {
+        if(getGoalsFirstTeam() != getGoalsSecondTeam()) {
+            return false;
+        }
+
+        if(firstMeet.getResultMeet().getGoalAway() != super.getResultMeet().getGoalAway()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean isWinnerHomeTeam() {
+        if(getGoalsFirstTeam() != getGoalsSecondTeam()) {
+            return getGoalsFirstTeam() < getGoalsSecondTeam();
+        }
+
+        if(firstMeet.getResultMeet().getGoalAway() != super.getResultMeet().getGoalAway()) {
+            return super.getResultMeet().getGoalAway() < firstMeet.getResultMeet().getGoalAway();
+        }
+
+        return resultPen.isLose();
+    }
+
+    @Override
+    public SimpleTeam getWinner() {
+        if(isWinnerHomeTeam()) {
+            return getTeamHome();
+        }
+        return getTeamAway();
+    }
+
+    @Override
+    public void calc() {
+        if(isAlreadyCalculated()) {
+            return;
+        }
+
+        firstMeet.calcUseOwner();
+        super.calcUseOwner();
+
+        if(!isDraw()) {
+            return;
+        }
+
+        resultAdd = ResultCalculator.calcAddTime(getTeamAway().getPower(), getTeamHome().getPower());
+        if(resultAdd.getGoalHome() != 0) {
+           return;
+        }
+
+        resultPen = ResultCalculator.calcPen();
+    }
 
     @Override
     public String toString() {
         var res = new StringBuffer();
         res.append(firstMeet.toString());
         res.append(System.lineSeparator());
-        res.append(secondMeet.toString());
+        res.append(super.toString());
         return res.toString();
     }
 }
