@@ -303,6 +303,41 @@ public class Table {
         alreadyCalculated = true;
     }
 
+    public SimpleTeam getNTeam(int n) {
+        if(!alreadyCalculated)
+            return null; //TODO: бросить exception
+
+        var table = tables.get(tables.size() - 1);
+        return table.rows.get(n).team;
+    }
+
+    private ArrayList<SimpleTeam> getNTeams(int first, int last) {
+        if(!alreadyCalculated)
+            return null; //TODO: бросить exception
+
+        var out = new ArrayList<SimpleTeam>();
+        for(int i = first; i < last; ++i) {
+            out.add(getNTeam(i));
+        }
+
+        return out;
+    }
+
+    public ArrayList<SimpleTeam> getNFirst(int n) {
+        if(!alreadyCalculated)
+            return null; //TODO: бросить exception
+
+        return getNTeams(0, n - 1);
+    }
+
+    public ArrayList<SimpleTeam> getNLast(int n) {
+        if(!alreadyCalculated)
+            return null; //TODO: бросить exception
+
+        var table = tables.get(tables.size() - 1);
+        return getNTeams(table.rows.size() - n, table.rows.size());
+    }
+
     @Override
     public String toString() {
         var result = new StringBuffer();

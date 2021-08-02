@@ -3,7 +3,7 @@ package fss.model;
 import java.util.*;
 
 public abstract class Stage {
-    private String name;
+    private String name = null;
     protected ArrayList<SimpleTeam> teams = null;
     protected boolean alreadyCalculated = false;
 
@@ -11,12 +11,14 @@ public abstract class Stage {
         this.name = name;
     }
 
-    public void AddTeam(SimpleTeam team) {
+    public void addTeam(SimpleTeam team) {
         if(teams == null) {
             teams = new ArrayList<>();
         }
         teams.add(team);
     }
+
+    public abstract void calc();
 
     @Override
     public String toString() {
@@ -29,13 +31,13 @@ public abstract class Stage {
     }
 }
 
-class TournamentStage extends Stage {
+class CircleStage extends Stage {
     private Table table = null;
     private ArrayList<RoundSystem.Day> days = null;
     private int cntRounds = 0;
     private ArrayList<Table.WinRules> rules = new ArrayList<>();
 
-    public TournamentStage(String name, int cntRounds) {
+    public CircleStage(String name, int cntRounds) {
         super(name);
         this.cntRounds = cntRounds;
     }
@@ -61,7 +63,7 @@ class TournamentStage extends Stage {
         rules.add(Table.WinRules.BY_GOAL_FOR);
     }
 
-
+    @Override
     public void calc() {
         if(alreadyCalculated) {
             return;
@@ -80,6 +82,18 @@ class TournamentStage extends Stage {
 
     public void addWinRules(Table.WinRules rule) {
         rules.add(rule);
+    }
+
+    ArrayList<SimpleTeam> getNFirst(int n) {
+        return table.getNFirst(n);
+    }
+
+    ArrayList<SimpleTeam> getNLast(int n) {
+        return table.getNLast(n);
+    }
+
+    SimpleTeam getNTeam(int n) {
+        return table.getNTeam(n);
     }
 
     @Override
@@ -137,6 +151,7 @@ class PlayOffStage extends Stage {
         }
     }
 
+    @Override
     public void calc() {
         if(alreadyCalculated) {
             return;
@@ -156,6 +171,16 @@ class PlayOffStage extends Stage {
         }
         return winners;
 
+    }
+
+    public ArrayList<SimpleTeam> getLooses() {
+        var looses = new ArrayList<SimpleTeam>();
+        if(alreadyCalculated) {
+            for(var m : meets) {
+                looses.add(m.getLooser());
+            }
+        }
+        return looses;
     }
 
     @Override

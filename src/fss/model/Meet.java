@@ -78,6 +78,18 @@ public class Meet {
 
         return null;
     }
+
+    public SimpleTeam getLooser() {
+        if(result.isWin()) {
+            return teamAway;
+        }
+
+        if(result.isLose()) {
+            return teamHome;
+        }
+
+        return null;
+    }
 }
 
 class WinMeet extends Meet {

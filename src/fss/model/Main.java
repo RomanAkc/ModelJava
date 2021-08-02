@@ -1,5 +1,4 @@
 package fss.model;
-import java.util.ArrayList;
 
 public class Main {
 
@@ -89,10 +88,10 @@ public class Main {
         System.out.println(tournamentStage.toString());*/
 
         var poStage = new PlayOffStage("League Champions 1/2", true);
-        poStage.AddTeam(new ClubTeam(1, "Real Madrid", "Spain", SimpleTeam.WorldPart.EUROPE, 30, 0, 0));
-        poStage.AddTeam(new ClubTeam(1, "Chelsea", "England", SimpleTeam.WorldPart.EUROPE, 30, 0, 0));
-        poStage.AddTeam(new ClubTeam(1, "PSG", "France", SimpleTeam.WorldPart.EUROPE, 30, 0, 0));
-        poStage.AddTeam(new ClubTeam(1, "Manchester City", "England", SimpleTeam.WorldPart.EUROPE, 30, 0, 0));
+        poStage.addTeam(new ClubTeam(1, "Real Madrid", "Spain", SimpleTeam.WorldPart.EUROPE, 30, 0, 0));
+        poStage.addTeam(new ClubTeam(1, "Chelsea", "England", SimpleTeam.WorldPart.EUROPE, 30, 0, 0));
+        poStage.addTeam(new ClubTeam(1, "PSG", "France", SimpleTeam.WorldPart.EUROPE, 30, 0, 0));
+        poStage.addTeam(new ClubTeam(1, "Manchester City", "England", SimpleTeam.WorldPart.EUROPE, 30, 0, 0));
         poStage.setSortTeams(false);
         poStage.calc();
         System.out.println(poStage.toString());
