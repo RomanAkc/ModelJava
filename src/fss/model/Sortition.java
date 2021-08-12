@@ -3,86 +3,29 @@ package fss.model;
 import java.util.*;
 
 public class Sortition {
-    static public ArrayList<SimpleTeam> playOffSort(ArrayList<SimpleTeam> teams, Rating rating) {
+    public static ArrayList<Meet> playOffSort(ArrayList<SimpleTeam> teams, Rating rating, boolean twoMeets) {
         if(teams.size() % 2 != 0)
             return null;
 
-        if(rating == null) {
-            var res = new ArrayList<SimpleTeam>(teams);
-            Collections.shuffle(res);
-            return  res;
-        }
+        if(rating == null)
+            return getWinMeetsWORating(teams, twoMeets);
 
-        var teamsByRating = getTeamsByRating(teams, rating);
-
-        var baskets = divideIntoBaskets(teams.size() / 2, teamsByRating);
-        var firstPart = baskets.get(0);
-        var secondPart = baskets.get(1);
-
-       /* var firstPart = new ArrayList<SimpleTeam>();
-        var secondPart = new ArrayList<SimpleTeam>();
-
-        int size = teamsByRating.size();
-        int index = 0;
-        for(var team : teamsByRating.values()) {
-            if(index < size / 2) {
-                firstPart.add(team);
-            } else {
-                secondPart.add(team);
-            }
-            index++;
-        }*/
-
-        Collections.shuffle(firstPart);
-        Collections.shuffle(secondPart);
-
-        //TODO: сравнить fistPart.size == second.part.Size, если не совпадают - выыбросить исключение
-
-        var res = new ArrayList<SimpleTeam>();
-        for(int i = 0; i < secondPart.size(); ++i) {
-            res.add(secondPart.get(i));
-            res.add(firstPart.get(i));
-        }
-
-        return res;
+        return getWinMeetsWithRating(teams, rating, twoMeets);
     }
 
-    static public ArrayList<ArrayList<SimpleTeam>> groupSort(ArrayList<SimpleTeam> teams, int cntGroup, Rating rating) {
+    public static ArrayList<ArrayList<SimpleTeam>> groupSort(ArrayList<SimpleTeam> teams, int cntGroup, Rating rating) {
         int cntGroupTeams = teams.size() / cntGroup;
         if(cntGroupTeams < 2)
             return null;
 
+        var baskets = divideIntoBaskets(cntGroup, getTeamsByRating(teams, rating));
+
         var res = new ArrayList<ArrayList<SimpleTeam>>();
-
-        if(rating == null) {
-            var tmp = new ArrayList<SimpleTeam>(teams);
-            Collections.shuffle(tmp);
-
-            int index  = 0;
-            for(var team : tmp) {
-                if(index < cntGroupTeams) {
-                    var group = new ArrayList<SimpleTeam>();
-                    group.add(team);
-                    res.add(group);
-                } else {
-                    res.get(index % cntGroupTeams).add(team);
-                }
-                index++;
-            }
-
-            return res;
-        }
-
-        var teamsByRating = getTeamsByRating(teams, rating);
-
-        ArrayList<ArrayList<SimpleTeam>> baskets = divideIntoBaskets(cntGroup, teamsByRating);
-        int index;
-
         boolean firstBasket = true;
         for(var basket : baskets) {
             Collections.shuffle(basket);
 
-            index = 0;
+            int index = 0;
             for(var team : basket) {
                 ArrayList<SimpleTeam> group = null;
                 if(firstBasket) {
@@ -102,20 +45,54 @@ public class Sortition {
         return res;
     }
 
+    private static ArrayList<Meet> getWinMeetsWithRating(ArrayList<SimpleTeam> teams, Rating rating, boolean twoMeets) {
+        var baskets = divideIntoBaskets(teams.size() / 2, getTeamsByRating(teams, rating));
+        Collections.shuffle(baskets.get(0));
+        Collections.shuffle(baskets.get(1));
+
+        var res = new ArrayList<Meet>();
+        for(int i = 0; i < baskets.get(1).size(); ++i) {
+            if(twoMeets) {
+                res.add(new WinTwoMeet(baskets.get(1).get(i), baskets.get(0).get(i)));
+            } else {
+                res.add(new WinMeet(baskets.get(1).get(i), baskets.get(0).get(i)));
+            }
+        }
+        return res;
+    }
+
+    private static ArrayList<Meet> getWinMeetsWORating(ArrayList<SimpleTeam> teams, boolean twoMeets) {
+        var teamsForShuffle = new ArrayList<>(teams);
+        Collections.shuffle(teamsForShuffle);
+        return getWinMeets(teamsForShuffle, twoMeets);
+    }
+
+    private static ArrayList<Meet> getWinMeets(ArrayList<SimpleTeam> teamsForShuffle, boolean twoMeets) {
+        var meets = new ArrayList<Meet>();
+        for(int i = 0; i < teamsForShuffle.size(); i = i + 2) {
+            if(twoMeets) {
+                meets.add(new WinTwoMeet(teamsForShuffle.get(i), teamsForShuffle.get(i + 1)));
+            } else {
+                meets.add(new WinMeet(teamsForShuffle.get(i), teamsForShuffle.get(i + 1)));
+            }
+        }
+        return  meets;
+    }
+
     static private TreeMap<Integer, SimpleTeam> getTeamsByRating(ArrayList<SimpleTeam> teams, Rating rating) {
         var teamsByRating = new TreeMap<Integer, SimpleTeam>();
         for(var team : teams) {
-            teamsByRating.put(rating.getTeamPosition(team), team);
+            teamsByRating.put(rating != null ? rating.getTeamPosition(team) : team.getID(), team);
         }
         return teamsByRating;
     }
 
     private static ArrayList<ArrayList<SimpleTeam>> divideIntoBaskets(int cntGroup, TreeMap<Integer, SimpleTeam> teamsByRating) {
         var baskets = new ArrayList<ArrayList<SimpleTeam>>();
+        
         int index = 0;
-
         for(var team : teamsByRating.values()) {
-            if(index >= cntGroup) {
+            if(index >= cntGroup || index == 0) {
                 index = 0;
                 var basket = new ArrayList<SimpleTeam>();
                 baskets.add(basket);
@@ -126,7 +103,7 @@ public class Sortition {
 
             index++;
         }
+
         return baskets;
     }
-
 }
