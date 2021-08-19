@@ -17,6 +17,14 @@ public abstract class Stage {
         }
         teams.add(team);
     }
+    public void addTeams(ArrayList<SimpleTeam> teams) {
+        if(this.teams == null) {
+            this.teams = new ArrayList<>(teams);
+            return;
+        }
+
+        this.teams.addAll(teams);
+    }
 
     public abstract void calc();
 
@@ -120,6 +128,10 @@ class PlayOffStage extends Stage {
         this.twoMeets = twoMeets;
     }
 
+    public void addMeets(ArrayList<Meet> meets) {
+        this.meets = new ArrayList<>();
+        this.meets.addAll(meets);
+    }
     public void setSortTeams(boolean sortTeams) {this.sortTeams = sortTeams;}
     public void sort(ArrayList<SimpleTeam> teams) {
         Collections.shuffle(teams);
@@ -134,6 +146,10 @@ class PlayOffStage extends Stage {
     }
 
     private void fillMeets() {
+        if(meets != null) {
+            return;
+        }
+
         var teamsForPair = new ArrayList<SimpleTeam>(teams);
         if(sortTeams) {
             sort(teamsForPair);

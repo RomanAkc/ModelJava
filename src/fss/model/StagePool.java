@@ -2,30 +2,37 @@ package fss.model;
 
 import java.util.ArrayList;
 
-public class StagePool {
-    private boolean alreadyCalculated = false;
-    private ArrayList<Stage> stages = new ArrayList<>();
-
-    public StagePool() {
+public abstract class StagePool {
+    public enum StageType {
+        CIRCLE,
+        GROUPS,
+        PLAYOFF
     }
 
-    public StagePool(ArrayList<Stage> stages) {
-        this.stages = stages;
+    protected StageType stageType = StageType.PLAYOFF;
+    protected String name;
+    protected int cntGroups = 0;
+    protected ArrayList<SimpleTeam> teams = null;
+    protected Rating rating = null;
+    protected int cntRounds = 0;
+
+    public StagePool(StageType stageType, String name, ArrayList<SimpleTeam> teams, Rating rating, int cntRounds) {
+        this.stageType = stageType;
+        this.teams = new ArrayList<>(teams);
+        this.rating = rating;
+        this.name = name;
+        this.cntRounds = cntRounds;
     }
 
-    public void addStage(Stage s) {
-        stages.add(s);
+    public StagePool(String name, int cntGroups, ArrayList<SimpleTeam> teams, Rating rating, int cntRounds) {
+        this(StageType.GROUPS, name, teams, rating, cntRounds);
+        this.cntGroups = cntGroups;
     }
 
-    public void calc() {
-        if(alreadyCalculated) {
-            return;
-        }
-
-        for(var s : stages) {
-            s.calc();
-        }
-
-        alreadyCalculated = true;
-    }
+    public abstract void calc();
+    public abstract ArrayList<SimpleTeam> getWinners();
+    public abstract ArrayList<SimpleTeam> getLosers();
+    public abstract ArrayList<SimpleTeam> getFirstN(int cnt);
+    public abstract ArrayList<SimpleTeam> getLastN(int cnt);
+    public abstract SimpleTeam getN(int n);
 }

@@ -3,9 +3,7 @@ package fss.model;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.ArrayList;
-
-public class SortitionTest {
+public class SortitionTest extends BaseTest {
     @Test
     public void playOffSortCntResultTeamWORating() {
        var teams = generateTeams(4);
@@ -105,13 +103,5 @@ public class SortitionTest {
             if(index >= teams.size())
                 break;
         }
-    }
-
-    private ArrayList<SimpleTeam> generateTeams(int cnt) {
-        var teams = new ArrayList<SimpleTeam>();
-        for(int i = 0; i < cnt; ++i) {
-            teams.add(new ClubTeam(i, String.format("%d", i), String.format("%d", i), SimpleTeam.WorldPart.EUROPE, 30, 30, 30));
-        }
-        return teams;
     }
 }

@@ -32,9 +32,10 @@ public class Meet {
         return res;
     }
 
-    boolean isAlreadyCalculated() {
+    protected boolean isAlreadyCalculated() {
         return alreadyCalculated;
     }
+    protected void releaseAlreadyCalculated() { alreadyCalculated = false; }
 
     @Override
     public String toString() {
@@ -138,7 +139,10 @@ class WinMeet extends Meet {
 
         super.calc();
         if(getResultMeet().isDraw()) {
+            releaseAlreadyCalculated();
             resultAdd = calculate(false);
+        } else {
+            return;
         }
 
         if(resultAdd.isDraw()) {
