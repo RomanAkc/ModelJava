@@ -3,7 +3,6 @@ package fss.model;
 import java.util.ArrayList;
 
 public class StagePoolImpl extends StagePool {
-    private boolean alreadyCalculated = false;
     private ArrayList<Stage> stages = new ArrayList<>();
 
     public StagePoolImpl(StageType stageType, String name, ArrayList<SimpleTeam> teams, Rating rating, int cntRounds) {
@@ -16,27 +15,15 @@ public class StagePoolImpl extends StagePool {
 
     @Override
     public void calc() {
-        if(alreadyCalculated) {
-            return;
-        }
-
-        //1.Разбить на стадии
         createStages();
 
-        //2.Вычислить
         for(var s : stages) {
             s.calc();
         }
-
-        alreadyCalculated = true;
     }
 
     @Override
     public ArrayList<SimpleTeam> getWinners() {
-        if(!alreadyCalculated) {
-            return null;
-        }
-
         var result = new ArrayList<SimpleTeam>();
         for(var stage : stages) {
             switch (stageType) {
@@ -57,37 +44,21 @@ public class StagePoolImpl extends StagePool {
 
     @Override
     public ArrayList<SimpleTeam> getLosers() {
-        if(!alreadyCalculated) {
-            return null;
-        }
-
         return null;
     }
 
     @Override
     public ArrayList<SimpleTeam> getFirstN(int cnt) {
-        if(!alreadyCalculated) {
-            return null;
-        }
-
         return null;
     }
 
     @Override
     public ArrayList<SimpleTeam> getLastN(int cnt) {
-        if(!alreadyCalculated) {
-            return null;
-        }
-
         return null;
     }
 
     @Override
     public SimpleTeam getN(int n) {
-        if(!alreadyCalculated) {
-            return null;
-        }
-
         return null;
     }
 

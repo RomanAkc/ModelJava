@@ -316,7 +316,7 @@ public class Table {
             return null; //TODO: бросить exception
 
         var out = new ArrayList<SimpleTeam>();
-        for(int i = first; i < last; ++i) {
+        for(int i = first; i <= last; ++i) {
             out.add(getNTeam(i));
         }
 
