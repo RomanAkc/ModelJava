@@ -1,7 +1,6 @@
 package fss.model;
 
 public class Meet {
-    private boolean alreadyCalculated = false;
     private SimpleTeam teamHome = null;
     private SimpleTeam teamAway = null;
     private Result result = null;
@@ -20,22 +19,16 @@ public class Meet {
     }
 
     protected Result calculate(boolean useOwner) {
-        if(alreadyCalculated) {
-            //TODO: бросить исключение
-            return new Result(-1, -1);
-        }
+        if(useOwner)
+            return ResultCalculator.calcUseOwner(teamHome.getPower(), teamAway.getPower());
 
-        var res = useOwner ? ResultCalculator.calcUseOwner(teamHome.getPower(), teamAway.getPower())
-                : ResultCalculator.calc(teamHome.getPower(), teamAway.getPower());
-        alreadyCalculated = true;
-
-        return res;
+        return ResultCalculator.calc(teamHome.getPower(), teamAway.getPower());
     }
 
+    //TODO: удалить функцию
     protected boolean isAlreadyCalculated() {
-        return alreadyCalculated;
+        return result != null;
     }
-    protected void releaseAlreadyCalculated() { alreadyCalculated = false; }
 
     @Override
     public String toString() {
@@ -43,12 +36,10 @@ public class Meet {
         res.append(teamHome.getName());
         res.append(" - ");
         res.append(teamAway.getName());
-
-        if (alreadyCalculated) {
-            res.append(" ");
+        res.append(" ");
+        if(result != null) {
             res.append(result.toString());
         }
-
         return  res.toString();
     }
 
@@ -80,7 +71,7 @@ public class Meet {
         return null;
     }
 
-    public SimpleTeam getLooser() {
+    public SimpleTeam getLoser() {
         if(result.isWin()) {
             return teamAway;
         }
@@ -104,20 +95,18 @@ class WinMeet extends Meet {
     @Override
     public boolean isWinnerHomeTeam() {
         if(!getResultMeet().isDraw()) {
-            if(getResultMeet().isWin()) {
-                return true;
-            }
-            return false;
+            return isWinResult(getResultMeet());
         }
 
         if(!resultAdd.isDraw()) {
-            if(resultAdd.isWin()) {
-                return true;
-            }
-            return false;
+            return isWinResult(resultAdd);
         }
 
-        if(resultPen.isWin()) {
+        return isWinResult(resultPen);
+    }
+
+    private boolean isWinResult(Result resultAdd) {
+        if (resultAdd.isWin()) {
             return true;
         }
         return false;
@@ -133,13 +122,9 @@ class WinMeet extends Meet {
 
     @Override
     public void calc() {
-        if(isAlreadyCalculated()) {
-            return;
-        }
-
         super.calc();
+
         if(getResultMeet().isDraw()) {
-            releaseAlreadyCalculated();
             resultAdd = calculate(false);
         } else {
             return;
@@ -219,10 +204,6 @@ class WinTwoMeet extends Meet {
 
     @Override
     public void calc() {
-        if(isAlreadyCalculated()) {
-            return;
-        }
-
         firstMeet.calcUseOwner();
         super.calcUseOwner();
 

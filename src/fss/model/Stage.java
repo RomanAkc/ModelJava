@@ -193,7 +193,7 @@ class PlayOffStage extends Stage {
         var looses = new ArrayList<SimpleTeam>();
         if(alreadyCalculated) {
             for(var m : meets) {
-                looses.add(m.getLooser());
+                looses.add(m.getLoser());
             }
         }
         return looses;

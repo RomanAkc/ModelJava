@@ -32,8 +32,6 @@ public class MeetTest extends BaseTest {
     }
 
     private boolean checkMeetIsCalculated(Meet meet) {
-        return  meet.isAlreadyCalculated()
-                && meet.getResultMeet().getGoalHome() >= 0
-                && meet.getResultMeet().getGoalAway() >= 0;
+        return  meet.getResultMeet() != null;
     }
 }
