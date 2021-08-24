@@ -308,6 +308,11 @@ public class Table {
             return null; //TODO: бросить exception
 
         var table = tables.get(tables.size() - 1);
+
+        if(n < 0 || n >= table.rows.size()) {
+            return null;
+        }
+
         return table.rows.get(n).team;
     }
 
@@ -316,7 +321,7 @@ public class Table {
             return null; //TODO: бросить exception
 
         var out = new ArrayList<SimpleTeam>();
-        for(int i = first; i <= last; ++i) {
+        for(int i = first; i < last; ++i) {
             out.add(getNTeam(i));
         }
 
@@ -327,7 +332,7 @@ public class Table {
         if(!alreadyCalculated)
             return null; //TODO: бросить exception
 
-        return getNTeams(0, n - 1);
+        return getNTeams(0, n);
     }
 
     public ArrayList<SimpleTeam> getNLast(int n) {

@@ -38,27 +38,65 @@ public class StagePoolImpl extends StagePool {
                 }
             }
         }
-
         return result;
     }
 
     @Override
     public ArrayList<SimpleTeam> getLosers() {
-        return null;
+        var result = new ArrayList<SimpleTeam>();
+        for(var stage : stages) {
+            switch (stageType) {
+                case PLAYOFF: {
+                    result.addAll(((PlayOffStage)stage).getLosers());
+                    break;
+                }
+                case GROUPS:
+                case CIRCLE: {
+                    result.addAll(((CircleStage)stage).getNLast(1));
+                    break;
+                }
+            }
+        }
+        return result;
     }
 
     @Override
     public ArrayList<SimpleTeam> getFirstN(int cnt) {
-        return null;
+        var result = new ArrayList<SimpleTeam>();
+        for(var stage : stages) {
+            switch (stageType) {
+                case GROUPS:
+                case CIRCLE: {
+                    result.addAll(((CircleStage)stage).getNFirst(cnt));
+                    break;
+                }
+            }
+        }
+        return result;
     }
 
     @Override
     public ArrayList<SimpleTeam> getLastN(int cnt) {
-        return null;
+        var result = new ArrayList<SimpleTeam>();
+        for(var stage : stages) {
+            switch (stageType) {
+                case GROUPS:
+                case CIRCLE: {
+                    result.addAll(((CircleStage)stage).getNLast(cnt));
+                    break;
+                }
+            }
+        }
+        return result;
     }
 
     @Override
     public SimpleTeam getN(int n) {
+        for(var stage : stages) {
+            if(stageType == StageType.CIRCLE) {
+                return ((CircleStage) stage).getNTeam(n);
+            }
+        }
         return null;
     }
 

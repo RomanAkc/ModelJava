@@ -19,13 +19,26 @@ public class StagePoolImplTest extends BaseTest {
         var stagePool = new StagePoolImpl(StagePool.StageType.PLAYOFF, "Test", teams, new TestRating(teams), twoRounds ? 2 : 1);
         stagePool.calc();
         Assert.assertEquals(stagePool.getWinners().size(), teams.size() / 2);
+        Assert.assertEquals(stagePool.getLosers().size(), teams.size() / 2);
     }
 
     @Test
     public void calcStagePoolCircle() {
         var teams = generateTeams(8);
-        var stagePool = new StagePoolImpl(StagePool.StageType.CIRCLE, "Test",  teams, new TestRating(teams), 2);
+        calcStagePoolCircle(teams, 1);
+        calcStagePoolCircle(teams, 2);
+        calcStagePoolCircle(teams, 3);
+        calcStagePoolCircle(teams, 4);
+    }
+
+    private void calcStagePoolCircle(ArrayList<SimpleTeam> teams, int cntRounds) {
+        var stagePool = new StagePoolImpl(StagePool.StageType.CIRCLE, "Test",  teams, new TestRating(teams), cntRounds);
         stagePool.calc();
         Assert.assertEquals(stagePool.getWinners().size(), 1);
+        Assert.assertEquals(stagePool.getLosers().size(), 1);
+        Assert.assertEquals(stagePool.getFirstN(4).size(), 4);
+        Assert.assertEquals(stagePool.getLastN(4).size(), 4);
+        Assert.assertTrue(stagePool.getN(4) != null);
+        Assert.assertTrue(stagePool.getN(1500) == null);
     }
 }
