@@ -86,8 +86,9 @@ public class Table {
         public ArrayList<Row> rows = new ArrayList<>();
     }
 
-    private boolean alreadyCalculated = false;
-    private ArrayList<WinRules> rules = new ArrayList<>();
+    private HashMap<Integer, Boolean> isUsed = new HashMap<>();
+    private HashMap<Integer, SimpleTeam> teamByID = new HashMap<>();
+    private ArrayList<WinRules> rules = null;
     private ArrayList<RoundSystem.Day> days = null;
     private ArrayList<TableDay> tables = null;
 
@@ -98,9 +99,13 @@ public class Table {
         rules.add(WinRules.BY_GOAL_AWAY_MEET);
     }
 
-    public Table(ArrayList<RoundSystem.Day> days, ArrayList<WinRules> rules) {
+    public Table(ArrayList<SimpleTeam> teams, ArrayList<RoundSystem.Day> days, ArrayList<WinRules> rules) {
         this.days = days;
         this.rules = rules;
+        for(var team : teams) {
+            isUsed.put(team.getID(), false);
+            teamByID.put(team.getID(), team);
+        }
     }
     public void addWinRule(WinRules rule) {
         rules.add(rule);
@@ -145,6 +150,7 @@ public class Table {
         if(tables.isEmpty()) {
             return new Row(team);
         }
+
         return new Row(tables.get(tables.size() - 1).rowsByTeam.get(team));
     }
 
@@ -273,10 +279,6 @@ public class Table {
     }
 
     public void calc() {
-        if(alreadyCalculated) {
-            return;
-        }
-
         tables = new ArrayList<>();
         var meetByPairTeam = new HashMap<PairTeam, ArrayList<Meet>>();
 
@@ -287,8 +289,11 @@ public class Table {
             for(var meet : day.getMeetings()) {
                 addMeetToPair(meet, meetByPairTeam);
 
+                isUsed.put(meet.getTeamHome().getID(), true);
+                isUsed.put(meet.getTeamAway().getID(), true);
+
                 var rowHome = getRowByTeam(meet.getTeamHome());
-                var rowAway = getRowByTeam(meet.getTeamAway());;
+                var rowAway = getRowByTeam(meet.getTeamAway());
 
                 addMeetToRows(meet, rowHome, rowAway);
 
@@ -296,17 +301,21 @@ public class Table {
                 addRowToTableDay(rowAway, td);
             }
 
+            for(var k : isUsed.keySet()) {
+                if(isUsed.get(k)) {
+                    isUsed.put(k, false);
+                } else {
+                    var row = getRowByTeam( teamByID.get(k));
+                    addRowToTableDay(row, td);
+                }
+            }
+
             sortTableDay(td, meetByPairTeam);
             tables.add(td);
         }
-
-        alreadyCalculated = true;
     }
 
     public SimpleTeam getNTeam(int n) {
-        if(!alreadyCalculated)
-            return null; //TODO: бросить exception
-
         var table = tables.get(tables.size() - 1);
 
         if(n < 0 || n >= table.rows.size()) {
@@ -317,9 +326,6 @@ public class Table {
     }
 
     private ArrayList<SimpleTeam> getNTeams(int first, int last) {
-        if(!alreadyCalculated)
-            return null; //TODO: бросить exception
-
         var out = new ArrayList<SimpleTeam>();
         for(int i = first; i < last; ++i) {
             out.add(getNTeam(i));
@@ -329,16 +335,10 @@ public class Table {
     }
 
     public ArrayList<SimpleTeam> getNFirst(int n) {
-        if(!alreadyCalculated)
-            return null; //TODO: бросить exception
-
         return getNTeams(0, n);
     }
 
     public ArrayList<SimpleTeam> getNLast(int n) {
-        if(!alreadyCalculated)
-            return null; //TODO: бросить exception
-
         var table = tables.get(tables.size() - 1);
         return getNTeams(table.rows.size() - n, table.rows.size());
     }

@@ -41,4 +41,12 @@ public class StagePoolImplTest extends BaseTest {
         Assert.assertTrue(stagePool.getN(4) != null);
         Assert.assertTrue(stagePool.getN(1500) == null);
     }
+
+    @Test
+    public void calcStagePoolGroups() {
+        var teams = generateTeams(51);
+        var stagePool = new StagePoolImpl("Test", 10, teams, new TestRating(teams), 2);
+        stagePool.calc();
+        Assert.assertTrue(true);
+    }
 }

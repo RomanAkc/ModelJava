@@ -118,7 +118,7 @@ public class StagePoolImpl extends StagePool {
             case GROUPS: {
                 var groups = Sortition.groupSort(teams, cntGroups, rating);
                 for(int i = 0; i < groups.size(); ++i) {
-                    var stage = new CircleStage(name + ". Group " + Integer.toString(i), cntRounds);
+                    var stage = new CircleStage(name + ". Group " + Integer.toString(i + 1), cntRounds);
                     stage.addTeams(groups.get(i));
                     stages.add(stage);
                 }

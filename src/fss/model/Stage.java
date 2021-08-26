@@ -82,7 +82,7 @@ class CircleStage extends Stage {
             fillRulesByDefault();
         }
 
-        table = new Table(days, rules);
+        table = new Table(teams, days, rules);
         table.calc();
 
         alreadyCalculated = true;
