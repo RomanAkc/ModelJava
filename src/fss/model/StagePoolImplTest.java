@@ -5,8 +5,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
-
 public class StagePoolImplTest extends BaseTest {
     @Test
     public void calcStagePoolPlayOff() {
@@ -38,8 +36,8 @@ public class StagePoolImplTest extends BaseTest {
         Assert.assertEquals(stagePool.getLosers().size(), 1);
         Assert.assertEquals(stagePool.getFirstN(4).size(), 4);
         Assert.assertEquals(stagePool.getLastN(4).size(), 4);
-        Assert.assertTrue(stagePool.getN(4) != null);
-        Assert.assertTrue(stagePool.getN(1500) == null);
+        Assert.assertEquals(stagePool.getN(4).size(), 1);
+        Assert.assertEquals(stagePool.getN(1500).size(), 0);
     }
 
     @Test
@@ -47,6 +45,8 @@ public class StagePoolImplTest extends BaseTest {
         var teams = generateTeams(51);
         var stagePool = new StagePoolImpl("Test", 10, teams, new TestRating(teams), 2);
         stagePool.calc();
-        Assert.assertTrue(true);
+        Assert.assertEquals(stagePool.getWinners().size(), 10);
+        Assert.assertEquals(stagePool.getN(2).size(), 10);
+        Assert.assertEquals(stagePool.getFirstN(2).size(), 20);
     }
 }

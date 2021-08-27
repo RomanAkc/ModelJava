@@ -91,13 +91,17 @@ public class StagePoolImpl extends StagePool {
     }
 
     @Override
-    public SimpleTeam getN(int n) {
+    public ArrayList<SimpleTeam> getN(int n) {
+        var result = new ArrayList<SimpleTeam>();
         for(var stage : stages) {
-            if(stageType == StageType.CIRCLE) {
-                return ((CircleStage) stage).getNTeam(n);
+            if(stageType == StageType.CIRCLE || stageType == StageType.GROUPS) {
+                var team = ((CircleStage)stage).getNTeam(n);
+                if(team != null) {
+                    result.add(team);
+                }
             }
         }
-        return null;
+        return result;
     }
 
     private void createStages() {
