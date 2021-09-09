@@ -53,6 +53,21 @@ import java.util.HashSet;
 //Т. е. надо написать класс для определения лучшей, худшей команды
 //Или не надо? Наверное, все-таки, правильнее перенести логику определения лучшей/худшей команды на пул стадий
 
+//При исполнении турнир идет по схеме последовательно,
+//создает пул стадий для каждой части схемы
+//и сразу вычисляет
+
+class Tournament {
+    private String name;
+
+    public Tournament(String name) {
+        this.name = name;
+    }
+
+    //public void AddScheme(Scheme scheme)
+}
+
+
 
 /*
 public class Tournament {
