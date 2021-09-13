@@ -1,9 +1,7 @@
 package fss.model;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 
 //Турнир - не просто набор стадий
 //Это набор стадий и отношений между ними
@@ -58,13 +56,98 @@ import java.util.HashSet;
 //и сразу вычисляет
 
 class Tournament {
-    private String name;
+    private String name = null;
+    private Scheme scheme = null;
+    private Rating rating = null;
+    private ArrayList<StagePool> stages = new ArrayList<>();
+    private HashMap<Integer, StagePool> stageByID = new HashMap<>();
+    private HashMap<Integer, ArrayList<SimpleTeam>> teamsByStageID = new HashMap<>();
 
     public Tournament(String name) {
         this.name = name;
     }
 
-    //public void AddScheme(Scheme scheme)
+    public void addScheme(Scheme scheme) {
+        this.scheme = scheme;
+    }
+
+    public void addTeamsToStage(int nID, ArrayList<SimpleTeam> teams) {
+        this.teamsByStageID.put(nID, teams);
+    }
+
+    public void calc() {
+        if(!scheme.check()) {
+            return;
+        }
+
+        for(var part : scheme) {
+            //Создать набор команд для пула стадий
+            var teams = getTeams(part);
+
+            //Создать пул стадий
+            StagePool stagePool = null;
+            switch (part.stageType) {
+                case CIRCLE:
+                case PLAYOFF: {
+                    stagePool = new StagePoolImpl(part.stageType, part.name, teams, rating, part.cntRound);
+                    break;
+                }
+                case GROUPS: {
+                    stagePool = new StagePoolImpl(part.name, part.cntGroups, teams, rating, part.cntRound);
+                    break;
+                }
+            }
+
+            stages.add(stagePool);
+            stageByID.put(part.ID, stagePool);
+            stagePool.calc();
+        }
+    }
+
+    private StagePool getStage(int stageID) {
+        if(stageByID.containsKey(stageID)) {
+            return stageByID.get(stageID);
+        }
+        return null;
+    }
+
+    private ArrayList<SimpleTeam> getTeams(SchemePart part) {
+        var teams = new ArrayList<SimpleTeam>();
+
+        for(var source : part.teamSources) {
+            if(source.source == SchemePart.Source.FROM_OUT) {
+                if(teamsByStageID.containsKey(part.ID)) {
+                    teams.addAll(teamsByStageID.get(part.ID));
+                }
+            } else if(source.source == SchemePart.Source.PREV_STAGE) {
+                var prevStage = getStage(source.sourcePrevID);
+                switch (source.typeSourcePrev) {
+                    case WINNWERS: {
+                        teams.addAll(prevStage.getWinners());
+                        break;
+                    }
+                    case LOSERS: {
+                        teams.addAll(prevStage.getLosers());
+                        break;
+                    }
+                    case N_FIRST: {
+                        teams.addAll(prevStage.getFirstN(source.cntTeam));
+                        break;
+                    }
+                    case N_LAST: {
+                        teams.addAll(prevStage.getLastN(source.cntTeam));
+                        break;
+                    }
+                    case N_TEAM: {
+                        teams.addAll(prevStage.getN(source.teamN));
+                        break;
+                    }
+                }
+            }
+        }
+
+        return teams;
+    }
 }
 
 

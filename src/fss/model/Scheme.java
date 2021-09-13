@@ -14,27 +14,35 @@ package fss.model;
  */
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 
-public class Scheme {
-    ArrayList<SchemePart> parts = new ArrayList<>();
+public class Scheme implements Iterable<SchemePart> {
+    private ArrayList<SchemePart> parts = new ArrayList<>();
+    private HashMap<Integer, SchemePart> partHash = new HashMap<>();
 
     void AddPart(SchemePart part) {
         parts.add(part);
+        partHash.put(part.ID, part);
     }
 
-    boolean Check() {
+    SchemePart GetPartByID(int ID) {
+        return partHash.get(ID);
+    }
+
+    boolean check() {
         var prevID = new HashSet<Integer>();
         for(int i = 0; i < parts.size(); ++i) {
             var part = parts.get(i);
 
             if(i == 0) {
-                if(!CheckFirstPart(part)) {
+                if(!checkFirstPart(part)) {
                     return false;
                 }
             } else {
                 for(var src : part.teamSources) {
-                    if (CheckNPart(src, prevID)) {
+                    if (checkNPart(src, prevID)) {
                         return false;
                     }
                 }
@@ -46,7 +54,7 @@ public class Scheme {
         return true;
     }
 
-    private boolean CheckNPart(SchemePart.TeamsSource src, HashSet<Integer> prevID) {
+    private boolean checkNPart(SchemePart.TeamsSource src, HashSet<Integer> prevID) {
         if(src.source == SchemePart.Source.NO) {
             return false;
         }
@@ -58,7 +66,7 @@ public class Scheme {
         return true;
     }
 
-    private boolean CheckFirstPart(SchemePart part) {
+    private boolean checkFirstPart(SchemePart part) {
         if(part.teamSources.size() != 1) {
             return false;
         }
@@ -66,5 +74,10 @@ public class Scheme {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public Iterator<SchemePart> iterator() {
+        return parts.iterator();
     }
 }
