@@ -104,6 +104,18 @@ public class StagePoolImpl extends StagePool {
         return result;
     }
 
+    @Override
+    public String toString() {
+        var sb = new StringBuilder();
+        for(var stage : stages) {
+            sb.append(name);
+            sb.append(System.lineSeparator());
+            sb.append(stage.toString());
+            sb.append(System.lineSeparator());
+        }
+        return sb.toString();
+    }
+
     private void createStages() {
         switch (stageType) {
             case CIRCLE: {

@@ -104,6 +104,18 @@ class Tournament {
         }
     }
 
+    @Override
+    public String toString() {
+        var sb = new StringBuilder();
+        sb.append(String.format("Tournament %s", name));
+        sb.append(System.lineSeparator());
+        for(var stage : stages) {
+            sb.append(stage.toString());
+            sb.append(System.lineSeparator());
+        }
+        return sb.toString();
+    }
+
     private StagePool getStage(int stageID) {
         if(stageByID.containsKey(stageID)) {
             return stageByID.get(stageID);
