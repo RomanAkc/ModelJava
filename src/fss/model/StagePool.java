@@ -29,6 +29,7 @@ public abstract class StagePool {
         this.cntGroups = cntGroups;
     }
 
+    public abstract void addWinRules(ArrayList<Table.WinRules> rules);
     public abstract void calc();
     public abstract ArrayList<SimpleTeam> getWinners();
     public abstract ArrayList<SimpleTeam> getLosers();

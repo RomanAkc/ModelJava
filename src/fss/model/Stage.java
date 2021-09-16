@@ -43,7 +43,7 @@ class CircleStage extends Stage {
     private Table table = null;
     private ArrayList<RoundSystem.Day> days = null;
     private int cntRounds = 0;
-    private ArrayList<Table.WinRules> rules = new ArrayList<>();
+    private ArrayList<Table.WinRules> rules = null;
 
     public CircleStage(String name, int cntRounds) {
         super(name);
@@ -88,8 +88,8 @@ class CircleStage extends Stage {
         alreadyCalculated = true;
     }
 
-    public void addWinRules(Table.WinRules rule) {
-        rules.add(rule);
+    public void addWinRules(ArrayList<Table.WinRules> rules) {
+        this.rules = rules;
     }
 
     ArrayList<SimpleTeam> getNFirst(int n) {

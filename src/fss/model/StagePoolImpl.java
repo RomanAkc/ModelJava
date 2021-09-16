@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class StagePoolImpl extends StagePool {
     private ArrayList<Stage> stages = new ArrayList<>();
+    private ArrayList<Table.WinRules> rules = null;
 
     public StagePoolImpl(StageType stageType, String name, ArrayList<SimpleTeam> teams, Rating rating, int cntRounds) {
         super(stageType, name, teams, rating, cntRounds);
@@ -11,6 +12,11 @@ public class StagePoolImpl extends StagePool {
 
     public StagePoolImpl(String name, int cntGroups, ArrayList<SimpleTeam> teams, Rating rating, int cntRounds) {
         super(name, cntGroups, teams, rating, cntRounds);
+    }
+
+    @Override
+    public void addWinRules(ArrayList<Table.WinRules> rules) {
+        this.rules = rules;
     }
 
     @Override
@@ -120,6 +126,7 @@ public class StagePoolImpl extends StagePool {
         switch (stageType) {
             case CIRCLE: {
                 var stage = new CircleStage(name, cntRounds);
+                stage.addWinRules(rules);
                 stage.addTeams(teams);
                 stages.add(stage);
                 break;
@@ -135,6 +142,7 @@ public class StagePoolImpl extends StagePool {
                 var groups = Sortition.groupSort(teams, cntGroups, rating);
                 for(int i = 0; i < groups.size(); ++i) {
                     var stage = new CircleStage(name + ". Group " + Integer.toString(i + 1), cntRounds);
+                    stage.addWinRules(rules);
                     stage.addTeams(groups.get(i));
                     stages.add(stage);
                 }

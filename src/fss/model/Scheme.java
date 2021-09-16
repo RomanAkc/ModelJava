@@ -31,6 +31,7 @@ public class Scheme implements Iterable<SchemePart> {
         return partHash.get(ID);
     }
 
+    //Может перенести функцию check в другое место? Или вообще убрать?
     boolean check() {
         var prevID = new HashSet<Integer>();
         for(int i = 0; i < parts.size(); ++i) {
