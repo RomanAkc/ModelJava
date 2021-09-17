@@ -106,7 +106,7 @@ class TournamentImpl extends Tournament {
                     break;
                 }
                 case PLAYOFF: {
-
+                    stagePool = new StagePoolImpl(part.stageType, part.name, teams, rating, part.cntRound);
                     break;
                 }
                 case GROUPS: {
