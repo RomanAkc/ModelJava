@@ -152,7 +152,7 @@ class TournamentImpl extends Tournament {
             } else if(source.source == SchemePart.Source.PREV_STAGE) {
                 var prevStage = getStage(source.sourcePrevID);
                 switch (source.typeSourcePrev) {
-                    case WINNWERS: {
+                    case WINNERS: {
                         teams.addAll(prevStage.getWinners());
                         break;
                     }

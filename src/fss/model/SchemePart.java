@@ -11,19 +11,11 @@ public class SchemePart {
 
     public enum TypeSourcePrev {
         NO,
-        WINNWERS,
+        WINNERS,
         LOSERS,
         N_FIRST,
         N_LAST,
         N_TEAM
-    }
-
-    public class TeamsSource {
-        public Source source = Source.NO;
-        public int sourcePrevID = -1;
-        public TypeSourcePrev typeSourcePrev = TypeSourcePrev.NO;
-        public int cntTeam = 0;
-        public int teamN = 0;
     }
 
     public int ID = 0;

@@ -55,7 +55,7 @@ public class Scheme implements Iterable<SchemePart> {
         return true;
     }
 
-    private boolean checkNPart(SchemePart.TeamsSource src, HashSet<Integer> prevID) {
+    private boolean checkNPart(TeamsSource src, HashSet<Integer> prevID) {
         if(src.source == SchemePart.Source.NO) {
             return false;
         }
