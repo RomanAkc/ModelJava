@@ -123,6 +123,25 @@ class TournamentImpl extends Tournament {
     }
 
     @Override
+    public int getCntStagePool() {
+        return stages.size();
+    }
+
+    @Override
+    public ArrayList<RoundSystem.Day> getTables(int stageID) {
+        if(!stageByID.containsKey(stageID)) {
+            return null;
+        }
+
+        var stagePool = stageByID.get(stageID);
+        if(stagePool.getStageType() != StagePool.StageType.CIRCLE) {
+            return null;
+        }
+
+        return null;
+    }
+
+    @Override
     public String toString() {
         var sb = new StringBuilder();
         sb.append(String.format("Tournament %s", name));

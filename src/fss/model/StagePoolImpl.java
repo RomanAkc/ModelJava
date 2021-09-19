@@ -111,6 +111,11 @@ public class StagePoolImpl extends StagePool {
     }
 
     @Override
+    public StageType getStageType() {
+        return stageType;
+    }
+
+    @Override
     public String toString() {
         var sb = new StringBuilder();
         for(var stage : stages) {

@@ -36,4 +36,5 @@ public abstract class StagePool {
     public abstract ArrayList<SimpleTeam> getFirstN(int cnt);
     public abstract ArrayList<SimpleTeam> getLastN(int cnt);
     public abstract ArrayList<SimpleTeam> getN(int n);
+    public abstract StageType getStageType();
 }

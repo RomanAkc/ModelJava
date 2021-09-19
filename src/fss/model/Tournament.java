@@ -15,4 +15,7 @@ public abstract class Tournament {
     public abstract void addWinRules(ArrayList<Table.WinRules> rules);
 
     public abstract void calc();
+
+    public abstract int getCntStagePool();
+    public abstract ArrayList<RoundSystem.Day> getTables(int stageID);
 }

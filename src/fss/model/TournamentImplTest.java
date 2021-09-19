@@ -15,7 +15,7 @@ public class TournamentImplTest {
 
         tournament.calc();
 
-        Assert.assertEquals(true, true);
+        Assert.assertEquals(tournament.getCntStagePool(), 1);
     }
 
     ArrayList<Table.WinRules> createWinRules() {

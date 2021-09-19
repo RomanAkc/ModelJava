@@ -64,6 +64,7 @@ class CircleStage extends Stage {
     }
 
     private void fillRulesByDefault() {
+        rules = new ArrayList<>();
         rules.clear();
         rules.add(Table.WinRules.BY_MEET);
         rules.add(Table.WinRules.BY_COUNT_WIN);
@@ -71,14 +72,13 @@ class CircleStage extends Stage {
         rules.add(Table.WinRules.BY_GOAL_FOR);
     }
 
-    @Override
     public void calc() {
         if(alreadyCalculated) {
             return;
         }
 
         var days = calcDays();
-        if(rules.isEmpty()) {
+        if(rules == null) {
             fillRulesByDefault();
         }
 
