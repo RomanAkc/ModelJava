@@ -2,17 +2,63 @@ package fss.model;
 
 import java.util.ArrayList;
 
-public class StagePoolImpl extends StagePool {
+class RoundRobinStagePool extends BaseRoundRobinStagePool {
+    private CircleStage stage = null;
+
+    public RoundRobinStagePool(String name, ArrayList<SimpleTeam> teams, Rating rating, int cntRounds) {
+        super(name, teams, rating, cntRounds);
+    }
+
+    @Override
+    public void calc() {
+        stage = new CircleStage(name, cntRounds);
+        stage.addWinRules(rules);
+        stage.addTeams(teams);
+        stage.calc();
+    }
+
+    @Override
+    public ArrayList<SimpleTeam> getWinners() {
+        return new ArrayList<>(stage.getNFirst(1));
+    }
+
+    @Override
+    public ArrayList<SimpleTeam> getLosers() {
+        return new ArrayList<>(stage.getNLast(1));
+    }
+
+    @Override
+    public ArrayList<SimpleTeam> getN(int n) {
+        var result = new ArrayList<SimpleTeam>();
+        result.add(stage.getNTeam(n));
+        return result;
+    }
+
+    @Override
+    public ArrayList<SimpleTeam> getFirstN(int cnt) {
+        return new ArrayList<>(stage.getNFirst(cnt));
+    }
+
+    @Override
+    public ArrayList<SimpleTeam> getLastN(int cnt) {
+        return new ArrayList<>(stage.getNLast(cnt));
+    }
+}
+/*
+
+public class RoundRobinStagePool1 extends BaseRoundRobinStagePool {
     private ArrayList<Stage> stages = new ArrayList<>();
     private ArrayList<Table.WinRules> rules = null;
 
-    public StagePoolImpl(StageType stageType, String name, ArrayList<SimpleTeam> teams, Rating rating, int cntRounds) {
-        super(stageType, name, teams, rating, cntRounds);
+    public RoundRobinStagePool(String name, ArrayList<SimpleTeam> teams, Rating rating, int cntRounds) {
+        super(name, teams, rating, cntRounds);
     }
 
-    public StagePoolImpl(String name, int cntGroups, ArrayList<SimpleTeam> teams, Rating rating, int cntRounds) {
+    */
+/*public RoundRobinStagePool(String name, int cntGroups, ArrayList<SimpleTeam> teams, Rating rating, int cntRounds) {
         super(name, cntGroups, teams, rating, cntRounds);
-    }
+    }*//*
+
 
     @Override
     public void addWinRules(ArrayList<Table.WinRules> rules) {
@@ -111,11 +157,6 @@ public class StagePoolImpl extends StagePool {
     }
 
     @Override
-    public StageType getStageType() {
-        return stageType;
-    }
-
-    @Override
     public String toString() {
         var sb = new StringBuilder();
         for(var stage : stages) {
@@ -156,3 +197,4 @@ public class StagePoolImpl extends StagePool {
         }
     }
 }
+*/

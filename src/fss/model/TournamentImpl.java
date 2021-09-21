@@ -54,12 +54,12 @@ import java.util.HashMap;
 //При исполнении турнир идет по схеме последовательно,
 //создает пул стадий для каждой части схемы
 //и сразу вычисляет
-
+/*
 class TournamentImpl extends Tournament {
     private Scheme scheme = null;
     private Rating rating = null;
-    private ArrayList<StagePool> stages = new ArrayList<>();
-    private HashMap<Integer, StagePool> stageByID = new HashMap<>();
+    private ArrayList<BaseStagePool> stages = new ArrayList<>();
+    private HashMap<Integer, BaseStagePool> stageByID = new HashMap<>();
     private HashMap<Integer, ArrayList<SimpleTeam>> teamsByStageID = new HashMap<>();
     private ArrayList<Table.WinRules> rules = null;
 
@@ -98,19 +98,19 @@ class TournamentImpl extends Tournament {
             var teams = getTeams(part);
 
             //Создать пул стадий
-            StagePool stagePool = null;
+            BaseStagePool stagePool = null;
             switch (part.stageType) {
                 case CIRCLE: {
-                    stagePool = new StagePoolImpl(part.stageType, part.name, teams, rating, part.cntRound);
+                    stagePool = new RoundRobinStagePool(part.stageType, part.name, teams, rating, part.cntRound);
                     stagePool.addWinRules(rules);
                     break;
                 }
                 case PLAYOFF: {
-                    stagePool = new StagePoolImpl(part.stageType, part.name, teams, rating, part.cntRound);
+                    stagePool = new RoundRobinStagePool(part.stageType, part.name, teams, rating, part.cntRound);
                     break;
                 }
                 case GROUPS: {
-                    stagePool = new StagePoolImpl(part.name, part.cntGroups, teams, rating, part.cntRound);
+                    stagePool = new RoundRobinStagePool(part.name, part.cntGroups, teams, rating, part.cntRound);
                     stagePool.addWinRules(rules);
                     break;
                 }
@@ -134,7 +134,7 @@ class TournamentImpl extends Tournament {
         }
 
         var stagePool = stageByID.get(stageID);
-        if(stagePool.getStageType() != StagePool.StageType.CIRCLE) {
+        if(stagePool.getStageType() != BaseStagePool.StageType.CIRCLE) {
             return null;
         }
 
@@ -153,7 +153,7 @@ class TournamentImpl extends Tournament {
         return sb.toString();
     }
 
-    private StagePool getStage(int stageID) {
+    private BaseStagePool getStage(int stageID) {
         if(stageByID.containsKey(stageID)) {
             return stageByID.get(stageID);
         }
@@ -199,7 +199,7 @@ class TournamentImpl extends Tournament {
     }
 }
 
-
+*/
 
 /*
 public class Tournament {
