@@ -54,8 +54,8 @@ abstract class BaseRoundRobinStagePool extends AbstractRoundRobinStagePool {
     public abstract ArrayList<SimpleTeam> getLastN(int cnt);
 }
 
-abstract class BaseStagePoolPlayOff extends BaseStagePool {
-    public BaseStagePoolPlayOff(String name, ArrayList<SimpleTeam> teams, Rating rating, int cntRounds) {
+abstract class BasePlayOffStagePool extends BaseStagePool {
+    public BasePlayOffStagePool(String name, ArrayList<SimpleTeam> teams, Rating rating, int cntRounds) {
         super(StageType.PLAYOFF, name, teams, rating, cntRounds);
     }
 }

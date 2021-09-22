@@ -44,6 +44,33 @@ class RoundRobinStagePool extends BaseRoundRobinStagePool {
         return new ArrayList<>(stage.getNLast(cnt));
     }
 }
+
+class PlayOffStagePool extends BasePlayOffStagePool {
+    private PlayOffStage stage = null;
+
+    public PlayOffStagePool(String name, ArrayList<SimpleTeam> teams, Rating rating, int cntRounds) {
+        super(name, teams, rating, cntRounds);
+    }
+
+    @Override
+    public void calc() {
+        stage = new PlayOffStage(name, cntRounds != 1);
+        stage.addTeams(teams);
+        stage.addMeets(Sortition.playOffSort(teams, rating, cntRounds != 1));
+        stage.calc();
+    }
+
+    @Override
+    public ArrayList<SimpleTeam> getWinners() {
+        return stage.getWinners();
+    }
+
+    @Override
+    public ArrayList<SimpleTeam> getLosers() {
+        return stage.getLosers();
+    }
+}
+
 /*
 
 public class RoundRobinStagePool1 extends BaseRoundRobinStagePool {
