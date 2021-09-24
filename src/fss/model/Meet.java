@@ -191,6 +191,10 @@ class WinTwoMeet extends Meet {
             return super.getResultMeet().getGoalAway() < firstMeet.getResultMeet().getGoalAway();
         }
 
+        if(!resultAdd.isDraw()) {
+            return resultAdd.isLose();
+        }
+
         return resultPen.isLose();
     }
 

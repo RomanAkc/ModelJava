@@ -30,7 +30,10 @@ class RoundRobinStagePool extends BaseRoundRobinStagePool {
     @Override
     public ArrayList<SimpleTeam> getN(int n) {
         var result = new ArrayList<SimpleTeam>();
-        result.add(stage.getNTeam(n));
+        var team = stage.getNTeam(n);
+        if(team != null) {
+            result.add(team);
+        }
         return result;
     }
 
@@ -107,6 +110,7 @@ class GroupsStagePool extends BaseGroupsStagePool {
     }
 
     private void createStages() {
+        stages = new ArrayList<>();
         var groups = Sortition.groupSort(teams, cntGroups, rating);
         for(int i = 0; i < groups.size(); ++i) {
             var stage = new CircleStage(name + ". Group " + Integer.toString(i + 1), cntRounds);
@@ -138,7 +142,10 @@ class GroupsStagePool extends BaseGroupsStagePool {
     public ArrayList<SimpleTeam> getN(int n) {
         var res = new ArrayList<SimpleTeam>();
         for(var stage : stages) {
-            res.add(stage.getNTeam(n));
+            var team = stage.getNTeam(n);
+            if(team != null) {
+                res.add(team);
+            }
         }
         return res;
     }
