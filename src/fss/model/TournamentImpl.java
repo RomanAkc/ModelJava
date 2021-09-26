@@ -54,7 +54,7 @@ import java.util.HashMap;
 //При исполнении турнир идет по схеме последовательно,
 //создает пул стадий для каждой части схемы
 //и сразу вычисляет
-/*
+
 class TournamentImpl extends Tournament {
     private Scheme scheme = null;
     private Rating rating = null;
@@ -101,17 +101,17 @@ class TournamentImpl extends Tournament {
             BaseStagePool stagePool = null;
             switch (part.stageType) {
                 case CIRCLE: {
-                    stagePool = new RoundRobinStagePool(part.stageType, part.name, teams, rating, part.cntRound);
-                    stagePool.addWinRules(rules);
+                    stagePool = new RoundRobinStagePool(part.name, teams, rating, part.cntRound);
+                    ((AbstractRoundRobinStagePool)stagePool).addWinRules(rules);
                     break;
                 }
                 case PLAYOFF: {
-                    stagePool = new RoundRobinStagePool(part.stageType, part.name, teams, rating, part.cntRound);
+                    stagePool = new PlayOffStagePool(part.name, teams, rating, part.cntRound);
                     break;
                 }
                 case GROUPS: {
-                    stagePool = new RoundRobinStagePool(part.name, part.cntGroups, teams, rating, part.cntRound);
-                    stagePool.addWinRules(rules);
+                    stagePool = new GroupsStagePool(part.name, part.cntGroups, teams, rating, part.cntRound);
+                    ((AbstractRoundRobinStagePool)stagePool).addWinRules(rules);
                     break;
                 }
             }
@@ -163,7 +163,7 @@ class TournamentImpl extends Tournament {
     private ArrayList<SimpleTeam> getTeams(SchemePart part) {
         var teams = new ArrayList<SimpleTeam>();
 
-        for(var source : part.teamSources) {
+        /*for(var source : part.teamSources) {
             if(source.source == SchemePart.Source.FROM_OUT) {
                 if(teamsByStageID.containsKey(part.ID)) {
                     teams.addAll(teamsByStageID.get(part.ID));
@@ -193,13 +193,13 @@ class TournamentImpl extends Tournament {
                     }
                 }
             }
-        }
+        }*/
 
         return teams;
     }
 }
 
-*/
+
 
 /*
 public class Tournament {
