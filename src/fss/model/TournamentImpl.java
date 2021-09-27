@@ -163,13 +163,14 @@ class TournamentImpl extends Tournament {
     private ArrayList<SimpleTeam> getTeams(SchemePart part) {
         var teams = new ArrayList<SimpleTeam>();
 
-        /*for(var source : part.teamSources) {
+        for(var source : part.teamSources) {
             if(source.source == SchemePart.Source.FROM_OUT) {
                 if(teamsByStageID.containsKey(part.ID)) {
                     teams.addAll(teamsByStageID.get(part.ID));
                 }
             } else if(source.source == SchemePart.Source.PREV_STAGE) {
                 var prevStage = getStage(source.sourcePrevID);
+
                 switch (source.typeSourcePrev) {
                     case WINNERS: {
                         teams.addAll(prevStage.getWinners());
@@ -180,360 +181,35 @@ class TournamentImpl extends Tournament {
                         break;
                     }
                     case N_FIRST: {
-                        teams.addAll(prevStage.getFirstN(source.cntTeam));
+                        if(isCanReceiveNTeam(prevStage)) {
+                            teams.addAll(((BaseRoundRobinStagePool)prevStage).getFirstN(source.cntTeam));
+                        }
                         break;
                     }
                     case N_LAST: {
-                        teams.addAll(prevStage.getLastN(source.cntTeam));
+                        if(isCanReceiveNTeam(prevStage)) {
+                            teams.addAll(((BaseRoundRobinStagePool)prevStage).getLastN(source.cntTeam));
+                        }
                         break;
                     }
                     case N_TEAM: {
-                        teams.addAll(prevStage.getN(source.teamN));
+                        if(isCanReceiveFirstLast(prevStage)) {
+                            teams.addAll(((AbstractRoundRobinStagePool)prevStage).getN(source.teamN));
+                        }
                         break;
                     }
                 }
             }
-        }*/
+        }
 
         return teams;
     }
+
+    private boolean isCanReceiveFirstLast(BaseStagePool stage) {
+        return stage instanceof AbstractRoundRobinStagePool;
+    }
+
+    private boolean isCanReceiveNTeam(BaseStagePool stage) {
+        return stage instanceof BaseRoundRobinStagePool;
+    }
 }
-
-
-
-/*
-public class Tournament {
-    public enum StageType {
-        CIRCLE,
-        GROUPS,
-        PLAYOFF
-    }
-
-    public enum TeamSource {
-        ALL_TEAMS,
-        PREVIOUS_STAGE,
-        ADD_TEAMS,
-    }
-
-    //Показывает кто идет в какую стадию дальше
-    public enum WhoGoes {
-        NUM_FIRST, //Первые N команд
-        NUM_LAST, //Последние N команд
-        WINNERS, //Победители
-        LOOSES, //Проигравшие
-        N_TEAM //N-я команда
-    }
-
-    private class WhoGoesNextStage {
-        public WhoGoes whoGoes = null;
-        public int cntGoes = 0;
-
-        public WhoGoesNextStage(WhoGoes whoGoes, int cntGoes) {
-            this.whoGoes = whoGoes;
-            this.cntGoes = cntGoes;
-        }
-    }
-
-    private class StageRules {
-        public StageType stageType = null;
-        public TeamSource teamSource = null;
-        public WhoGoesNextStage whoGoesNextStage = null;
-
-        public StageRules(StageType stageType, TeamSource teamSource, WhoGoesNextStage whoGoesNextStage) {
-            this.stageType = stageType;
-            this.teamSource = teamSource;
-            this.whoGoesNextStage = whoGoesNextStage;
-        }
-    }
-
-    private class StagesWithRules {
-        public Stage stage;
-        public StageRules stageRule;
-        public int stageOrder;
-        public int stageSourceTeamOrder;
-        public int cntTeams;
-
-        public StagesWithRules(Stage stage, StageRules stageRule, int stageOrder, int stageSourceTeamOrder, int cntTeams) {
-            this.stage = stage;
-            this.stageRule = stageRule;
-            this.stageOrder = stageOrder;
-            this.stageSourceTeamOrder = stageSourceTeamOrder;
-            this.cntTeams = cntTeams;
-        }
-    }
-
-    private String name = null;
-    private ArrayList<SimpleTeam> allTeams = new ArrayList<>();
-    private HashMap<Integer, ArrayList<SimpleTeam>> addTeams = new HashMap<>();
-    private ArrayList<StagesWithRules> stages = new ArrayList<>();
-    private SortProvider sortProvider = null;
-    protected boolean alreadyCalculated = false;
-
-    public Tournament(String name) {
-        this.name = name;
-    }
-
-    public void addTeams(SimpleTeam team) {
-        allTeams.add(team);
-    }
-
-    public void addTeams(int listNum, SimpleTeam team) {
-        if(addTeams.containsKey(listNum)) {
-            addTeams.get(listNum).add(team);
-        } else {
-            var teams = new ArrayList<SimpleTeam>();
-            teams.add(team);
-            addTeams.put(listNum, teams);
-        }
-    }
-
-    public void addStageGroups(String name, int cntGroups, int cntRound
-            , TeamSource teamSource, int prevSourceShift, WhoGoes whoGoes, int nGoes, int cntTeams) {
-        addStageImpl(name, StageType.GROUPS, cntRound, teamSource, prevSourceShift, whoGoes, nGoes, cntGroups, cntTeams);
-    }
-
-    //TODO: добавить addStageGroups с более сложным распределением по группам (кол-во команд в группе и кол-во проходящих далее)
-
-    public void addStage(String name, StageType type, int cntRound
-            , TeamSource teamSource, int prevSourceShift, WhoGoes whoGoes, int nGoes, int cntTeams) {
-        addStageImpl(name, type, cntRound, teamSource, prevSourceShift, whoGoes, nGoes, 0, cntTeams);
-    }
-
-    private void addStageImpl(String name, StageType type, int cntRound
-            , TeamSource teamSource, int prevSourceShift, WhoGoes whoGoes, int cntGoes
-            , int cntGroups, int cntTeams) {
-        var stageRule = new StageRules(type, teamSource, new WhoGoesNextStage(whoGoes, cntGoes));
-        int stageOrder = (stages.isEmpty() ? 0 : stages.get(stages.size() - 1).stageOrder + 1);
-        int stageSourceTeamOrder = stageOrder - prevSourceShift;
-        switch (type) {
-            case CIRCLE: {
-                var stage = new CircleStage(name, cntRound);
-                stages.add(new StagesWithRules(stage, stageRule, stageOrder, stageSourceTeamOrder, cntTeams));
-                break;
-            }
-            case PLAYOFF: {
-                var stage = new PlayOffStage(name, cntRound != 1);
-                stages.add(new StagesWithRules(stage, stageRule, stageOrder, stageSourceTeamOrder, cntTeams));
-                break;
-            }
-            case GROUPS: {
-                for(int i = 0; i < cntGroups; ++i) {
-                    var nameStage = (name + " Group " + Integer.toString(i));
-                    var stage = new CircleStage(nameStage, cntRound);
-                    stages.add(new StagesWithRules(stage, stageRule, stageOrder, stageSourceTeamOrder, cntTeams));
-                }
-                break;
-            }
-            //TODO: дефолт с исключением?
-        }
-    }
-
-    private boolean Check() {
-        return true; //TODO: написать?
-    }
-
-    public int getGoesNextFromStage() {
-        return 0;
-    }
-
-    public void calc() {
-        if(alreadyCalculated) {
-            return;
-        }
-
-        int curOrder = -1;
-        var lastOrderStages = new ArrayList<StagesWithRules>();
-        var stagesByOrder = new ArrayList<ArrayList<StagesWithRules>>();
-
-        for(var stageWithRule : stages) {
-            if(curOrder != stageWithRule.stageOrder) {
-                if(!lastOrderStages.isEmpty()) {
-                    stagesByOrder.add(lastOrderStages);
-                    lastOrderStages = new ArrayList<>();
-                }
-            }
-            lastOrderStages.add(stageWithRule);
-        }
-
-        if(!lastOrderStages.isEmpty()) {
-            stagesByOrder.add(lastOrderStages);
-        }
-
-        for(int stageIndex = 0; stageIndex < stagesByOrder.size(); ++stageIndex) {
-            var arrStages = stagesByOrder.get(stageIndex);
-            if(arrStages.isEmpty()) {
-                continue;
-            }
-
-            //считаем, что источник во всех стадиях с одним порядком одинаков
-            var teamSource = arrStages.get(0).stageRule.teamSource;
-            switch (teamSource) {
-                case ALL_TEAMS: {
-                    ArrayList<SimpleTeam> teams = new ArrayList<>();
-                    for(var t : allTeams) {
-                        teams.add(t);
-                    }
-
-                    if(sortProvider != null) {
-                        //TODO:
-                    } else {
-                        Collections.shuffle(teams);
-                    }
-
-                    for(int i = 0; i < teams.size(); ++i) {
-                        for(var curStage : arrStages) {
-                            for(int j = 0; j < curStage.cntTeams; ++j) {
-                                curStage.stage.addTeam(teams.get(i));
-                            }
-                        }
-                    }
-                }
-                case PREVIOUS_STAGE: {
-                    if(stageIndex < 1) {
-                        break;
-                    }
-
-                    if(arrStages.get(0).stageSourceTeamOrder < 0 || arrStages.get(0).stageSourceTeamOrder >= stagesByOrder.size()) {
-                        break;
-                    }
-
-                    ArrayList<SimpleTeam> teams = new ArrayList<>();
-                    var arrPrevStages = stagesByOrder.get(arrStages.get(0).stageSourceTeamOrder);
-
-                    for(var prevStage : arrPrevStages) {
-                        switch (prevStage.stageRule.whoGoesNextStage.whoGoes) {
-                            case NUM_FIRST: {
-                                var stage = (CircleStage)prevStage.stage;
-                                teams.addAll(stage.getNLast(prevStage.stageRule.whoGoesNextStage.cntGoes));
-                                break;
-                            }
-                            case NUM_LAST: {
-                                var stage = (CircleStage)prevStage.stage;
-                                teams.addAll(stage.getNFirst(prevStage.stageRule.whoGoesNextStage.cntGoes));
-                                break;
-                            }
-                            case N_TEAM: {
-                                var stage = (CircleStage)prevStage.stage;
-                                teams.add(stage.getNTeam(prevStage.stageRule.whoGoesNextStage.cntGoes));
-                                break;
-                            }
-                            case LOOSES: {
-                                var stage = (PlayOffStage)prevStage.stage;
-                                teams.addAll(stage.getLooses());
-                                break;
-                            }
-                            case WINNERS: {
-                                var stage = (PlayOffStage)prevStage.stage;
-                                teams.addAll(stage.getWinners());
-                                break;
-                            }
-
-                        }
-                    }
-                }
-            }
-
-
-            ;
-
-
-        }
-
-
-        //var lastOrderStages = new ArrayList<StagesWithRules>();
-        var curOrderStages = new ArrayList<StagesWithRules>();
-        boolean isTeamsAdded = false;
-        for(var stageWithRule : stages) {
-            if(stageWithRule.stageOrder != curOrder) {
-                isTeamsAdded = false;
-                for(var curStageWithRule : curOrderStages) {
-                    if(curStageWithRule.stageRule.teamSource == TeamSource.ALL_TEAMS) {
-                        if(!isTeamsAdded) {
-                            ArrayList<SimpleTeam> teams = new ArrayList<>();
-                            for(var t : allTeams) {
-                                teams.add(t);
-                            }
-
-                            if(sortProvider != null) {
-                                //TODO:
-                            } else {
-                                Collections.shuffle(teams);
-                            }
-
-                            for(int i = 0; i < teams.size(); ++i) {
-                                for(var curStage : curOrderStages) {
-                                    for(int j = 0; j < curStage.cntTeams; ++j) {
-                                        curStage.stage.addTeam(teams.get(i));
-                                    }
-                                }
-                            }
-                            isTeamsAdded = true;
-                        }
-
-                        curStageWithRule.stage.calc();
-                        curOrderStages.add(stageWithRule); //Какая-то фигня - надо перепроверить
-                    } else if(curStageWithRule.stageRule.teamSource == TeamSource.PREVIOUS_STAGE) {
-                        if(!isTeamsAdded) {
-                            ArrayList<SimpleTeam> teams = new ArrayList<>();
-                            for(var prevStageWithRule : lastOrderStages) {
-                                switch(prevStageWithRule.stageRule.whoGoesNextStage.whoGoes) {
-                                    case LOOSES: {
-                                        var stage = (PlayOffStage)prevStageWithRule.stage;
-                                        teams.addAll(stage.getLooses());
-                                        break;
-                                    }
-                                    case WINNERS: {
-                                        var stage = (PlayOffStage)prevStageWithRule.stage;
-                                        teams.addAll(stage.getWinners());
-                                        break;
-                                    }
-                                    case NUM_FIRST: {
-                                        var stage = (CircleStage)prevStageWithRule.stage;
-                                        teams.addAll(stage.getNFirst(prevStageWithRule.stageRule.whoGoesNextStage.cntGoes));
-                                        break;
-                                    }
-                                    case NUM_LAST: {
-                                        var stage = (CircleStage)prevStageWithRule.stage;
-                                        teams.addAll(stage.getNLast(prevStageWithRule.stageRule.whoGoesNextStage.cntGoes));
-                                        break;
-                                    }
-                                    case N_TEAM: {
-                                        var stage = (CircleStage)prevStageWithRule.stage;
-                                        teams.add(stage.getNTeam(prevStageWithRule.stageRule.whoGoesNextStage.cntGoes));
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if(sortProvider != null) {
-                                //TODO:
-                            } else {
-                                Collections.shuffle(teams);
-                            }
-
-                            for(int i = 0; i < teams.size(); ++i) {
-                                for(var curStage : curOrderStages) {
-                                    for(int j = 0; j < curStage.cntTeams; ++j) {
-                                        curStage.stage.addTeam(teams.get(i));
-                                    }
-                                }
-                            }
-                            isTeamsAdded = true;
-                        }
-
-                        curStageWithRule.stage.calc();
-                        curOrderStages.add(stageWithRule);
-                    }
-                }
-
-                lastOrderStages = curOrderStages;
-                curOrderStages = new ArrayList<>();
-                curOrderStages.add(stageWithRule);
-            }
-
-
-        }
-    }
-
-
-}*/
