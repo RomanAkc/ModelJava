@@ -104,6 +104,10 @@ class CircleStage extends Stage {
         return table.getNTeam(n);
     }
 
+    ArrayList<Table.Row> getFinalTableRows() {
+        return table.getLastRows();
+    }
+
     @Override
     public String toString() {
         var sb = new StringBuffer();

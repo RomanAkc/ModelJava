@@ -10,42 +10,59 @@ public class TournamentImplTest {
 
     @Test
     public void calcCountryChampionship() {
-       /* var tournament = new TournamentImpl("Italy championship");
+        var tournament = new TournamentImpl("Italy championship");
         tournament.addScheme(createScheme());
         tournament.addTeamsToStage(CHAMPIONSHIP_STAGE_ID, createClubs());
         tournament.addWinRules(createWinRules());
 
         tournament.calc();
+        Assert.assertEquals(tournament.getCntStagePool(), 1);
 
-        Assert.assertEquals(tournament.getCntStagePool(), 1);*/
+        var rows = tournament.getFinalTableRows(CHAMPIONSHIP_STAGE_ID);
+        Assert.assertFalse(rows == null);
+
+        checkFinalTable(rows);
     }
 
-    ArrayList<Table.WinRules> createWinRules() {
+    private void checkFinalTable(ArrayList<Table.Row> rows) {
+        int prevPoint = Integer.MAX_VALUE;
+        int sumFor = 0;
+        int sumAgainst = 0;
+        for(var row : rows) {
+            Assert.assertTrue(row.point <= prevPoint);
+            Assert.assertEquals(row.point, row.win * 3 + row.draw);
+            sumFor += row.goalFor;
+            sumAgainst += row.goalAgainst;
+        }
+        Assert.assertEquals(sumFor, sumAgainst);
+    }
+
+    private ArrayList<Table.WinRules> createWinRules() {
         var winRules = new ArrayList<Table.WinRules>();
-       /* winRules.add(Table.WinRules.BY_MEET);
+        winRules.add(Table.WinRules.BY_MEET);
         winRules.add(Table.WinRules.BY_GOAL_AWAY_MEET);
         winRules.add(Table.WinRules.BY_DIFFERENCE_GOAL);
         winRules.add(Table.WinRules.BY_GOAL_FOR);
-        winRules.add(Table.WinRules.BY_COUNT_WIN);*/
+        winRules.add(Table.WinRules.BY_COUNT_WIN);
         return winRules;
     }
 
     private Scheme createScheme() {
-      /*  var teamSource = new TeamsSource();
+        var teamSource = new TeamsSource();
         teamSource.source = SchemePart.Source.FROM_OUT;
 
         var part = new SchemePart(CHAMPIONSHIP_STAGE_ID, "Championship", 2, BaseStagePool.StageType.CIRCLE);
-        part.teamSources.add(teamSource);*/
+        part.teamSources.add(teamSource);
 
         var scheme = new Scheme();
-       // scheme.AddPart(part);
+        scheme.AddPart(part);
 
         return scheme;
     }
 
-    ArrayList<SimpleTeam> createClubs() {
+    private ArrayList<SimpleTeam> createClubs() {
         ArrayList<SimpleTeam> teams = new ArrayList<>();
-       /* teams.add(new ClubTeam(1, "Internazionale", "Italy", SimpleTeam.WorldPart.EUROPE, 28, 28, 28));
+        teams.add(new ClubTeam(1, "Internazionale", "Italy", SimpleTeam.WorldPart.EUROPE, 28, 28, 28));
         teams.add(new ClubTeam(2, "Roma", "Italy", SimpleTeam.WorldPart.EUROPE, 26, 26, 26));
         teams.add(new ClubTeam(3, "Milan", "Italy", SimpleTeam.WorldPart.EUROPE, 27, 27, 27));
         teams.add(new ClubTeam(4, "Napoli", "Italy", SimpleTeam.WorldPart.EUROPE, 26, 26, 26));
@@ -64,7 +81,7 @@ public class TournamentImplTest {
         teams.add(new ClubTeam(17, "Cagliari", "Italy", SimpleTeam.WorldPart.EUROPE, 28, 28, 28));
         teams.add(new ClubTeam(18, "Spezia", "Italy", SimpleTeam.WorldPart.EUROPE, 20, 20, 20));
         teams.add(new ClubTeam(19, "Hellas Verona", "Italy", SimpleTeam.WorldPart.EUROPE, 23, 23, 23));
-        teams.add(new ClubTeam(20, "Salernitana", "Italy", SimpleTeam.WorldPart.EUROPE, 19, 19, 19));*/
+        teams.add(new ClubTeam(20, "Salernitana", "Italy", SimpleTeam.WorldPart.EUROPE, 19, 19, 19));
         return teams;
     }
 

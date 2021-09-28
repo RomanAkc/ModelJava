@@ -128,7 +128,7 @@ class TournamentImpl extends Tournament {
     }
 
     @Override
-    public ArrayList<RoundSystem.Day> getTables(int stageID) {
+    public ArrayList<Table.Row> getFinalTableRows(int stageID) {
         if(!stageByID.containsKey(stageID)) {
             return null;
         }
@@ -138,7 +138,7 @@ class TournamentImpl extends Tournament {
             return null;
         }
 
-        return null;
+        return ((RoundRobinStagePool)stagePool).getFinalTableRows();
     }
 
     @Override

@@ -52,7 +52,7 @@ public class Table {
         }
     }
 
-    private class Row {
+    public class Row {
         public SimpleTeam team = null;
         public int meet = 0;
         public int win = 0;
@@ -341,6 +341,13 @@ public class Table {
     public ArrayList<SimpleTeam> getNLast(int n) {
         var table = tables.get(tables.size() - 1);
         return getNTeams(table.rows.size() - n, table.rows.size());
+    }
+
+    public ArrayList<Row> getLastRows() {
+        if(tables == null || tables.size() == 0)
+            return null;
+
+        return tables.get(tables.size() - 1).rows;
     }
 
     @Override

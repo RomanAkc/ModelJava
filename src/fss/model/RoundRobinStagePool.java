@@ -48,6 +48,11 @@ class RoundRobinStagePool extends BaseRoundRobinStagePool {
     }
 
     @Override
+    public ArrayList<Table.Row> getFinalTableRows() {
+        return stage.getFinalTableRows();
+    }
+
+    @Override
     public String toString() {
         var sb = new StringBuilder();
         sb.append("Round-robin stage: " + name);

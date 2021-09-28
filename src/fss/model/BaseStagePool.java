@@ -52,6 +52,7 @@ abstract class BaseRoundRobinStagePool extends AbstractRoundRobinStagePool {
 
     public abstract ArrayList<SimpleTeam> getFirstN(int cnt);
     public abstract ArrayList<SimpleTeam> getLastN(int cnt);
+    public abstract ArrayList<Table.Row> getFinalTableRows();
 }
 
 abstract class BasePlayOffStagePool extends BaseStagePool {
