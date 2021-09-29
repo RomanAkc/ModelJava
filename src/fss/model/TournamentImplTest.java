@@ -6,13 +6,20 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 public class TournamentImplTest {
-    private static int CHAMPIONSHIP_STAGE_ID = 1;
+    private static int CHAMPIONSHIP_STAGE_ID                = 1;
+    private static int FIRST_EUROCUP_QUALIFICATION          = 2;
+    private static int SECOND_EUROCUP_QUALIFICATION         = 3;
+    private static int EUROCUP_GROUP                        = 4;
+    private static int EUROCUP_1_8                          = 5;
+    private static int EUROCUP_1_4                          = 6;
+    private static int EUROCUP_1_2                          = 7;
+    private static int EUROCUP_FINAL                        = 8;
 
     @Test
     public void calcCountryChampionship() {
         var tournament = new TournamentImpl("Italy championship");
-        tournament.addScheme(createScheme());
-        tournament.addTeamsToStage(CHAMPIONSHIP_STAGE_ID, createClubs());
+        tournament.addScheme(createSchemeChampionship());
+        tournament.addTeamsToStage(CHAMPIONSHIP_STAGE_ID, createClubsForChampionship());
         tournament.addWinRules(createWinRules());
 
         tournament.calc();
@@ -47,20 +54,17 @@ public class TournamentImplTest {
         return winRules;
     }
 
-    private Scheme createScheme() {
-        var teamSource = new TeamsSource();
-        teamSource.source = SchemePart.Source.FROM_OUT;
+    private Scheme createSchemeChampionship() {
+        var scheme = new Scheme();
 
         var part = new SchemePart(CHAMPIONSHIP_STAGE_ID, "Championship", 2, BaseStagePool.StageType.CIRCLE);
-        part.teamSources.add(teamSource);
-
-        var scheme = new Scheme();
+        part.teamSources.add(new TeamsSource());
         scheme.AddPart(part);
 
         return scheme;
     }
 
-    private ArrayList<SimpleTeam> createClubs() {
+    private ArrayList<SimpleTeam> createClubsForChampionship() {
         ArrayList<SimpleTeam> teams = new ArrayList<>();
         teams.add(new ClubTeam(1, "Internazionale", "Italy", SimpleTeam.WorldPart.EUROPE, 28, 28, 28));
         teams.add(new ClubTeam(2, "Roma", "Italy", SimpleTeam.WorldPart.EUROPE, 26, 26, 26));
@@ -88,6 +92,17 @@ public class TournamentImplTest {
     @Test
     public void calcContinentClubTournament() {
 
+    }
+
+    private Scheme createSchemeContinentalClubTournament() {
+        var scheme = new Scheme();
+
+        var firstQual = new SchemePart(FIRST_EUROCUP_QUALIFICATION, "First Qual", 2, BaseStagePool.StageType.PLAYOFF);
+        firstQual.teamSources.add(new TeamsSource());
+        scheme.AddPart(firstQual);
+
+
+        return scheme;
     }
 
     @Test
