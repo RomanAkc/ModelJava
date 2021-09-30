@@ -91,6 +91,12 @@ public class TournamentImplTest {
 
     @Test
     public void calcContinentClubTournament() {
+        var tournament = new TournamentImpl("League champions");
+        tournament.addScheme(createSchemeContinentalClubTournament());
+
+        //tournament.addTeamsToStage(CHAMPIONSHIP_STAGE_ID, createClubsForChampionship());
+        tournament.addWinRules(createWinRules());
+
 
     }
 
@@ -101,6 +107,31 @@ public class TournamentImplTest {
         firstQual.teamSources.add(new TeamsSource());
         scheme.AddPart(firstQual);
 
+        var secondQual = new SchemePart(SECOND_EUROCUP_QUALIFICATION, "Second Qual", 2, BaseStagePool.StageType.PLAYOFF);
+        secondQual.teamSources.add(new TeamsSource());
+        secondQual.teamSources.add(new TeamsSource(FIRST_EUROCUP_QUALIFICATION, SchemePart.TypeSourcePrev.WINNERS));
+        scheme.AddPart(secondQual);
+
+        var group = new SchemePart(EUROCUP_GROUP, "Group", 2, 8);
+        group.teamSources.add(new TeamsSource());
+        group.teamSources.add(new TeamsSource(SECOND_EUROCUP_QUALIFICATION, SchemePart.TypeSourcePrev.WINNERS));
+        scheme.AddPart(group);
+
+        var playOff18 = new SchemePart(EUROCUP_1_8, "1/8", 2, BaseStagePool.StageType.PLAYOFF);
+        playOff18.teamSources.add(new TeamsSource(EUROCUP_GROUP, SchemePart.TypeSourcePrev.N_FIRST, 2));
+        scheme.AddPart(playOff18);
+
+        var playOff14 = new SchemePart(EUROCUP_1_4, "1/4", 2, BaseStagePool.StageType.PLAYOFF);
+        playOff14.teamSources.add(new TeamsSource(EUROCUP_1_8, SchemePart.TypeSourcePrev.WINNERS));
+        scheme.AddPart(playOff14);
+
+        var playOff12 = new SchemePart(EUROCUP_1_2, "1/2", 2, BaseStagePool.StageType.PLAYOFF);
+        playOff12.teamSources.add(new TeamsSource(EUROCUP_1_4, SchemePart.TypeSourcePrev.WINNERS));
+        scheme.AddPart(playOff12);
+
+        var playOffFinal = new SchemePart(EUROCUP_FINAL, "Final", 1, BaseStagePool.StageType.PLAYOFF);
+        playOffFinal.teamSources.add(new TeamsSource(EUROCUP_1_2, SchemePart.TypeSourcePrev.WINNERS));
+        scheme.AddPart(playOffFinal);
 
         return scheme;
     }

@@ -32,6 +32,14 @@ public class SchemePart {
         this.stageType = stageType;
     }
 
+    public SchemePart(int ID, String name, int cntRound, int cntGroups) {
+        this.ID = ID;
+        this.name = name;
+        this.cntRound = cntRound;
+        this.stageType = BaseStagePool.StageType.GROUPS;
+        this.cntGroups = cntGroups;
+    }
+
     public  void setCntGroups(int cntGroups) {
         this.cntGroups = cntGroups;
     }
