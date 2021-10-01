@@ -66,6 +66,11 @@ class ClubTeam extends SimpleTeam {
         this.country = country;
     }
 
+    public ClubTeam(int id, String name, String country, WorldPart worldPart, int power) {
+        super(id, name, worldPart, power, power, power);
+        this.country = country;
+    }
+
     @Override
     public String toString() {
         return super.toString();

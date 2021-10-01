@@ -43,7 +43,7 @@ public class Scheme implements Iterable<SchemePart> {
                 }
             } else {
                 for(var src : part.teamSources) {
-                    if (checkNPart(src, prevID)) {
+                    if (!checkNPart(src, prevID)) {
                         return false;
                     }
                 }

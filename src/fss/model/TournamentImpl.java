@@ -194,7 +194,7 @@ class TournamentImpl extends Tournament {
                     }
                     case N_TEAM: {
                         if(isCanReceiveFirstLast(prevStage)) {
-                            teams.addAll(((AbstractRoundRobinStagePool)prevStage).getN(source.teamN));
+                            teams.addAll(((AbstractRoundRobinStagePool)prevStage).getN(source.teamN - 1));
                         }
                         break;
                     }
