@@ -224,6 +224,24 @@ class WinTwoMeet extends Meet {
     }
 
     @Override
+    public Result getResultMeet() {
+        var goalsFor = firstMeet.getResultMeet().getGoalHome() + super.getResultMeet().getGoalAway();
+        var goalsAway = firstMeet.getResultMeet().getGoalAway() + super.getResultMeet().getGoalHome();
+
+        if(resultAdd != null) {
+            goalsFor += resultAdd.getGoalAway();
+            goalsAway += resultAdd.getGoalHome();
+        }
+
+        if(resultPen != null) {
+            goalsFor += resultPen.getGoalAway();
+            goalsAway += resultPen.getGoalHome();
+        }
+
+        return new Result(goalsFor, goalsAway);
+    }
+
+    @Override
     public String toString() {
         var res = new StringBuffer();
         res.append(firstMeet.toString());
