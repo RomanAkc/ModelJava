@@ -97,7 +97,6 @@ public class TournamentImplTest {
         tournament.addTeamsToStage(SECOND_EUROCUP_QUALIFICATION, createClubsLC2stQual());
         tournament.addTeamsToStage(EUROCUP_GROUP, createClubsLCGroup());
         tournament.addWinRules(createWinRules());
-
         tournament.calc();
 
         System.out.println(tournament);

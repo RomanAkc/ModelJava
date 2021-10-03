@@ -124,27 +124,31 @@ class WinMeet extends Meet {
     public void calc() {
         super.calc();
 
-        if(getResultMeet().isDraw()) {
-            resultAdd = calculate(false);
-        } else {
+        if(!getResultMeet().isDraw()){
             return;
         }
 
-        if(resultAdd.isDraw()) {
-            resultPen = ResultCalculator.calcPen();
+        resultAdd = ResultCalculator.calcAddTime(getTeamHome().getPower(), getTeamAway().getPower());
+        if(!resultAdd.isDraw()) {
+            return;
         }
+
+        resultPen = ResultCalculator.calcPen();
     }
 
     @Override
     public String toString() {
         var res = new StringBuffer();
         res.append(super.toString());
-        res.append(", add ");
-        res.append(resultAdd.toString());
 
-        if(resultAdd.isDraw()) {
-            res.append(", pen ");
+        if(resultAdd != null) {
+            res.append(", add ");
             res.append(resultAdd.toString());
+        }
+
+        if(resultPen != null) {
+            res.append(", pen ");
+            res.append(resultPen.toString());
         }
 
         return res.toString();
@@ -161,20 +165,16 @@ class WinTwoMeet extends Meet {
         firstMeet = new Meet(teamHome, teamAway);
     }
 
-    private int getGoalsFirstTeam() {
+    private int getGoalsFirstTeamMain() {
         return firstMeet.getResultMeet().getGoalHome() + super.getResultMeet().getGoalAway();
     }
 
-    private int getGoalsSecondTeam() {
+    private int getGoalsSecondTeamMain() {
         return firstMeet.getResultMeet().getGoalAway() + super.getResultMeet().getGoalHome();
     }
 
     private boolean isDraw() {
-        if(getGoalsFirstTeam() != getGoalsSecondTeam()) {
-            return false;
-        }
-
-        if(firstMeet.getResultMeet().getGoalAway() != super.getResultMeet().getGoalAway()) {
+        if(getGoalsFirstTeamMain() != getGoalsSecondTeamMain()) {
             return false;
         }
 
@@ -183,27 +183,15 @@ class WinTwoMeet extends Meet {
 
     @Override
     public boolean isWinnerHomeTeam() {
-        if(getGoalsFirstTeam() != getGoalsSecondTeam()) {
-            return getGoalsFirstTeam() < getGoalsSecondTeam();
-        }
-
-        if(firstMeet.getResultMeet().getGoalAway() != super.getResultMeet().getGoalAway()) {
-            return super.getResultMeet().getGoalAway() < firstMeet.getResultMeet().getGoalAway();
-        }
-
-        if(!resultAdd.isDraw()) {
-            return resultAdd.isLose();
-        }
-
-        return resultPen.isLose();
+        return getResultMeet().isWin();
     }
 
     @Override
     public SimpleTeam getWinner() {
         if(isWinnerHomeTeam()) {
-            return getTeamHome();
+            return getTeamAway(); //because teams in base class are in reverse order
         }
-        return getTeamAway();
+        return getTeamHome(); //because teams in base class are in reverse order
     }
 
     @Override
@@ -216,17 +204,17 @@ class WinTwoMeet extends Meet {
         }
 
         resultAdd = ResultCalculator.calcAddTime(getTeamAway().getPower(), getTeamHome().getPower());
-        if(resultAdd.getGoalHome() != 0) {
+        if(!resultAdd.isDraw()) {
            return;
         }
 
-        resultPen = ResultCalculator.calcPen();
+        resultPen = ResultCalculator.calcPen().reverse();
     }
 
     @Override
     public Result getResultMeet() {
-        var goalsFor = firstMeet.getResultMeet().getGoalHome() + super.getResultMeet().getGoalAway();
-        var goalsAway = firstMeet.getResultMeet().getGoalAway() + super.getResultMeet().getGoalHome();
+        var goalsFor = getGoalsFirstTeamMain();
+        var goalsAway = getGoalsSecondTeamMain();
 
         if(resultAdd != null) {
             goalsFor += resultAdd.getGoalAway();
@@ -247,6 +235,17 @@ class WinTwoMeet extends Meet {
         res.append(firstMeet.toString());
         res.append(System.lineSeparator());
         res.append(super.toString());
+
+        if(resultAdd != null) {
+            res.append(", add ");
+            res.append(resultAdd.toString());
+        }
+
+        if(resultPen != null) {
+            res.append(", pen ");
+            res.append(resultPen.toString());
+        }
+
         return res.toString();
     }
 }

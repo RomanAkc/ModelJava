@@ -14,6 +14,7 @@ public class Result {
     public boolean isDraw() { return goalHome == goalAway; }
     public boolean isWin() { return  goalHome > goalAway; }
     public boolean isLose() { return goalHome < goalAway; }
+    public Result reverse() { return new Result(goalAway, goalHome); }
     @Override
     public String toString() {
         var res = new StringBuffer();

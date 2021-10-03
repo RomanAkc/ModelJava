@@ -18,7 +18,7 @@ public class MeetTest extends BaseTest {
 
     @Test
     public void winTwoMeetResult() {
-        for(int i = 0; i < 10000; ++i) {
+        for(int i = 0; i < 1000; ++i) {
             var meet = createWinTwoMeet();
             meet.calc();
             var result = meet.getResultMeet();
