@@ -1,6 +1,6 @@
 package fss.model;
 
-public class Meet {
+class Meet {
     private SimpleTeam teamHome = null;
     private SimpleTeam teamAway = null;
     private Result result = null;
@@ -23,11 +23,6 @@ public class Meet {
             return ResultCalculator.calcUseOwner(teamHome.getPower(), teamAway.getPower());
 
         return ResultCalculator.calc(teamHome.getPower(), teamAway.getPower());
-    }
-
-    //TODO: удалить функцию
-    protected boolean isAlreadyCalculated() {
-        return result != null;
     }
 
     @Override
@@ -85,8 +80,8 @@ public class Meet {
 }
 
 class WinMeet extends Meet {
-    private Result resultAdd;
-    private Result resultPen;
+    private Result resultAdd = null;
+    private Result resultPen = null;
 
     public WinMeet(SimpleTeam teamHome, SimpleTeam teamAway) {
         super(teamHome, teamAway);
@@ -94,22 +89,7 @@ class WinMeet extends Meet {
 
     @Override
     public boolean isWinnerHomeTeam() {
-        if(!getResultMeet().isDraw()) {
-            return isWinResult(getResultMeet());
-        }
-
-        if(!resultAdd.isDraw()) {
-            return isWinResult(resultAdd);
-        }
-
-        return isWinResult(resultPen);
-    }
-
-    private boolean isWinResult(Result resultAdd) {
-        if (resultAdd.isWin()) {
-            return true;
-        }
-        return false;
+        return getResultMeet().isWin();
     }
 
     @Override
@@ -124,7 +104,7 @@ class WinMeet extends Meet {
     public void calc() {
         super.calc();
 
-        if(!getResultMeet().isDraw()){
+        if(!getResultMeet().isDraw()) {
             return;
         }
 
@@ -134,6 +114,24 @@ class WinMeet extends Meet {
         }
 
         resultPen = ResultCalculator.calcPen();
+    }
+
+    @Override
+    public Result getResultMeet() {
+        var goalsFor = super.getResultMeet().getGoalHome();
+        var goalsAway = super.getResultMeet().getGoalAway();
+
+        if(resultAdd != null) {
+            goalsFor += resultAdd.getGoalHome();
+            goalsAway += resultAdd.getGoalAway();
+        }
+
+        if(resultPen != null) {
+            goalsFor += resultPen.getGoalHome();
+            goalsAway += resultPen.getGoalAway();
+        }
+
+        return new Result(goalsFor, goalsAway);
     }
 
     @Override

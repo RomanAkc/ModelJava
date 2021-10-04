@@ -1,11 +1,9 @@
 package fss.model;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 public class RoundSystem {
     public static class Day {
-        private boolean alreadyCalculated = false;
         private ArrayList<Meet> meetings = new ArrayList<Meet>();
         private int numDay = 0;
         public Day(int numDay) {
@@ -22,22 +20,7 @@ public class RoundSystem {
             calculate(true);
         }
 
-        public void updateAlreadyCalculated() {
-            boolean already = true;
-            for(var m : meetings) {
-                if(!m.isAlreadyCalculated()) {
-                    already = false;
-                    break;
-                }
-            }
-            alreadyCalculated = already;
-        }
-
         private void calculate(boolean useOwner) {
-            if(alreadyCalculated) {
-                return;
-            }
-
             for(var meet : meetings) {
                 if(useOwner) {
                     meet.calcUseOwner();
@@ -45,7 +28,6 @@ public class RoundSystem {
                     meet.calc();
                 }
             }
-            alreadyCalculated = true;
         }
 
         @Override

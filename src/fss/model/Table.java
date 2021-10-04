@@ -164,7 +164,6 @@ public class Table {
             for(var m : meets) {
                 tempTable.days.add(new RoundSystem.Day(dayFrom + 1));
                 tempTable.days.get(dayFrom).addMeet(m);
-                tempTable.days.get(dayFrom).updateAlreadyCalculated();
                 dayFrom++;
             }
         }

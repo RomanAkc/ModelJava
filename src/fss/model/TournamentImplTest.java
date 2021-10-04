@@ -93,9 +93,11 @@ public class TournamentImplTest {
     public void calcContinentClubTournament() {
         var tournament = new TournamentImpl("League champions");
         tournament.addScheme(createSchemeContinentalClubTournament());
+
         tournament.addTeamsToStage(FIRST_EUROCUP_QUALIFICATION, createClubsLC1stQual());
         tournament.addTeamsToStage(SECOND_EUROCUP_QUALIFICATION, createClubsLC2stQual());
         tournament.addTeamsToStage(EUROCUP_GROUP, createClubsLCGroup());
+
         tournament.addWinRules(createWinRules());
         tournament.calc();
 

@@ -13,7 +13,7 @@ public class MeetTest extends BaseTest {
     @Test
     public void meetNotCalc() {
         var meet = createMeet();
-        Assert.assertFalse(meet.isAlreadyCalculated());
+        Assert.assertFalse(checkMeetIsCalculated(meet));
     }
 
     @Test
@@ -24,6 +24,21 @@ public class MeetTest extends BaseTest {
             var result = meet.getResultMeet();
             Assert.assertNotEquals(result.getGoalHome(), result.getGoalAway());
         }
+    }
+
+    @Test
+    public void winMeetResult() {
+        for(int i = 0; i < 1000; ++i) {
+            var meet = createWinMeet();
+            meet.calc();
+            var result = meet.getResultMeet();
+            Assert.assertNotEquals(result.getGoalHome(), result.getGoalAway());
+        }
+    }
+
+    private WinMeet createWinMeet() {
+        var teams = generateTeams(2);
+        return new WinMeet(teams.get(0), teams.get(1));
     }
 
     private WinTwoMeet createWinTwoMeet() {
