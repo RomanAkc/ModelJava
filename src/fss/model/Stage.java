@@ -2,10 +2,9 @@ package fss.model;
 
 import java.util.*;
 
-public abstract class Stage {
+abstract class Stage {
     private String name = null;
     protected ArrayList<SimpleTeam> teams = null;
-    protected boolean alreadyCalculated = false;
 
     public Stage(String name) {
         this.name = name;
@@ -73,10 +72,6 @@ class CircleStage extends Stage {
     }
 
     public void calc() {
-        if(alreadyCalculated) {
-            return;
-        }
-
         var days = calcDays();
         if(rules == null) {
             fillRulesByDefault();
@@ -84,8 +79,6 @@ class CircleStage extends Stage {
 
         table = new Table(teams, days, rules);
         table.calc();
-
-        alreadyCalculated = true;
     }
 
     public void addWinRules(ArrayList<Table.WinRules> rules) {
@@ -112,7 +105,7 @@ class CircleStage extends Stage {
     public String toString() {
         var sb = new StringBuffer();
         sb.append(super.toString());
-        if(alreadyCalculated) {
+        if(table != null) {
             sb.append(table.toString());
         } else {
             sb.append("Is not calculated");

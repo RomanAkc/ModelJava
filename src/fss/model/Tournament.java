@@ -10,7 +10,7 @@ public abstract class Tournament {
     }
 
     public abstract void addScheme(Scheme scheme);
-    public abstract void addTeamsToStage(int nID, ArrayList<SimpleTeam> teams) ;
+    public abstract void addTeamsToStage(int stageID, ArrayList<SimpleTeam> teams) ;
     public abstract void addRating(Rating rating);
     public abstract void addWinRules(ArrayList<Table.WinRules> rules);
 
@@ -18,4 +18,5 @@ public abstract class Tournament {
 
     public abstract int getCntStagePool();
     public abstract ArrayList<Table.Row> getFinalTableRows(int stageID);
+    public abstract ArrayList<SimpleTeam> getStageTeams(int stageID, SchemePart.TypeSourcePrev typeSource, int cntTeamOrNTeam);
 }

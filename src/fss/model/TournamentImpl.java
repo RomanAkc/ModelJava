@@ -73,8 +73,8 @@ class TournamentImpl extends Tournament {
     }
 
     @Override
-    public void addTeamsToStage(int nID, ArrayList<SimpleTeam> teams) {
-        this.teamsByStageID.put(nID, teams);
+    public void addTeamsToStage(int stageID, ArrayList<SimpleTeam> teams) {
+        this.teamsByStageID.put(stageID, teams);
     }
 
     @Override
@@ -142,6 +142,16 @@ class TournamentImpl extends Tournament {
     }
 
     @Override
+    public ArrayList<SimpleTeam> getStageTeams(int stageID, SchemePart.TypeSourcePrev typeSource, int cntTeamOrNTeam) {
+        var stage = getStage(stageID);
+        if(stage == null) {
+            return new ArrayList<SimpleTeam>();
+        }
+
+        return fillTeamsBySourceFromStage(stage, typeSource, cntTeamOrNTeam);
+    }
+
+    @Override
     public String toString() {
         var sb = new StringBuilder();
         sb.append(String.format("Tournament %s", name));
@@ -170,38 +180,44 @@ class TournamentImpl extends Tournament {
                 }
             } else if(source.source == SchemePart.Source.PREV_STAGE) {
                 var prevStage = getStage(source.sourcePrevID);
-
-                switch (source.typeSourcePrev) {
-                    case WINNERS: {
-                        teams.addAll(prevStage.getWinners());
-                        break;
-                    }
-                    case LOSERS: {
-                        teams.addAll(prevStage.getLosers());
-                        break;
-                    }
-                    case N_FIRST: {
-                        if(isCanReceiveNTeam(prevStage)) {
-                            teams.addAll(((BaseRoundRobinStagePool)prevStage).getFirstN(source.cntTeam));
-                        }
-                        break;
-                    }
-                    case N_LAST: {
-                        if(isCanReceiveNTeam(prevStage)) {
-                            teams.addAll(((BaseRoundRobinStagePool)prevStage).getLastN(source.cntTeam));
-                        }
-                        break;
-                    }
-                    case N_TEAM: {
-                        if(isCanReceiveFirstLast(prevStage)) {
-                            teams.addAll(((AbstractRoundRobinStagePool)prevStage).getN(source.teamN - 1));
-                        }
-                        break;
-                    }
-                }
+                int cntTeamOrNTeam = source.typeSourcePrev == SchemePart.TypeSourcePrev.N_TEAM ? source.teamN - 1 : source.cntTeam;
+                teams.addAll(fillTeamsBySourceFromStage(prevStage, source.typeSourcePrev, cntTeamOrNTeam));
             }
         }
 
+        return teams;
+    }
+
+    private ArrayList<SimpleTeam> fillTeamsBySourceFromStage(BaseStagePool stage, SchemePart.TypeSourcePrev source, int cntTeamOrNTeam) {
+        var teams = new ArrayList<SimpleTeam>();
+        switch (source) {
+            case WINNERS: {
+                teams.addAll(stage.getWinners());
+                break;
+            }
+            case LOSERS: {
+                teams.addAll(stage.getLosers());
+                break;
+            }
+            case N_FIRST: {
+                if(isCanReceiveNTeam(stage)) {
+                    teams.addAll(((BaseRoundRobinStagePool)stage).getFirstN(cntTeamOrNTeam));
+                }
+                break;
+            }
+            case N_LAST: {
+                if(isCanReceiveNTeam(stage)) {
+                    teams.addAll(((BaseRoundRobinStagePool)stage).getLastN(cntTeamOrNTeam));
+                }
+                break;
+            }
+            case N_TEAM: {
+                if(isCanReceiveFirstLast(stage)) {
+                    teams.addAll(((AbstractRoundRobinStagePool)stage).getN(cntTeamOrNTeam));
+                }
+                break;
+            }
+        }
         return teams;
     }
 

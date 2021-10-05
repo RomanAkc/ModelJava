@@ -101,7 +101,18 @@ public class TournamentImplTest {
         tournament.addWinRules(createWinRules());
         tournament.calc();
 
-        System.out.println(tournament);
+        Assert.assertEquals(tournament.getCntStagePool(), 7);
+        Assert.assertEquals(tournament.getStageTeams(FIRST_EUROCUP_QUALIFICATION, SchemePart.TypeSourcePrev.WINNERS, 0).size(), 8);
+        Assert.assertEquals(tournament.getStageTeams(SECOND_EUROCUP_QUALIFICATION, SchemePart.TypeSourcePrev.WINNERS, 0).size(), 8);
+        Assert.assertEquals(tournament.getStageTeams(EUROCUP_GROUP, SchemePart.TypeSourcePrev.N_TEAM, 1).size(), 8);
+        Assert.assertEquals(tournament.getStageTeams(EUROCUP_GROUP, SchemePart.TypeSourcePrev.N_TEAM, 2).size(), 8);
+        Assert.assertEquals(tournament.getStageTeams(EUROCUP_1_8, SchemePart.TypeSourcePrev.WINNERS, 0).size(), 8);
+        Assert.assertEquals(tournament.getStageTeams(EUROCUP_1_4, SchemePart.TypeSourcePrev.WINNERS, 0).size(), 4);
+        Assert.assertEquals(tournament.getStageTeams(EUROCUP_1_2, SchemePart.TypeSourcePrev.WINNERS, 0).size(), 2);
+        Assert.assertEquals(tournament.getStageTeams(EUROCUP_FINAL, SchemePart.TypeSourcePrev.WINNERS, 0).size(), 1);
+
+
+        //System.out.println(tournament);
     }
 
     private Scheme createSchemeContinentalClubTournament() {
