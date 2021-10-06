@@ -152,6 +152,14 @@ class TournamentImpl extends Tournament {
     }
 
     @Override
+    public ArrayList<SimpleTeam> getAllTournamentTeams() {
+        var allTeams = new ArrayList<SimpleTeam>();
+        for(var teams : teamsByStageID.values())
+            allTeams.addAll(teams);
+        return allTeams;
+    }
+
+    @Override
     public String toString() {
         var sb = new StringBuilder();
         sb.append(String.format("Tournament %s", name));

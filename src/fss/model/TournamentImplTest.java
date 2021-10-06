@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 public class TournamentImplTest {
     private static int CHAMPIONSHIP_STAGE_ID                = 1;
@@ -98,7 +100,9 @@ public class TournamentImplTest {
         tournament.addTeamsToStage(SECOND_EUROCUP_QUALIFICATION, createClubsLC2stQual());
         tournament.addTeamsToStage(EUROCUP_GROUP, createClubsLCGroup());
 
+        tournament.addRating(createRatingContinentalClubTournament(tournament.getAllTournamentTeams()));
         tournament.addWinRules(createWinRules());
+
         tournament.calc();
 
         Assert.assertEquals(tournament.getCntStagePool(), 7);
@@ -111,8 +115,7 @@ public class TournamentImplTest {
         Assert.assertEquals(tournament.getStageTeams(EUROCUP_1_2, SchemePart.TypeSourcePrev.WINNERS, 0).size(), 2);
         Assert.assertEquals(tournament.getStageTeams(EUROCUP_FINAL, SchemePart.TypeSourcePrev.WINNERS, 0).size(), 1);
 
-
-        //System.out.println(tournament);
+        System.out.println(tournament);
     }
 
     private Scheme createSchemeContinentalClubTournament() {
@@ -219,6 +222,74 @@ public class TournamentImplTest {
         teams.add(new ClubTeam(24, "Manchester City", "England", SimpleTeam.WorldPart.EUROPE, 30));
 
         return teams;
+    }
+
+    private TestRating createRatingContinentalClubTournament(ArrayList<SimpleTeam> teams) {
+        var teamIndexByNames = new HashMap<String, Integer>();
+        for(int i = 0; i < teams.size(); ++i) {
+            teamIndexByNames.put(teams.get(i).getName(), i);
+        }
+
+        var ratingTeams = new ArrayList<SimpleTeam>();
+        var teamsInOrder = getTeamNamesInOrder();
+        for(var teamName : teamsInOrder) {
+            ratingTeams.add(teams.get(teamIndexByNames.get(teamName)));
+        }
+
+        return new TestRating(ratingTeams);
+    }
+
+    private ArrayList<String> getTeamNamesInOrder() {
+        var teamsInOrder = new ArrayList<String>();
+        teamsInOrder.add("Bayern Munich");
+        teamsInOrder.add("Manchester City");
+        teamsInOrder.add("Liverpool");
+        teamsInOrder.add("Chelsea");
+        teamsInOrder.add("Barcelona");
+        teamsInOrder.add("PSG");
+        teamsInOrder.add("Real Madrid");
+        teamsInOrder.add("Juventus");
+        teamsInOrder.add("Atletico Madrid");
+        teamsInOrder.add("Manchester United");
+        teamsInOrder.add("Sevilla");
+        teamsInOrder.add("Borussia Dortmund");
+        teamsInOrder.add("Porto");
+        teamsInOrder.add("Shakhtar Donetsk");
+        teamsInOrder.add("RB Leipzig");
+        teamsInOrder.add("Ajax");
+        teamsInOrder.add("Salzburg");
+        teamsInOrder.add("Lyon");
+        teamsInOrder.add("Atalanta");
+        teamsInOrder.add("Inter Milan");
+        teamsInOrder.add("Benfica");
+        teamsInOrder.add("Basel");
+        teamsInOrder.add("Zenit");
+        teamsInOrder.add("Dinamo Kiev");
+        teamsInOrder.add("Sporting Lisbon");
+        teamsInOrder.add("Dinamo Zagbeb");
+        teamsInOrder.add("Brugge");
+        teamsInOrder.add("Olympiakos");
+        teamsInOrder.add("Young Boys");
+        teamsInOrder.add("AC Milan");
+        teamsInOrder.add("Rangers");
+        teamsInOrder.add("Viktoria");
+        teamsInOrder.add("Celtic");
+        teamsInOrder.add("PSV");
+        teamsInOrder.add("Partizan");
+        teamsInOrder.add("Wolfsburg");
+        teamsInOrder.add("AEK");
+        teamsInOrder.add("Spartak Moscow");
+        teamsInOrder.add("AZ");
+        teamsInOrder.add("Lille");
+        teamsInOrder.add("Monaco");
+        teamsInOrder.add("Appolon");
+        teamsInOrder.add("Rapid Vienna");
+        teamsInOrder.add("Fenerbahce");
+        teamsInOrder.add("Antwerp");
+        teamsInOrder.add("Osijec");
+        teamsInOrder.add("Sporting Braga");
+        teamsInOrder.add("Red Star Belgrade");
+        return teamsInOrder;
     }
 
     @Test
