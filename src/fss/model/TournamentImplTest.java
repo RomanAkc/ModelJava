@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 public class TournamentImplTest {
     private static int CHAMPIONSHIP_STAGE_ID                = 1;
@@ -106,14 +105,14 @@ public class TournamentImplTest {
         tournament.calc();
 
         Assert.assertEquals(tournament.getCntStagePool(), 7);
-        Assert.assertEquals(tournament.getStageTeams(FIRST_EUROCUP_QUALIFICATION, SchemePart.TypeSourcePrev.WINNERS, 0).size(), 8);
-        Assert.assertEquals(tournament.getStageTeams(SECOND_EUROCUP_QUALIFICATION, SchemePart.TypeSourcePrev.WINNERS, 0).size(), 8);
-        Assert.assertEquals(tournament.getStageTeams(EUROCUP_GROUP, SchemePart.TypeSourcePrev.N_TEAM, 1).size(), 8);
-        Assert.assertEquals(tournament.getStageTeams(EUROCUP_GROUP, SchemePart.TypeSourcePrev.N_TEAM, 2).size(), 8);
-        Assert.assertEquals(tournament.getStageTeams(EUROCUP_1_8, SchemePart.TypeSourcePrev.WINNERS, 0).size(), 8);
-        Assert.assertEquals(tournament.getStageTeams(EUROCUP_1_4, SchemePart.TypeSourcePrev.WINNERS, 0).size(), 4);
-        Assert.assertEquals(tournament.getStageTeams(EUROCUP_1_2, SchemePart.TypeSourcePrev.WINNERS, 0).size(), 2);
-        Assert.assertEquals(tournament.getStageTeams(EUROCUP_FINAL, SchemePart.TypeSourcePrev.WINNERS, 0).size(), 1);
+        Assert.assertEquals(tournament.getStageTeams(FIRST_EUROCUP_QUALIFICATION, TypeSource.WINNERS, 0).size(), 8);
+        Assert.assertEquals(tournament.getStageTeams(SECOND_EUROCUP_QUALIFICATION, TypeSource.WINNERS, 0).size(), 8);
+        Assert.assertEquals(tournament.getStageTeams(EUROCUP_GROUP, TypeSource.N_TEAM, 1).size(), 8);
+        Assert.assertEquals(tournament.getStageTeams(EUROCUP_GROUP, TypeSource.N_TEAM, 2).size(), 8);
+        Assert.assertEquals(tournament.getStageTeams(EUROCUP_1_8, TypeSource.WINNERS, 0).size(), 8);
+        Assert.assertEquals(tournament.getStageTeams(EUROCUP_1_4, TypeSource.WINNERS, 0).size(), 4);
+        Assert.assertEquals(tournament.getStageTeams(EUROCUP_1_2, TypeSource.WINNERS, 0).size(), 2);
+        Assert.assertEquals(tournament.getStageTeams(EUROCUP_FINAL, TypeSource.WINNERS, 0).size(), 1);
 
         System.out.println(tournament);
     }
@@ -127,29 +126,33 @@ public class TournamentImplTest {
 
         var secondQual = new SchemePart(SECOND_EUROCUP_QUALIFICATION, "Second Qual", 2, BaseStagePool.StageType.PLAYOFF);
         secondQual.teamSources.add(new TeamsSource());
-        secondQual.teamSources.add(new TeamsSource(FIRST_EUROCUP_QUALIFICATION, SchemePart.TypeSourcePrev.WINNERS));
+        secondQual.teamSources.add(new TeamsSource(FIRST_EUROCUP_QUALIFICATION, TypeSource.WINNERS));
         scheme.AddPart(secondQual);
 
         var group = new SchemePart(EUROCUP_GROUP, "Group", 2, 8);
         group.teamSources.add(new TeamsSource());
-        group.teamSources.add(new TeamsSource(SECOND_EUROCUP_QUALIFICATION, SchemePart.TypeSourcePrev.WINNERS));
+        group.teamSources.add(new TeamsSource(SECOND_EUROCUP_QUALIFICATION, TypeSource.WINNERS));
         scheme.AddPart(group);
 
         var playOff18 = new SchemePart(EUROCUP_1_8, "1/8", 2, BaseStagePool.StageType.PLAYOFF);
-        playOff18.teamSources.add(new TeamsSource(EUROCUP_GROUP, SchemePart.TypeSourcePrev.N_TEAM, 1));
-        playOff18.teamSources.add(new TeamsSource(EUROCUP_GROUP, SchemePart.TypeSourcePrev.N_TEAM, 2));
+        playOff18.teamSources.add(new TeamsSource(EUROCUP_GROUP, TypeSource.N_TEAM, 1));
+        playOff18.teamSources.add(new TeamsSource(EUROCUP_GROUP, TypeSource.N_TEAM, 2));
+        playOff18.ratingType = RatingType.BY_ORDER;
         scheme.AddPart(playOff18);
 
         var playOff14 = new SchemePart(EUROCUP_1_4, "1/4", 2, BaseStagePool.StageType.PLAYOFF);
-        playOff14.teamSources.add(new TeamsSource(EUROCUP_1_8, SchemePart.TypeSourcePrev.WINNERS));
+        playOff14.teamSources.add(new TeamsSource(EUROCUP_1_8, TypeSource.WINNERS));
+        playOff14.ratingType = RatingType.NO;
         scheme.AddPart(playOff14);
 
         var playOff12 = new SchemePart(EUROCUP_1_2, "1/2", 2, BaseStagePool.StageType.PLAYOFF);
-        playOff12.teamSources.add(new TeamsSource(EUROCUP_1_4, SchemePart.TypeSourcePrev.WINNERS));
+        playOff12.teamSources.add(new TeamsSource(EUROCUP_1_4, TypeSource.WINNERS));
+        playOff12.ratingType = RatingType.NO;
         scheme.AddPart(playOff12);
 
         var playOffFinal = new SchemePart(EUROCUP_FINAL, "Final", 1, BaseStagePool.StageType.PLAYOFF);
-        playOffFinal.teamSources.add(new TeamsSource(EUROCUP_1_2, SchemePart.TypeSourcePrev.WINNERS));
+        playOffFinal.teamSources.add(new TeamsSource(EUROCUP_1_2, TypeSource.WINNERS));
+        playOffFinal.ratingType = RatingType.NO;
         scheme.AddPart(playOffFinal);
 
         return scheme;

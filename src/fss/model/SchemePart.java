@@ -9,21 +9,13 @@ public class SchemePart {
         PREV_STAGE
     }
 
-    public enum TypeSourcePrev {
-        NO,
-        WINNERS,
-        LOSERS,
-        N_FIRST,
-        N_LAST,
-        N_TEAM
-    }
-
     public int ID = 0;
     public String name = null;
     public int cntRound = 0;
     public BaseStagePool.StageType stageType;
     public ArrayList<TeamsSource> teamSources = new ArrayList<>();
     public int cntGroups = 0;
+    public RatingType ratingType = RatingType.STANDART;
 
     public SchemePart(int ID, String name, int cntRound, BaseStagePool.StageType stageType) {
         this.ID = ID;
@@ -37,10 +29,6 @@ public class SchemePart {
         this.name = name;
         this.cntRound = cntRound;
         this.stageType = BaseStagePool.StageType.GROUPS;
-        this.cntGroups = cntGroups;
-    }
-
-    public  void setCntGroups(int cntGroups) {
         this.cntGroups = cntGroups;
     }
 }

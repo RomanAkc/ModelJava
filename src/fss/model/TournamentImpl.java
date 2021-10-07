@@ -99,18 +99,19 @@ class TournamentImpl extends Tournament {
 
             //Создать пул стадий
             BaseStagePool stagePool = null;
+            var ratingForUse = getRatingForUse(part.ratingType, teams);
             switch (part.stageType) {
                 case CIRCLE: {
-                    stagePool = new RoundRobinStagePool(part.name, teams, rating, part.cntRound);
+                    stagePool = new RoundRobinStagePool(part.name, teams, ratingForUse, part.cntRound);
                     ((AbstractRoundRobinStagePool)stagePool).addWinRules(rules);
                     break;
                 }
                 case PLAYOFF: {
-                    stagePool = new PlayOffStagePool(part.name, teams, rating, part.cntRound);
+                    stagePool = new PlayOffStagePool(part.name, teams, ratingForUse, part.cntRound);
                     break;
                 }
                 case GROUPS: {
-                    stagePool = new GroupsStagePool(part.name, part.cntGroups, teams, rating, part.cntRound);
+                    stagePool = new GroupsStagePool(part.name, part.cntGroups, teams, ratingForUse, part.cntRound);
                     ((AbstractRoundRobinStagePool)stagePool).addWinRules(rules);
                     break;
                 }
@@ -142,7 +143,7 @@ class TournamentImpl extends Tournament {
     }
 
     @Override
-    public ArrayList<SimpleTeam> getStageTeams(int stageID, SchemePart.TypeSourcePrev typeSource, int cntTeamOrNTeam) {
+    public ArrayList<SimpleTeam> getStageTeams(int stageID, TypeSource typeSource, int cntTeamOrNTeam) {
         var stage = getStage(stageID);
         if(stage == null) {
             return new ArrayList<SimpleTeam>();
@@ -171,6 +172,18 @@ class TournamentImpl extends Tournament {
         return sb.toString();
     }
 
+    private Rating getRatingForUse(RatingType ratingType, ArrayList<SimpleTeam> teams) {
+        if(ratingType == RatingType.NO) {
+            return null;
+        }
+
+        if(ratingType == RatingType.STANDART) {
+            return rating;
+        }
+
+        return new TestRating(teams);
+    }
+
     private BaseStagePool getStage(int stageID) {
         if(stageByID.containsKey(stageID)) {
             return stageByID.get(stageID);
@@ -188,15 +201,15 @@ class TournamentImpl extends Tournament {
                 }
             } else if(source.source == SchemePart.Source.PREV_STAGE) {
                 var prevStage = getStage(source.sourcePrevID);
-                int cntTeamOrNTeam = source.typeSourcePrev == SchemePart.TypeSourcePrev.N_TEAM ? source.teamN - 1 : source.cntTeam;
-                teams.addAll(fillTeamsBySourceFromStage(prevStage, source.typeSourcePrev, cntTeamOrNTeam));
+                int cntTeamOrNTeam = source.typeSource == TypeSource.N_TEAM ? source.teamN - 1 : source.cntTeam;
+                teams.addAll(fillTeamsBySourceFromStage(prevStage, source.typeSource, cntTeamOrNTeam));
             }
         }
 
         return teams;
     }
 
-    private ArrayList<SimpleTeam> fillTeamsBySourceFromStage(BaseStagePool stage, SchemePart.TypeSourcePrev source, int cntTeamOrNTeam) {
+    private ArrayList<SimpleTeam> fillTeamsBySourceFromStage(BaseStagePool stage, TypeSource source, int cntTeamOrNTeam) {
         var teams = new ArrayList<SimpleTeam>();
         switch (source) {
             case WINNERS: {

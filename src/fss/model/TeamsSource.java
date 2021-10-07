@@ -5,17 +5,17 @@ public class TeamsSource {
         source = SchemePart.Source.FROM_OUT;
     }
 
-    public TeamsSource(int sourcePrevID, SchemePart.TypeSourcePrev typeSourcePrev) {
+    public TeamsSource(int sourcePrevID, TypeSource typeSource) {
         this.source = SchemePart.Source.PREV_STAGE;
         this.sourcePrevID = sourcePrevID;
-        this.typeSourcePrev = typeSourcePrev;
+        this.typeSource = typeSource;
     }
 
-    public TeamsSource(int sourcePrevID, SchemePart.TypeSourcePrev typeSourcePrev, int cntOrNTeamTypeSourcePrev) {
+    public TeamsSource(int sourcePrevID, TypeSource typeSource, int cntOrNTeamTypeSourcePrev) {
         this.source = SchemePart.Source.PREV_STAGE;
         this.sourcePrevID = sourcePrevID;
-        this.typeSourcePrev = typeSourcePrev;
-        if(typeSourcePrev == SchemePart.TypeSourcePrev.N_TEAM)
+        this.typeSource = typeSource;
+        if(typeSource == TypeSource.N_TEAM)
             this.teamN = cntOrNTeamTypeSourcePrev;
         else
             this.cntTeam = cntOrNTeamTypeSourcePrev;
@@ -25,7 +25,7 @@ public class TeamsSource {
 
     public SchemePart.Source source = SchemePart.Source.NO;
     public int sourcePrevID = -1;
-    public SchemePart.TypeSourcePrev typeSourcePrev = SchemePart.TypeSourcePrev.NO;
+    public TypeSource typeSource = TypeSource.NO;
     public int cntTeam = 0;
     public int teamN = 0;
 }

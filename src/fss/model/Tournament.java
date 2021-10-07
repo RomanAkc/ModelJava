@@ -18,6 +18,6 @@ public abstract class Tournament {
 
     public abstract int getCntStagePool();
     public abstract ArrayList<Table.Row> getFinalTableRows(int stageID);
-    public abstract ArrayList<SimpleTeam> getStageTeams(int stageID, SchemePart.TypeSourcePrev typeSource, int cntTeamOrNTeam);
+    public abstract ArrayList<SimpleTeam> getStageTeams(int stageID, TypeSource typeSource, int cntTeamOrNTeam);
     public abstract ArrayList<SimpleTeam> getAllTournamentTeams();
 }
