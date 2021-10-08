@@ -14,7 +14,7 @@ public class StagePoolTest extends BaseTest {
     }
 
     private void calcStagePoolPlayOff(ArrayList<SimpleTeam> teams, boolean twoRounds) {
-        var stagePool = new PlayOffStagePool("Test", teams, new TestRating(teams), twoRounds ? 2 : 1);
+        var stagePool = new PlayOffStagePool("Test", teams, new RatingByTeamOrder(teams), twoRounds ? 2 : 1);
         stagePool.calc();
         Assert.assertEquals(stagePool.getWinners().size(), teams.size() / 2);
         Assert.assertEquals(stagePool.getLosers().size(), teams.size() / 2);
@@ -30,7 +30,7 @@ public class StagePoolTest extends BaseTest {
     }
 
     private void calcStagePoolCircle(ArrayList<SimpleTeam> teams, int cntRounds) {
-        var stagePool = new RoundRobinStagePool("Test",  teams, new TestRating(teams), cntRounds);
+        var stagePool = new RoundRobinStagePool("Test",  teams, new RatingByTeamOrder(teams), cntRounds);
         stagePool.calc();
         Assert.assertEquals(stagePool.getWinners().size(), 1);
         Assert.assertEquals(stagePool.getLosers().size(), 1);
@@ -43,7 +43,7 @@ public class StagePoolTest extends BaseTest {
     @Test
     public void calcStagePoolGroups() {
         var teams = generateTeams(51);
-        var stagePool = new GroupsStagePool("Test", 10, teams, new TestRating(teams), 2);
+        var stagePool = new GroupsStagePool("Test", 10, teams, new RatingByTeamOrder(teams), 2);
         stagePool.calc();
         Assert.assertEquals(stagePool.getWinners().size(), 10);
         Assert.assertEquals(stagePool.getLosers().size(), 10);

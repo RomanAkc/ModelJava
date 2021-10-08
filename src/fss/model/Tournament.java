@@ -20,4 +20,5 @@ public abstract class Tournament {
     public abstract ArrayList<Table.Row> getFinalTableRows(int stageID);
     public abstract ArrayList<SimpleTeam> getStageTeams(int stageID, TypeSource typeSource, int cntTeamOrNTeam);
     public abstract ArrayList<SimpleTeam> getAllTournamentTeams();
+    public abstract ArrayList<Meet> getStageMeetings(int stageID);
 }

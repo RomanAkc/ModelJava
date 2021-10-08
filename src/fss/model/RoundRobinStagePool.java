@@ -53,6 +53,11 @@ class RoundRobinStagePool extends BaseRoundRobinStagePool {
     }
 
     @Override
+    public ArrayList<Meet> getMeetings() {
+        return stage.getMeetings();
+    }
+
+    @Override
     public String toString() {
         var sb = new StringBuilder();
         sb.append("Round-robin stage: " + name);
@@ -86,6 +91,11 @@ class PlayOffStagePool extends BasePlayOffStagePool {
     @Override
     public ArrayList<SimpleTeam> getLosers() {
         return stage.getLosers();
+    }
+
+    @Override
+    public ArrayList<Meet> getMeetings() {
+        return stage.getMeetings();
     }
 
     @Override
@@ -153,6 +163,14 @@ class GroupsStagePool extends BaseGroupsStagePool {
             }
         }
         return res;
+    }
+
+    @Override
+    public ArrayList<Meet> getMeetings() {
+        var result = new ArrayList<Meet>();
+        for(var stage : stages)
+            result.addAll(stage.getMeetings());
+        return result;
     }
 
     @Override

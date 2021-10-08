@@ -26,6 +26,7 @@ abstract class Stage {
     }
 
     public abstract void calc();
+    public abstract ArrayList<Meet> getMeetings();
 
     @Override
     public String toString() {
@@ -71,6 +72,7 @@ class CircleStage extends Stage {
         rules.add(Table.WinRules.BY_GOAL_FOR);
     }
 
+    @Override
     public void calc() {
         var days = calcDays();
         if(rules == null) {
@@ -79,6 +81,14 @@ class CircleStage extends Stage {
 
         table = new Table(teams, days, rules);
         table.calc();
+    }
+
+    @Override
+    public ArrayList<Meet> getMeetings() {
+        var result = new ArrayList<Meet>();
+        for(var day : days)
+            result.addAll(day.getMeetings());
+        return result;
     }
 
     public void addWinRules(ArrayList<Table.WinRules> rules) {
@@ -173,6 +183,11 @@ class PlayOffStage extends Stage {
         fillMeets();
         calcMeets();
         alreadyCalculated = true;
+    }
+
+    @Override
+    public ArrayList<Meet> getMeetings() {
+        return new ArrayList<>(meets);
     }
 
     public ArrayList<SimpleTeam> getWinners() {

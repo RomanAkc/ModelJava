@@ -161,6 +161,15 @@ class TournamentImpl extends Tournament {
     }
 
     @Override
+    public ArrayList<Meet> getStageMeetings(int stageID) {
+        var stage = getStage(stageID);
+        if(stage == null) {
+            return null;
+        }
+        return stage.getMeetings();
+    }
+
+    @Override
     public String toString() {
         var sb = new StringBuilder();
         sb.append(String.format("Tournament %s", name));
@@ -181,7 +190,7 @@ class TournamentImpl extends Tournament {
             return rating;
         }
 
-        return new TestRating(teams);
+        return new RatingByTeamOrder(teams);
     }
 
     private BaseStagePool getStage(int stageID) {

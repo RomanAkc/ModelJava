@@ -15,7 +15,7 @@ public class SortitionTest extends BaseTest {
     public void playOffSortWithRating() {
         int cntTeams = 8;
         var teams = generateTeams(cntTeams);
-        var meets = Sortition.playOffSort(teams, new TestRating(teams), false);
+        var meets = Sortition.playOffSort(teams, new RatingByTeamOrder(teams), false);
 
         var head = teams.subList(0, teams.size() / 2);
         var tail = teams.subList(teams.size() / 2, teams.size());
@@ -80,7 +80,7 @@ public class SortitionTest extends BaseTest {
 
     private void groupSortWithRating(int cntTeams, int cntGroups) {
         var teams = generateTeams(cntTeams);
-        var groups = Sortition.groupSort(teams, cntGroups, new TestRating(teams));
+        var groups = Sortition.groupSort(teams, cntGroups, new RatingByTeamOrder(teams));
 
         int index = 0;
         while (true) {

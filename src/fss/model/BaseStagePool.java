@@ -30,6 +30,7 @@ public abstract class BaseStagePool {
     public abstract void calc();
     public abstract ArrayList<SimpleTeam> getWinners();
     public abstract ArrayList<SimpleTeam> getLosers();
+    public abstract ArrayList<Meet> getMeetings();
 }
 
 abstract class AbstractRoundRobinStagePool extends BaseStagePool {

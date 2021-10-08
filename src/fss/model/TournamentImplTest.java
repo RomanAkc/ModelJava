@@ -114,6 +114,8 @@ public class TournamentImplTest {
         Assert.assertEquals(tournament.getStageTeams(EUROCUP_1_2, TypeSource.WINNERS, 0).size(), 2);
         Assert.assertEquals(tournament.getStageTeams(EUROCUP_FINAL, TypeSource.WINNERS, 0).size(), 1);
 
+        //Добавить проверку корректного использования рейтинга (в классе стадии?)
+
         System.out.println(tournament);
     }
 
@@ -227,7 +229,7 @@ public class TournamentImplTest {
         return teams;
     }
 
-    private TestRating createRatingContinentalClubTournament(ArrayList<SimpleTeam> teams) {
+    private RatingByTeamOrder createRatingContinentalClubTournament(ArrayList<SimpleTeam> teams) {
         var teamIndexByNames = new HashMap<String, Integer>();
         for(int i = 0; i < teams.size(); ++i) {
             teamIndexByNames.put(teams.get(i).getName(), i);
@@ -239,7 +241,7 @@ public class TournamentImplTest {
             ratingTeams.add(teams.get(teamIndexByNames.get(teamName)));
         }
 
-        return new TestRating(ratingTeams);
+        return new RatingByTeamOrder(ratingTeams);
     }
 
     private ArrayList<String> getTeamNamesInOrder() {

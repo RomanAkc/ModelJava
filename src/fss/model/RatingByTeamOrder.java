@@ -2,17 +2,11 @@ package fss.model;
 
 import java.util.ArrayList;
 
-public class TestRating implements Rating {
+public class RatingByTeamOrder implements Rating {
     private ArrayList<SimpleTeam> teams;
 
-    //public TestRating() {}
-
-    public TestRating(ArrayList<SimpleTeam> teams) {
+    public RatingByTeamOrder(ArrayList<SimpleTeam> teams) {
         this.teams = teams;
-    }
-
-    public void addTeam(SimpleTeam team) {
-        teams.add(team);
     }
 
     public int getTeamPosition(SimpleTeam team) {
