@@ -14,10 +14,23 @@ public class StagePoolTest extends BaseTest {
     }
 
     private void calcStagePoolPlayOff(ArrayList<SimpleTeam> teams, boolean twoRounds) {
-        var stagePool = new PlayOffStagePool("Test", teams, new RatingByTeamOrder(teams), twoRounds ? 2 : 1);
+        var rating = new RatingByTeamOrder(teams);
+
+        var stagePool = new PlayOffStagePool("Test", teams, rating, twoRounds ? 2 : 1);
         stagePool.calc();
         Assert.assertEquals(stagePool.getWinners().size(), teams.size() / 2);
         Assert.assertEquals(stagePool.getLosers().size(), teams.size() / 2);
+
+        var meetings = stagePool.getMeetings();
+        for(var meet : meetings) {
+            var posHome = rating.getTeamPosition(meet.getTeamHome());
+            var posAway = rating.getTeamPosition(meet.getTeamAway());
+
+            boolean isInTopHome = posHome < teams.size() / 2;
+            boolean isInTopAway = posAway < teams.size() / 2;
+
+            Assert.assertNotEquals(isInTopHome, isInTopAway);
+        }
     }
 
     @Test

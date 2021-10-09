@@ -142,14 +142,38 @@ class TournamentImpl extends Tournament {
         return ((RoundRobinStagePool)stagePool).getFinalTableRows();
     }
 
-    @Override
-    public ArrayList<SimpleTeam> getStageTeams(int stageID, TypeSource typeSource, int cntTeamOrNTeam) {
+    private ArrayList<SimpleTeam> getStageTeams(int stageID, TypeSource typeSource, int cntTeamOrNTeam) {
         var stage = getStage(stageID);
         if(stage == null) {
             return new ArrayList<SimpleTeam>();
         }
 
         return fillTeamsBySourceFromStage(stage, typeSource, cntTeamOrNTeam);
+    }
+
+    @Override
+    public ArrayList<SimpleTeam> getFirstStageTeams(int stageID, int cntTeam) {
+        return getStageTeams(stageID, TypeSource.N_FIRST, cntTeam);
+    }
+
+    @Override
+    public ArrayList<SimpleTeam> getLastStageTeams(int stageID, int cntTeam) {
+        return getStageTeams(stageID, TypeSource.N_LAST, cntTeam);
+    }
+
+    @Override
+    public ArrayList<SimpleTeam> getNTeamStageTeams(int stageID, int nTeam) {
+        return getStageTeams(stageID, TypeSource.N_TEAM, nTeam);
+    }
+
+    @Override
+    public ArrayList<SimpleTeam> getWinnersStageTeams(int stageID) {
+        return getStageTeams(stageID, TypeSource.WINNERS, 0);
+    }
+
+    @Override
+    public ArrayList<SimpleTeam> getLosersStageTeams(int stageID) {
+        return getStageTeams(stageID, TypeSource.LOSERS, 0);
     }
 
     @Override
@@ -230,19 +254,19 @@ class TournamentImpl extends Tournament {
                 break;
             }
             case N_FIRST: {
-                if(isCanReceiveNTeam(stage)) {
+                if(isCanReceiveFirstLast(stage)) {
                     teams.addAll(((BaseRoundRobinStagePool)stage).getFirstN(cntTeamOrNTeam));
                 }
                 break;
             }
             case N_LAST: {
-                if(isCanReceiveNTeam(stage)) {
+                if(isCanReceiveFirstLast(stage)) {
                     teams.addAll(((BaseRoundRobinStagePool)stage).getLastN(cntTeamOrNTeam));
                 }
                 break;
             }
             case N_TEAM: {
-                if(isCanReceiveFirstLast(stage)) {
+                if(isCanReceiveNTeam(stage)) {
                     teams.addAll(((AbstractRoundRobinStagePool)stage).getN(cntTeamOrNTeam));
                 }
                 break;
@@ -252,10 +276,10 @@ class TournamentImpl extends Tournament {
     }
 
     private boolean isCanReceiveFirstLast(BaseStagePool stage) {
-        return stage instanceof AbstractRoundRobinStagePool;
+        return stage instanceof BaseRoundRobinStagePool;
     }
 
     private boolean isCanReceiveNTeam(BaseStagePool stage) {
-        return stage instanceof BaseRoundRobinStagePool;
+        return stage instanceof AbstractRoundRobinStagePool;
     }
 }

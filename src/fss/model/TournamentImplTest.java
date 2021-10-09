@@ -3,8 +3,7 @@ package fss.model;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 public class TournamentImplTest {
     private static int CHAMPIONSHIP_STAGE_ID                = 1;
@@ -99,24 +98,69 @@ public class TournamentImplTest {
         tournament.addTeamsToStage(SECOND_EUROCUP_QUALIFICATION, createClubsLC2stQual());
         tournament.addTeamsToStage(EUROCUP_GROUP, createClubsLCGroup());
 
-        tournament.addRating(createRatingContinentalClubTournament(tournament.getAllTournamentTeams()));
+        var rating = createRatingContinentalClubTournament(tournament.getAllTournamentTeams());
+        tournament.addRating(rating);
         tournament.addWinRules(createWinRules());
 
         tournament.calc();
 
         Assert.assertEquals(tournament.getCntStagePool(), 7);
-        Assert.assertEquals(tournament.getStageTeams(FIRST_EUROCUP_QUALIFICATION, TypeSource.WINNERS, 0).size(), 8);
-        Assert.assertEquals(tournament.getStageTeams(SECOND_EUROCUP_QUALIFICATION, TypeSource.WINNERS, 0).size(), 8);
-        Assert.assertEquals(tournament.getStageTeams(EUROCUP_GROUP, TypeSource.N_TEAM, 1).size(), 8);
-        Assert.assertEquals(tournament.getStageTeams(EUROCUP_GROUP, TypeSource.N_TEAM, 2).size(), 8);
-        Assert.assertEquals(tournament.getStageTeams(EUROCUP_1_8, TypeSource.WINNERS, 0).size(), 8);
-        Assert.assertEquals(tournament.getStageTeams(EUROCUP_1_4, TypeSource.WINNERS, 0).size(), 4);
-        Assert.assertEquals(tournament.getStageTeams(EUROCUP_1_2, TypeSource.WINNERS, 0).size(), 2);
-        Assert.assertEquals(tournament.getStageTeams(EUROCUP_FINAL, TypeSource.WINNERS, 0).size(), 1);
+        Assert.assertEquals(tournament.getWinnersStageTeams(FIRST_EUROCUP_QUALIFICATION).size(), 8);
+        Assert.assertEquals(tournament.getWinnersStageTeams(SECOND_EUROCUP_QUALIFICATION).size(), 8);
+        Assert.assertEquals(tournament.getNTeamStageTeams(EUROCUP_GROUP, 1).size(), 8);
+        Assert.assertEquals(tournament.getNTeamStageTeams(EUROCUP_GROUP, 2).size(), 8);
+        Assert.assertEquals(tournament.getWinnersStageTeams(EUROCUP_1_8).size(), 8);
+        Assert.assertEquals(tournament.getWinnersStageTeams(EUROCUP_1_4).size(), 4);
+        Assert.assertEquals(tournament.getWinnersStageTeams(EUROCUP_1_2).size(), 2);
+        Assert.assertEquals(tournament.getWinnersStageTeams(EUROCUP_FINAL).size(), 1);
 
-        //Добавить проверку корректного использования рейтинга (в классе стадии?)
+        checkPlayOffStageWithRating(tournament, FIRST_EUROCUP_QUALIFICATION, rating);
+        checkPlayOffStageWithRating(tournament, SECOND_EUROCUP_QUALIFICATION, rating);
+
+        //Проверить использование рейтнга для группировки (?)
 
         System.out.println(tournament);
+    }
+
+    private class CompareTeams implements Comparator<SimpleTeam> {
+        Rating rating = null;
+
+        public CompareTeams(Rating rating) {
+            this.rating = rating;
+        }
+
+        public int compare(SimpleTeam t1, SimpleTeam t2) {
+            var pos1 = rating.getTeamPosition(t1);
+            var pos2 = rating.getTeamPosition(t2);
+            return pos1 > pos2 ? 1 : (pos1 == pos2 ? 0 : -1);
+        }
+    }
+
+    private void checkPlayOffStageWithRating(Tournament tournament, int stageID, Rating rating) {
+        var winners = tournament.getWinnersStageTeams(stageID);
+        var losers = tournament.getLosersStageTeams(stageID);
+
+        var allTeams = new ArrayList<SimpleTeam>(winners);
+        allTeams.addAll(losers);
+        Collections.sort(allTeams, new CompareTeams(rating));
+
+        var posByTeams = new HashMap<SimpleTeam, Integer>();
+        for(int i = 0; i < allTeams.size(); ++i) {
+            posByTeams.put(allTeams.get(i), i);
+        }
+
+        var meetings = tournament.getStageMeetings(stageID);
+        for(var meet : meetings) {
+            var posHome = posByTeams.get(meet.getTeamHome());
+            var posAway = posByTeams.get(meet.getTeamAway());
+
+            boolean isInTopHome = posHome < allTeams.size() / 2;
+            boolean isInTopAway = posAway < allTeams.size() / 2;
+
+            Assert.assertNotEquals(isInTopHome, isInTopAway);
+        }
+
+
     }
 
     private Scheme createSchemeContinentalClubTournament() {

@@ -18,7 +18,11 @@ public abstract class Tournament {
 
     public abstract int getCntStagePool();
     public abstract ArrayList<Table.Row> getFinalTableRows(int stageID);
-    public abstract ArrayList<SimpleTeam> getStageTeams(int stageID, TypeSource typeSource, int cntTeamOrNTeam);
+    public abstract ArrayList<SimpleTeam> getFirstStageTeams(int stageID, int cntTeam);
+    public abstract ArrayList<SimpleTeam> getLastStageTeams(int stageID, int cntTeam);
+    public abstract ArrayList<SimpleTeam> getNTeamStageTeams(int stageID, int nTeam);
+    public abstract ArrayList<SimpleTeam> getWinnersStageTeams(int stageID);
+    public abstract ArrayList<SimpleTeam> getLosersStageTeams(int stageID);
     public abstract ArrayList<SimpleTeam> getAllTournamentTeams();
     public abstract ArrayList<Meet> getStageMeetings(int stageID);
 }

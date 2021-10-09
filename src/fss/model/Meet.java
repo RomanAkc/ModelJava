@@ -101,6 +101,14 @@ class WinMeet extends Meet {
     }
 
     @Override
+    public SimpleTeam getLoser() {
+        if(isWinnerHomeTeam()) {
+            return getTeamAway();
+        }
+        return getTeamHome();
+    }
+
+    @Override
     public void calc() {
         super.calc();
 
@@ -190,6 +198,14 @@ class WinTwoMeet extends Meet {
             return getTeamAway(); //because teams in base class are in reverse order
         }
         return getTeamHome(); //because teams in base class are in reverse order
+    }
+
+    @Override
+    public SimpleTeam getLoser() {
+        if(isWinnerHomeTeam()) {
+            return getTeamHome(); //because teams in base class are in reverse order
+        }
+        return getTeamAway(); //because teams in base class are in reverse order
     }
 
     @Override
