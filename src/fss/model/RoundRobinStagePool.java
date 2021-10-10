@@ -174,6 +174,15 @@ class GroupsStagePool extends BaseGroupsStagePool {
     }
 
     @Override
+    public ArrayList<ArrayList<SimpleTeam>> getGroupTeams() {
+        var groups = new ArrayList<ArrayList<SimpleTeam>>();
+        for(var stage : stages) {
+            groups.add(new ArrayList<>(stage.getTeams()));
+        }
+        return groups;
+    }
+
+    @Override
     public String toString() {
         var sb = new StringBuilder();
         sb.append("Group stage: " + name);

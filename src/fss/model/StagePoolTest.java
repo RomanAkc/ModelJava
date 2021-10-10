@@ -3,7 +3,11 @@ package fss.model;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class StagePoolTest extends BaseTest {
     @Test
@@ -56,10 +60,30 @@ public class StagePoolTest extends BaseTest {
     @Test
     public void calcStagePoolGroups() {
         var teams = generateTeams(51);
-        var stagePool = new GroupsStagePool("Test", 10, teams, new RatingByTeamOrder(teams), 2);
+        var rating = new RatingByTeamOrder(teams);
+        var stagePool = new GroupsStagePool("Test", 10, teams, rating, 2);
         stagePool.calc();
         Assert.assertEquals(stagePool.getWinners().size(), 10);
         Assert.assertEquals(stagePool.getLosers().size(), 10);
         Assert.assertEquals(stagePool.getN(2).size(), 10);
+
+        var groups = stagePool.getGroupTeams();
+        var baskets = new TreeSet<Integer>();
+        for(var group : groups) {
+            baskets.clear();
+
+            for(var team : group) {
+                var pos = rating.getTeamPosition(team);
+                var basket = (pos - (pos % 10)) / 10;
+                baskets.add(basket);
+            }
+
+            Assert.assertTrue(baskets.size() == 5 || baskets.size() == 6);
+
+            for(var basket : baskets) {
+                int maxInd = baskets.size();
+                Assert.assertFalse(basket < 0 || basket >= maxInd);
+            }
+        }
     }
 }

@@ -159,8 +159,6 @@ public class TournamentImplTest {
 
             Assert.assertNotEquals(isInTopHome, isInTopAway);
         }
-
-
     }
 
     private Scheme createSchemeContinentalClubTournament() {
@@ -208,7 +206,7 @@ public class TournamentImplTest {
         var teams = new ArrayList<SimpleTeam>();
 
         teams.add(new ClubTeam(33, "Olympiakos", "Greece", SimpleTeam.WorldPart.EUROPE, 20));
-        teams.add(new ClubTeam(34, "Fenerbahce", "Tukey", SimpleTeam.WorldPart.EUROPE, 23));
+        teams.add(new ClubTeam(34, "Fenerbahce", "Turkey", SimpleTeam.WorldPart.EUROPE, 23));
         teams.add(new ClubTeam(35, "Viktoria", "Czech", SimpleTeam.WorldPart.EUROPE, 19));
         teams.add(new ClubTeam(36, "AEK", "Cyprus", SimpleTeam.WorldPart.EUROPE, 16));
         teams.add(new ClubTeam(37, "Osijec", "Croatia", SimpleTeam.WorldPart.EUROPE, 15));
@@ -245,7 +243,7 @@ public class TournamentImplTest {
     private ArrayList<SimpleTeam> createClubsLCGroup() {
         var teams = new ArrayList<SimpleTeam>();
 
-        teams.add(new ClubTeam(1, "Dinamo Zagbeb", "Cyprus", SimpleTeam.WorldPart.EUROPE, 18));
+        teams.add(new ClubTeam(1, "Dinamo Zagbeb", "Croatia", SimpleTeam.WorldPart.EUROPE, 18));
         teams.add(new ClubTeam(2, "Young Boys", "Switzerland", SimpleTeam.WorldPart.EUROPE, 22));
         teams.add(new ClubTeam(3, "Brugge", "Belgium", SimpleTeam.WorldPart.EUROPE, 21));
         teams.add(new ClubTeam(4, "Red Star Belgrade", "Serbia", SimpleTeam.WorldPart.EUROPE, 20));

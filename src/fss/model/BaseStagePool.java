@@ -69,6 +69,8 @@ abstract class BaseGroupsStagePool extends AbstractRoundRobinStagePool {
         super(StageType.GROUPS, name, teams, rating, cntRounds);
         this.cntGroups = cntGroups;
     }
+
+    public abstract ArrayList<ArrayList<SimpleTeam>> getGroupTeams();
 }
 
 //Написать наследников для BaseRoundRobinStagePool, BaseRoundRobinGroupsStagePool, BaseStagePoolPlayOff

@@ -25,6 +25,10 @@ abstract class Stage {
         this.teams.addAll(teams);
     }
 
+    public ArrayList<SimpleTeam> getTeams() {
+        return new ArrayList<>(teams);
+    }
+
     public abstract void calc();
     public abstract ArrayList<Meet> getMeetings();
 
