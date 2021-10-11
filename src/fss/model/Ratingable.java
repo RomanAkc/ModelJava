@@ -1,6 +1,6 @@
 package fss.model;
 
-public interface Rating {
+public interface Ratingable {
     int getTeamPosition(SimpleTeam team);
 }
 

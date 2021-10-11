@@ -12,12 +12,12 @@ public class SchemePart {
     public int ID = 0;
     public String name = null;
     public int cntRound = 0;
-    public BaseStagePool.StageType stageType;
+    public StagePool.StageType stageType;
     public ArrayList<TeamsSource> teamSources = new ArrayList<>();
     public int cntGroups = 0;
     public RatingType ratingType = RatingType.STANDART;
 
-    public SchemePart(int ID, String name, int cntRound, BaseStagePool.StageType stageType) {
+    public SchemePart(int ID, String name, int cntRound, StagePool.StageType stageType) {
         this.ID = ID;
         this.name = name;
         this.cntRound = cntRound;
@@ -28,7 +28,7 @@ public class SchemePart {
         this.ID = ID;
         this.name = name;
         this.cntRound = cntRound;
-        this.stageType = BaseStagePool.StageType.GROUPS;
+        this.stageType = StagePool.StageType.GROUPS;
         this.cntGroups = cntGroups;
     }
 }

@@ -2,7 +2,7 @@ package fss.model;
 
 import java.util.ArrayList;
 
-public class RatingByTeamOrder implements Rating {
+public class RatingByTeamOrder implements Ratingable {
     private ArrayList<SimpleTeam> teams;
 
     public RatingByTeamOrder(ArrayList<SimpleTeam> teams) {

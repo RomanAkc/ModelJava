@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import java.util.*;
 
-public class TournamentImplTest {
+public class TournamentTest {
     private static int CHAMPIONSHIP_STAGE_ID                = 1;
     private static int FIRST_EUROCUP_QUALIFICATION          = 2;
     private static int SECOND_EUROCUP_QUALIFICATION         = 3;
@@ -17,7 +17,7 @@ public class TournamentImplTest {
 
     @Test
     public void calcCountryChampionship() {
-        var tournament = new TournamentImpl("Italy championship");
+        var tournament = new Tournament("Italy championship");
         tournament.addScheme(createSchemeChampionship());
         tournament.addTeamsToStage(CHAMPIONSHIP_STAGE_ID, createClubsChampionship());
         tournament.addWinRules(createWinRules());
@@ -57,7 +57,7 @@ public class TournamentImplTest {
     private Scheme createSchemeChampionship() {
         var scheme = new Scheme();
 
-        var part = new SchemePart(CHAMPIONSHIP_STAGE_ID, "Championship", 2, BaseStagePool.StageType.CIRCLE);
+        var part = new SchemePart(CHAMPIONSHIP_STAGE_ID, "Championship", 2, StagePool.StageType.CIRCLE);
         part.teamSources.add(new TeamsSource());
         scheme.AddPart(part);
 
@@ -91,7 +91,7 @@ public class TournamentImplTest {
 
     @Test
     public void calcContinentClubTournament() {
-        var tournament = new TournamentImpl("League champions");
+        var tournament = new Tournament("League champions");
         tournament.addScheme(createSchemeContinentalClubTournament());
 
         tournament.addTeamsToStage(FIRST_EUROCUP_QUALIFICATION, createClubsLC1stQual());
@@ -117,15 +117,13 @@ public class TournamentImplTest {
         checkPlayOffStageWithRating(tournament, FIRST_EUROCUP_QUALIFICATION, rating);
         checkPlayOffStageWithRating(tournament, SECOND_EUROCUP_QUALIFICATION, rating);
 
-        //Проверить использование рейтнга для группировки (?)
-
         System.out.println(tournament);
     }
 
     private class CompareTeams implements Comparator<SimpleTeam> {
-        Rating rating = null;
+        Ratingable rating = null;
 
-        public CompareTeams(Rating rating) {
+        public CompareTeams(Ratingable rating) {
             this.rating = rating;
         }
 
@@ -136,7 +134,7 @@ public class TournamentImplTest {
         }
     }
 
-    private void checkPlayOffStageWithRating(Tournament tournament, int stageID, Rating rating) {
+    private void checkPlayOffStageWithRating(BaseTournament tournament, int stageID, Ratingable rating) {
         var winners = tournament.getWinnersStageTeams(stageID);
         var losers = tournament.getLosersStageTeams(stageID);
 
@@ -164,11 +162,11 @@ public class TournamentImplTest {
     private Scheme createSchemeContinentalClubTournament() {
         var scheme = new Scheme();
 
-        var firstQual = new SchemePart(FIRST_EUROCUP_QUALIFICATION, "First Qual", 2, BaseStagePool.StageType.PLAYOFF);
+        var firstQual = new SchemePart(FIRST_EUROCUP_QUALIFICATION, "First Qual", 2, StagePool.StageType.PLAYOFF);
         firstQual.teamSources.add(new TeamsSource());
         scheme.AddPart(firstQual);
 
-        var secondQual = new SchemePart(SECOND_EUROCUP_QUALIFICATION, "Second Qual", 2, BaseStagePool.StageType.PLAYOFF);
+        var secondQual = new SchemePart(SECOND_EUROCUP_QUALIFICATION, "Second Qual", 2, StagePool.StageType.PLAYOFF);
         secondQual.teamSources.add(new TeamsSource());
         secondQual.teamSources.add(new TeamsSource(FIRST_EUROCUP_QUALIFICATION, TypeSource.WINNERS));
         scheme.AddPart(secondQual);
@@ -178,23 +176,23 @@ public class TournamentImplTest {
         group.teamSources.add(new TeamsSource(SECOND_EUROCUP_QUALIFICATION, TypeSource.WINNERS));
         scheme.AddPart(group);
 
-        var playOff18 = new SchemePart(EUROCUP_1_8, "1/8", 2, BaseStagePool.StageType.PLAYOFF);
+        var playOff18 = new SchemePart(EUROCUP_1_8, "1/8", 2, StagePool.StageType.PLAYOFF);
         playOff18.teamSources.add(new TeamsSource(EUROCUP_GROUP, TypeSource.N_TEAM, 1));
         playOff18.teamSources.add(new TeamsSource(EUROCUP_GROUP, TypeSource.N_TEAM, 2));
         playOff18.ratingType = RatingType.BY_ORDER;
         scheme.AddPart(playOff18);
 
-        var playOff14 = new SchemePart(EUROCUP_1_4, "1/4", 2, BaseStagePool.StageType.PLAYOFF);
+        var playOff14 = new SchemePart(EUROCUP_1_4, "1/4", 2, StagePool.StageType.PLAYOFF);
         playOff14.teamSources.add(new TeamsSource(EUROCUP_1_8, TypeSource.WINNERS));
         playOff14.ratingType = RatingType.NO;
         scheme.AddPart(playOff14);
 
-        var playOff12 = new SchemePart(EUROCUP_1_2, "1/2", 2, BaseStagePool.StageType.PLAYOFF);
+        var playOff12 = new SchemePart(EUROCUP_1_2, "1/2", 2, StagePool.StageType.PLAYOFF);
         playOff12.teamSources.add(new TeamsSource(EUROCUP_1_4, TypeSource.WINNERS));
         playOff12.ratingType = RatingType.NO;
         scheme.AddPart(playOff12);
 
-        var playOffFinal = new SchemePart(EUROCUP_FINAL, "Final", 1, BaseStagePool.StageType.PLAYOFF);
+        var playOffFinal = new SchemePart(EUROCUP_FINAL, "Final", 1, StagePool.StageType.PLAYOFF);
         playOffFinal.teamSources.add(new TeamsSource(EUROCUP_1_2, TypeSource.WINNERS));
         playOffFinal.ratingType = RatingType.NO;
         scheme.AddPart(playOffFinal);
@@ -338,10 +336,4 @@ public class TournamentImplTest {
         teamsInOrder.add("Red Star Belgrade");
         return teamsInOrder;
     }
-
-    @Test
-    public void calcWorldCup() {
-
-    }
-
 }

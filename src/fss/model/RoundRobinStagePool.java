@@ -5,7 +5,7 @@ import java.util.ArrayList;
 class RoundRobinStagePool extends BaseRoundRobinStagePool {
     private CircleStage stage = null;
 
-    public RoundRobinStagePool(String name, ArrayList<SimpleTeam> teams, Rating rating, int cntRounds) {
+    public RoundRobinStagePool(String name, ArrayList<SimpleTeam> teams, Ratingable rating, int cntRounds) {
         super(name, teams, rating, cntRounds);
     }
 
@@ -71,7 +71,7 @@ class RoundRobinStagePool extends BaseRoundRobinStagePool {
 class PlayOffStagePool extends BasePlayOffStagePool {
     private PlayOffStage stage = null;
 
-    public PlayOffStagePool(String name, ArrayList<SimpleTeam> teams, Rating rating, int cntRounds) {
+    public PlayOffStagePool(String name, ArrayList<SimpleTeam> teams, Ratingable rating, int cntRounds) {
         super(name, teams, rating, cntRounds);
     }
 
@@ -112,7 +112,7 @@ class PlayOffStagePool extends BasePlayOffStagePool {
 class GroupsStagePool extends BaseGroupsStagePool {
     private ArrayList<CircleStage> stages = null;
 
-    public GroupsStagePool(String name, int cntGroups, ArrayList<SimpleTeam> teams, Rating rating, int cntRounds) {
+    public GroupsStagePool(String name, int cntGroups, ArrayList<SimpleTeam> teams, Ratingable rating, int cntRounds) {
         super(name, cntGroups, teams, rating, cntRounds);
     }
 

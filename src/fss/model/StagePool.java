@@ -2,7 +2,7 @@ package fss.model;
 
 import java.util.ArrayList;
 
-public abstract class BaseStagePool {
+abstract class StagePool {
     public enum StageType {
         CIRCLE,
         GROUPS,
@@ -12,10 +12,10 @@ public abstract class BaseStagePool {
     protected StageType stageType = StageType.PLAYOFF;
     protected String name;
     protected ArrayList<SimpleTeam> teams = null;
-    protected Rating rating = null;
+    protected Ratingable rating = null;
     protected int cntRounds = 0;
 
-    public BaseStagePool(StageType stageType, String name, ArrayList<SimpleTeam> teams, Rating rating, int cntRounds) {
+    public StagePool(StageType stageType, String name, ArrayList<SimpleTeam> teams, Ratingable rating, int cntRounds) {
         this.stageType = stageType;
         this.teams = new ArrayList<>(teams);
         this.rating = rating;
@@ -33,10 +33,10 @@ public abstract class BaseStagePool {
     public abstract ArrayList<Meet> getMeetings();
 }
 
-abstract class AbstractRoundRobinStagePool extends BaseStagePool {
+abstract class CommonRoundRobinGroupsStagePool extends StagePool {
     protected ArrayList<Table.WinRules> rules = null;
 
-    public AbstractRoundRobinStagePool(StageType stageType, String name, ArrayList<SimpleTeam> teams, Rating rating, int cntRounds) {
+    public CommonRoundRobinGroupsStagePool(StageType stageType, String name, ArrayList<SimpleTeam> teams, Ratingable rating, int cntRounds) {
         super(stageType, name, teams, rating, cntRounds);
     }
 
@@ -46,8 +46,8 @@ abstract class AbstractRoundRobinStagePool extends BaseStagePool {
     public abstract ArrayList<SimpleTeam> getN(int n);
 }
 
-abstract class BaseRoundRobinStagePool extends AbstractRoundRobinStagePool {
-    public BaseRoundRobinStagePool(String name, ArrayList<SimpleTeam> teams, Rating rating, int cntRounds) {
+abstract class BaseRoundRobinStagePool extends CommonRoundRobinGroupsStagePool {
+    public BaseRoundRobinStagePool(String name, ArrayList<SimpleTeam> teams, Ratingable rating, int cntRounds) {
         super(StageType.CIRCLE, name, teams, rating, cntRounds);
     }
 
@@ -56,23 +56,19 @@ abstract class BaseRoundRobinStagePool extends AbstractRoundRobinStagePool {
     public abstract ArrayList<Table.Row> getFinalTableRows();
 }
 
-abstract class BasePlayOffStagePool extends BaseStagePool {
-    public BasePlayOffStagePool(String name, ArrayList<SimpleTeam> teams, Rating rating, int cntRounds) {
+abstract class BasePlayOffStagePool extends StagePool {
+    public BasePlayOffStagePool(String name, ArrayList<SimpleTeam> teams, Ratingable rating, int cntRounds) {
         super(StageType.PLAYOFF, name, teams, rating, cntRounds);
     }
 }
 
-abstract class BaseGroupsStagePool extends AbstractRoundRobinStagePool {
+abstract class BaseGroupsStagePool extends CommonRoundRobinGroupsStagePool {
     protected int cntGroups = 0;
 
-    public BaseGroupsStagePool(String name, int cntGroups, ArrayList<SimpleTeam> teams, Rating rating, int cntRounds) {
+    public BaseGroupsStagePool(String name, int cntGroups, ArrayList<SimpleTeam> teams, Ratingable rating, int cntRounds) {
         super(StageType.GROUPS, name, teams, rating, cntRounds);
         this.cntGroups = cntGroups;
     }
 
     public abstract ArrayList<ArrayList<SimpleTeam>> getGroupTeams();
 }
-
-//Написать наследников для BaseRoundRobinStagePool, BaseRoundRobinGroupsStagePool, BaseStagePoolPlayOff
-//Использовать их в турнире
-//Проверить тесты на StagePoolImpl

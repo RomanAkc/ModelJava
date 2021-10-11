@@ -3,7 +3,7 @@ package fss.model;
 import java.util.*;
 
 public class Sortition {
-    public static ArrayList<Meet> playOffSort(ArrayList<SimpleTeam> teams, Rating rating, boolean twoMeets) {
+    public static ArrayList<Meet> playOffSort(ArrayList<SimpleTeam> teams, Ratingable rating, boolean twoMeets) {
         if(teams.size() % 2 != 0)
             return null;
 
@@ -13,7 +13,7 @@ public class Sortition {
         return getWinMeetsWithRating(teams, rating, twoMeets);
     }
 
-    public static ArrayList<ArrayList<SimpleTeam>> groupSort(ArrayList<SimpleTeam> teams, int cntGroup, Rating rating) {
+    public static ArrayList<ArrayList<SimpleTeam>> groupSort(ArrayList<SimpleTeam> teams, int cntGroup, Ratingable rating) {
         int cntGroupTeams = teams.size() / cntGroup;
         if(cntGroupTeams < 2)
             return null;
@@ -45,7 +45,7 @@ public class Sortition {
         return res;
     }
 
-    private static ArrayList<Meet> getWinMeetsWithRating(ArrayList<SimpleTeam> teams, Rating rating, boolean twoMeets) {
+    private static ArrayList<Meet> getWinMeetsWithRating(ArrayList<SimpleTeam> teams, Ratingable rating, boolean twoMeets) {
         var baskets = divideIntoBaskets(teams.size() / 2, getTeamsByRating(teams, rating));
         Collections.shuffle(baskets.get(0));
         Collections.shuffle(baskets.get(1));
@@ -79,7 +79,7 @@ public class Sortition {
         return  meets;
     }
 
-    static private TreeMap<Integer, SimpleTeam> getTeamsByRating(ArrayList<SimpleTeam> teams, Rating rating) {
+    static private TreeMap<Integer, SimpleTeam> getTeamsByRating(ArrayList<SimpleTeam> teams, Ratingable rating) {
         var teamsByRating = new TreeMap<Integer, SimpleTeam>();
         for(var team : teams) {
             teamsByRating.put(rating != null ? rating.getTeamPosition(team) : team.getID(), team);
