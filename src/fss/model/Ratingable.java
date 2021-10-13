@@ -6,4 +6,5 @@ interface Ratingable {
 
 interface CountryRatingable {
     String getCountryByPosition(int position);
+    int getAllCountries();
 }

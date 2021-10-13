@@ -71,6 +71,10 @@ class ClubTeam extends SimpleTeam {
         this.country = country;
     }
 
+    String getCountry() {
+        return country;
+    }
+
     @Override
     public String toString() {
         return super.toString();

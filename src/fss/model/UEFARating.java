@@ -1,6 +1,8 @@
 package fss.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.TreeMap;
 
 class UEFARating implements Ratingable, CountryRatingable {
 /*Т. к., предположительно, мы будем вычислять по годам,
@@ -24,17 +26,41 @@ class UEFARating implements Ratingable, CountryRatingable {
   При поиске сначала ищем в 1м хэше, если нашли - возвращаем
   Если не нашли в 1м - возврашаем из 2го
 */
-    public UEFARating() {
+    private class Value {
+        SimpleTeam team;
+        String country;
+    }
 
+    private ArrayList<Value> data = new ArrayList<>();
+    private HashMap<ClubTeam, Integer> clubPositions = new HashMap<>();
+    private HashMap<String, Integer> countryPositions = new HashMap<>();
+    private ArrayList<String> countries = new ArrayList<>();
+
+    public UEFARating() {
     }
 
     @Override
     public int getTeamPosition(SimpleTeam team) {
-        return 0;
+        var club = (ClubTeam)team;
+
+        if(clubPositions.containsKey(club)) {
+            return clubPositions.get(club);
+        }
+
+        if(countryPositions.containsKey(club.getCountry())) {
+            return countryPositions.get(club.getCountry());
+        }
+
+        return Integer.MAX_VALUE;
     }
 
     @Override
     public String getCountryByPosition(int position) {
-        return null;
+        return countries.get(position);
+    }
+
+    @Override
+    public int getAllCountries() {
+        return countries.size();
     }
 }
