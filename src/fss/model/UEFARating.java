@@ -33,7 +33,7 @@ class UEFARating implements Ratingable, CountryRatingable {
 
     private ArrayList<Value> data = new ArrayList<>();
     private HashMap<ClubTeam, Integer> clubPositions = new HashMap<>();
-    private HashMap<String, Integer> countryPositions = new HashMap<>();
+    private HashMap<Country, Integer> countryPositions = new HashMap<>();
     private ArrayList<String> countries = new ArrayList<>();
 
     public UEFARating() {

@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import java.util.*;
 
-public class TournamentTest {
+public class TournamentTest extends BaseTest {
     private static int CHAMPIONSHIP_STAGE_ID                = 1;
     private static int FIRST_EUROCUP_QUALIFICATION          = 2;
     private static int SECOND_EUROCUP_QUALIFICATION         = 3;
@@ -65,27 +65,28 @@ public class TournamentTest {
     }
 
     private ArrayList<SimpleTeam> createClubsChampionship() {
+        var country = new Country(1, "Italy", WorldPart.EUROPE);
         ArrayList<SimpleTeam> teams = new ArrayList<>();
-        teams.add(new ClubTeam(1, "Internazionale", "Italy", SimpleTeam.WorldPart.EUROPE, 28, 28, 28));
-        teams.add(new ClubTeam(2, "Roma", "Italy", SimpleTeam.WorldPart.EUROPE, 26, 26, 26));
-        teams.add(new ClubTeam(3, "Milan", "Italy", SimpleTeam.WorldPart.EUROPE, 27, 27, 27));
-        teams.add(new ClubTeam(4, "Napoli", "Italy", SimpleTeam.WorldPart.EUROPE, 26, 26, 26));
-        teams.add(new ClubTeam(5, "Udineze", "Italy", SimpleTeam.WorldPart.EUROPE, 25, 25, 25));
-        teams.add(new ClubTeam(6, "Bologna", "Italy", SimpleTeam.WorldPart.EUROPE, 24, 24, 24));
-        teams.add(new ClubTeam(7, "Lazio", "Italy", SimpleTeam.WorldPart.EUROPE, 25, 25, 25));
-        teams.add(new ClubTeam(8, "Torino", "Italy", SimpleTeam.WorldPart.EUROPE, 22, 22, 22));
-        teams.add(new ClubTeam(9, "Fiorentina", "Italy", SimpleTeam.WorldPart.EUROPE, 27, 27, 27));
-        teams.add(new ClubTeam(10, "Atalanta", "Italy", SimpleTeam.WorldPart.EUROPE, 24, 24, 24));
-        teams.add(new ClubTeam(11, "Sassuolo", "Italy", SimpleTeam.WorldPart.EUROPE, 21, 21, 21));
-        teams.add(new ClubTeam(12, "Empoli", "Italy", SimpleTeam.WorldPart.EUROPE, 21, 21, 21));
-        teams.add(new ClubTeam(13, "Genoa", "Italy", SimpleTeam.WorldPart.EUROPE, 22, 22, 22));
-        teams.add(new ClubTeam(14, "Venezia", "Italy", SimpleTeam.WorldPart.EUROPE, 21, 21, 21));
-        teams.add(new ClubTeam(15, "Sampdoria", "Italy", SimpleTeam.WorldPart.EUROPE, 25, 25, 25));
-        teams.add(new ClubTeam(16, "Juventus", "Italy", SimpleTeam.WorldPart.EUROPE, 28, 28, 28));
-        teams.add(new ClubTeam(17, "Cagliari", "Italy", SimpleTeam.WorldPart.EUROPE, 28, 28, 28));
-        teams.add(new ClubTeam(18, "Spezia", "Italy", SimpleTeam.WorldPart.EUROPE, 20, 20, 20));
-        teams.add(new ClubTeam(19, "Hellas Verona", "Italy", SimpleTeam.WorldPart.EUROPE, 23, 23, 23));
-        teams.add(new ClubTeam(20, "Salernitana", "Italy", SimpleTeam.WorldPart.EUROPE, 19, 19, 19));
+        teams.add(new ClubTeam(1, "Internazionale", country, 28, 28, 28));
+        teams.add(new ClubTeam(2, "Roma", country, 26, 26, 26));
+        teams.add(new ClubTeam(3, "Milan", country, 27, 27, 27));
+        teams.add(new ClubTeam(4, "Napoli", country, 26, 26, 26));
+        teams.add(new ClubTeam(5, "Udineze", country, 25, 25, 25));
+        teams.add(new ClubTeam(6, "Bologna", country, 24, 24, 24));
+        teams.add(new ClubTeam(7, "Lazio", country, 25, 25, 25));
+        teams.add(new ClubTeam(8, "Torino", country, 22, 22, 22));
+        teams.add(new ClubTeam(9, "Fiorentina", country, 27, 27, 27));
+        teams.add(new ClubTeam(10, "Atalanta", country, 24, 24, 24));
+        teams.add(new ClubTeam(11, "Sassuolo", country, 21, 21, 21));
+        teams.add(new ClubTeam(12, "Empoli", country, 21, 21, 21));
+        teams.add(new ClubTeam(13, "Genoa", country, 22, 22, 22));
+        teams.add(new ClubTeam(14, "Venezia", country, 21, 21, 21));
+        teams.add(new ClubTeam(15, "Sampdoria", country, 25, 25, 25));
+        teams.add(new ClubTeam(16, "Juventus", country, 28, 28, 28));
+        teams.add(new ClubTeam(17, "Cagliari", country, 28, 28, 28));
+        teams.add(new ClubTeam(18, "Spezia", country, 20, 20, 20));
+        teams.add(new ClubTeam(19, "Hellas Verona", country, 23, 23, 23));
+        teams.add(new ClubTeam(20, "Salernitana", country, 19, 19, 19));
         return teams;
     }
 
@@ -202,69 +203,72 @@ public class TournamentTest {
 
     private ArrayList<SimpleTeam> createClubsLC1stQual() {
         var teams = new ArrayList<SimpleTeam>();
+        var country = generateCounty();
 
-        teams.add(new ClubTeam(33, "Olympiakos", "Greece", SimpleTeam.WorldPart.EUROPE, 20));
-        teams.add(new ClubTeam(34, "Fenerbahce", "Turkey", SimpleTeam.WorldPart.EUROPE, 23));
-        teams.add(new ClubTeam(35, "Viktoria", "Czech", SimpleTeam.WorldPart.EUROPE, 19));
-        teams.add(new ClubTeam(36, "AEK", "Cyprus", SimpleTeam.WorldPart.EUROPE, 16));
-        teams.add(new ClubTeam(37, "Osijec", "Croatia", SimpleTeam.WorldPart.EUROPE, 15));
-        teams.add(new ClubTeam(38, "Basel", "Switzerland", SimpleTeam.WorldPart.EUROPE, 18));
-        teams.add(new ClubTeam(39, "Antwerp", "Belgium", SimpleTeam.WorldPart.EUROPE, 19));
-        teams.add(new ClubTeam(40, "Partizan", "Serbia", SimpleTeam.WorldPart.EUROPE, 17));
-        teams.add(new ClubTeam(41, "Shakhtar Donetsk", "Ukraine", SimpleTeam.WorldPart.EUROPE, 22));
-        teams.add(new ClubTeam(42, "Spartak Moscow", "Russia", SimpleTeam.WorldPart.EUROPE, 22));
-        teams.add(new ClubTeam(43, "Celtic", "Scotland", SimpleTeam.WorldPart.EUROPE, 23));
-        teams.add(new ClubTeam(44, "Rapid Vienna", "Austria", SimpleTeam.WorldPart.EUROPE, 19));
-        teams.add(new ClubTeam(45, "AZ", "Netherlands", SimpleTeam.WorldPart.EUROPE, 21));
-        teams.add(new ClubTeam(46, "Sporting Braga", "Portugal", SimpleTeam.WorldPart.EUROPE, 23));
-        teams.add(new ClubTeam(47, "Lyon", "France", SimpleTeam.WorldPart.EUROPE, 26));
-        teams.add(new ClubTeam(48, "Wolfsburg", "Germany", SimpleTeam.WorldPart.EUROPE, 25));
+        teams.add(new ClubTeam(33, "Olympiakos", country, 20));
+        teams.add(new ClubTeam(34, "Fenerbahce", country, 23));
+        teams.add(new ClubTeam(35, "Viktoria", country, 19));
+        teams.add(new ClubTeam(36, "AEK", country, 16));
+        teams.add(new ClubTeam(37, "Osijec", country, 15));
+        teams.add(new ClubTeam(38, "Basel", country, 18));
+        teams.add(new ClubTeam(39, "Antwerp", country, 19));
+        teams.add(new ClubTeam(40, "Partizan", country, 17));
+        teams.add(new ClubTeam(41, "Shakhtar Donetsk", country, 22));
+        teams.add(new ClubTeam(42, "Spartak Moscow", country, 22));
+        teams.add(new ClubTeam(43, "Celtic", country, 23));
+        teams.add(new ClubTeam(44, "Rapid Vienna", country, 19));
+        teams.add(new ClubTeam(45, "AZ", country, 21));
+        teams.add(new ClubTeam(46, "Sporting Braga", country, 23));
+        teams.add(new ClubTeam(47, "Lyon", country, 26));
+        teams.add(new ClubTeam(48, "Wolfsburg", country, 25));
 
         return teams;
     }
 
     private ArrayList<SimpleTeam> createClubsLC2stQual() {
         var teams = new ArrayList<SimpleTeam>();
+        var country = generateCounty();
 
-        teams.add(new ClubTeam(25, "Appolon", "Cyprus", SimpleTeam.WorldPart.EUROPE, 16));
-        teams.add(new ClubTeam(26, "PSV", "Netherlands", SimpleTeam.WorldPart.EUROPE, 22));
-        teams.add(new ClubTeam(27, "Benfica", "Portugal", SimpleTeam.WorldPart.EUROPE, 24));
-        teams.add(new ClubTeam(28, "Monaco", "France", SimpleTeam.WorldPart.EUROPE, 27));
-        teams.add(new ClubTeam(29, "Borussia Dortmund", "Germany", SimpleTeam.WorldPart.EUROPE, 27));
-        teams.add(new ClubTeam(30, "Juventus", "Italy", SimpleTeam.WorldPart.EUROPE, 28));
-        teams.add(new ClubTeam(31, "Sevilla", "Spain", SimpleTeam.WorldPart.EUROPE, 26));
-        teams.add(new ClubTeam(32, "Chelsea", "England", SimpleTeam.WorldPart.EUROPE, 28));
+        teams.add(new ClubTeam(25, "Appolon", country, 16));
+        teams.add(new ClubTeam(26, "PSV", country, 22));
+        teams.add(new ClubTeam(27, "Benfica", country, 24));
+        teams.add(new ClubTeam(28, "Monaco", country, 27));
+        teams.add(new ClubTeam(29, "Borussia Dortmund", country, 27));
+        teams.add(new ClubTeam(30, "Juventus", country, 28));
+        teams.add(new ClubTeam(31, "Sevilla", country, 26));
+        teams.add(new ClubTeam(32, "Chelsea", country, 28));
 
         return teams;
     }
 
     private ArrayList<SimpleTeam> createClubsLCGroup() {
         var teams = new ArrayList<SimpleTeam>();
+        var country = generateCounty();
 
-        teams.add(new ClubTeam(1, "Dinamo Zagbeb", "Croatia", SimpleTeam.WorldPart.EUROPE, 18));
-        teams.add(new ClubTeam(2, "Young Boys", "Switzerland", SimpleTeam.WorldPart.EUROPE, 22));
-        teams.add(new ClubTeam(3, "Brugge", "Belgium", SimpleTeam.WorldPart.EUROPE, 21));
-        teams.add(new ClubTeam(4, "Red Star Belgrade", "Serbia", SimpleTeam.WorldPart.EUROPE, 20));
-        teams.add(new ClubTeam(5, "Dinamo Kiev", "Ukraine", SimpleTeam.WorldPart.EUROPE, 24));
-        teams.add(new ClubTeam(6, "Zenit", "Russia", SimpleTeam.WorldPart.EUROPE, 26));
-        teams.add(new ClubTeam(7, "Rangers", "Scotland", SimpleTeam.WorldPart.EUROPE, 25));
-        teams.add(new ClubTeam(8, "Salzburg", "Austria", SimpleTeam.WorldPart.EUROPE, 23));
-        teams.add(new ClubTeam(9, "Ajax", "Netherlands", SimpleTeam.WorldPart.EUROPE, 25));
-        teams.add(new ClubTeam(10, "Sporting Lisbon", "Portugal", SimpleTeam.WorldPart.EUROPE, 25));
-        teams.add(new ClubTeam(11, "Porto", "Portugal", SimpleTeam.WorldPart.EUROPE, 27));
-        teams.add(new ClubTeam(12, "PSG", "France", SimpleTeam.WorldPart.EUROPE, 29));
-        teams.add(new ClubTeam(13, "Lille", "France", SimpleTeam.WorldPart.EUROPE, 26));
-        teams.add(new ClubTeam(14, "RB Leipzig", "Germany", SimpleTeam.WorldPart.EUROPE, 24));
-        teams.add(new ClubTeam(15, "Bayern Munich", "Germany", SimpleTeam.WorldPart.EUROPE, 30));
-        teams.add(new ClubTeam(16, "Atalanta", "Italy", SimpleTeam.WorldPart.EUROPE, 25));
-        teams.add(new ClubTeam(17, "AC Milan", "Italy", SimpleTeam.WorldPart.EUROPE, 27));
-        teams.add(new ClubTeam(18, "Inter Milan", "Italy", SimpleTeam.WorldPart.EUROPE, 29));
-        teams.add(new ClubTeam(19, "Barcelona", "Spain", SimpleTeam.WorldPart.EUROPE, 30));
-        teams.add(new ClubTeam(20, "Real Madrid", "Spain", SimpleTeam.WorldPart.EUROPE, 30));
-        teams.add(new ClubTeam(21, "Atletico Madrid", "Spain", SimpleTeam.WorldPart.EUROPE, 28));
-        teams.add(new ClubTeam(22, "Liverpool", "England", SimpleTeam.WorldPart.EUROPE, 29));
-        teams.add(new ClubTeam(23, "Manchester United", "England", SimpleTeam.WorldPart.EUROPE, 28));
-        teams.add(new ClubTeam(24, "Manchester City", "England", SimpleTeam.WorldPart.EUROPE, 30));
+        teams.add(new ClubTeam(1, "Dinamo Zagbeb", country, 18));
+        teams.add(new ClubTeam(2, "Young Boys", country, 22));
+        teams.add(new ClubTeam(3, "Brugge", country, 21));
+        teams.add(new ClubTeam(4, "Red Star Belgrade", country, 20));
+        teams.add(new ClubTeam(5, "Dinamo Kiev", country, 24));
+        teams.add(new ClubTeam(6, "Zenit", country, 26));
+        teams.add(new ClubTeam(7, "Rangers", country, 25));
+        teams.add(new ClubTeam(8, "Salzburg", country, 23));
+        teams.add(new ClubTeam(9, "Ajax", country, 25));
+        teams.add(new ClubTeam(10, "Sporting Lisbon", country, 25));
+        teams.add(new ClubTeam(11, "Porto", country, 27));
+        teams.add(new ClubTeam(12, "PSG", country, 29));
+        teams.add(new ClubTeam(13, "Lille", country, 26));
+        teams.add(new ClubTeam(14, "RB Leipzig", country, 24));
+        teams.add(new ClubTeam(15, "Bayern Munich", country, 30));
+        teams.add(new ClubTeam(16, "Atalanta", country, 25));
+        teams.add(new ClubTeam(17, "AC Milan", country, 27));
+        teams.add(new ClubTeam(18, "Inter Milan", country, 29));
+        teams.add(new ClubTeam(19, "Barcelona", country, 30));
+        teams.add(new ClubTeam(20, "Real Madrid", country, 30));
+        teams.add(new ClubTeam(21, "Atletico Madrid", country, 28));
+        teams.add(new ClubTeam(22, "Liverpool", country, 29));
+        teams.add(new ClubTeam(23, "Manchester United", country, 28));
+        teams.add(new ClubTeam(24, "Manchester City", country, 30));
 
         return teams;
     }

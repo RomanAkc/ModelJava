@@ -1,36 +1,28 @@
 package fss.model;
 import java.io.Serializable;
 
-public abstract class SimpleTeam implements Serializable {
-    public enum WorldPart {
-        EUROPE,
-        SOUTH_AMERICA,
-        NORD_AMERICA,
-        AFRICA,
-        ASIA,
-        OCEANIA
-    }
-
+abstract class SimpleTeam implements Serializable {
     private int id;
-    private String name;
-    private WorldPart worldPart;
+    private Country country;
     private int power;
     private int minPower;
     private int maxPower;
 
-    public SimpleTeam(int id, String name, WorldPart worldPart, int power, int minPower, int maxPower) {
+    public SimpleTeam(int id, Country country, int power, int minPower, int maxPower) {
         this.id = id;
-        this.name = name;
-        this.worldPart = worldPart;
+        this.country = country;
         this.power = power;
         this.minPower = minPower;
         this.maxPower = maxPower;
     }
 
     public int getID() { return id; }
-    public String getName() { return name; }
-    public WorldPart getWorldPart() { return worldPart; }
+    public String getName() { return ""; }
+    public WorldPart getWorldPart() { return country.getWorldPart(); }
     public int getPower() { return power; }
+    public Country getCountry() {
+        return country;
+    }
 
     public void setNewPower() {
         power += RandomWrapper.getRandom(-2, 2);
@@ -43,41 +35,47 @@ public abstract class SimpleTeam implements Serializable {
 
     @Override
     public String toString() {
-        return getName();
+        return Integer.toString(getID());
     }
 }
 
 class NationalTeam extends SimpleTeam {
-    public NationalTeam(int id, String name, WorldPart worldPart, int power, int minPower, int maxPower) {
-        super(id, name, worldPart, power, minPower, maxPower);
+    public NationalTeam(int id, Country country, int power, int minPower, int maxPower) {
+        super(id, country, power, minPower, maxPower);
+    }
+
+    @Override
+    public String getName() {
+        return getCountry().getName();
     }
 
     @Override
     public String toString() {
-        return super.toString();
+        return getName();
     }
 }
 
 class ClubTeam extends SimpleTeam {
-    private String country;
+    private String name;
 
-    public ClubTeam(int id, String name, String country, WorldPart worldPart, int power, int minPower, int maxPower) {
-        super(id, name, worldPart, power, minPower, maxPower);
-        this.country = country;
+    public ClubTeam(int id, String name, Country country, int power, int minPower, int maxPower) {
+        super(id, country, power, minPower, maxPower);
+        this.name = name;
     }
 
-    public ClubTeam(int id, String name, String country, WorldPart worldPart, int power) {
-        super(id, name, worldPart, power, power, power);
-        this.country = country;
+    public ClubTeam(int id, String name, Country country, int power) {
+        super(id, country, power, power, power);
+        this.name = name;
     }
 
-    String getCountry() {
-        return country;
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override
     public String toString() {
-        return super.toString();
+        return getName();
     }
 }
 

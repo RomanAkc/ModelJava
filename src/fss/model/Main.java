@@ -87,11 +87,11 @@ public class Main {
         tournamentStage.calc();
         System.out.println(tournamentStage.toString());*/
 
-        var poStage = new PlayOffStage("League Champions 1/2", true);
-        poStage.addTeam(new ClubTeam(1, "Real Madrid", "Spain", SimpleTeam.WorldPart.EUROPE, 30, 0, 0));
-        poStage.addTeam(new ClubTeam(1, "Chelsea", "England", SimpleTeam.WorldPart.EUROPE, 30, 0, 0));
-        poStage.addTeam(new ClubTeam(1, "PSG", "France", SimpleTeam.WorldPart.EUROPE, 30, 0, 0));
-        poStage.addTeam(new ClubTeam(1, "Manchester City", "England", SimpleTeam.WorldPart.EUROPE, 30, 0, 0));
+        /*var poStage = new PlayOffStage("League Champions 1/2", true);
+        poStage.addTeam(new ClubTeam(1, "Real Madrid", "Spain", WorldPart.EUROPE, 30, 0, 0));
+        poStage.addTeam(new ClubTeam(1, "Chelsea", "England", WorldPart.EUROPE, 30, 0, 0));
+        poStage.addTeam(new ClubTeam(1, "PSG", "France", WorldPart.EUROPE, 30, 0, 0));
+        poStage.addTeam(new ClubTeam(1, "Manchester City", "England", WorldPart.EUROPE, 30, 0, 0));
         poStage.setSortTeams(false);
         poStage.calc();
         System.out.println(poStage.toString());
@@ -101,6 +101,6 @@ public class Main {
         var winners = poStage.getWinners();
         for(var w : winners) {
             System.out.println(w);
-        }
+        }*/
     }
 }
