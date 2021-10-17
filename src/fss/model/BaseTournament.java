@@ -3,10 +3,14 @@ package fss.model;
 import java.util.ArrayList;
 
 public abstract class BaseTournament {
+    private int id = 0;
     protected String name = null;
 
     public BaseTournament(String name) {
         this.name = name;
+    }
+    public int getId() {
+        return id;
     }
 
     public abstract void addScheme(Scheme scheme);

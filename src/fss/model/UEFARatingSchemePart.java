@@ -6,6 +6,7 @@ enum UEFARatingStageType {
 }
 
 class UEFARatingSchemePart {
+    public int tournamentID = 0;
     public int stageID = 0;
     public UEFARatingStageType ratingStageType = UEFARatingStageType.NORMAL;
     public int addPoint = 0;
