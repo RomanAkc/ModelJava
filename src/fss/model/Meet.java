@@ -54,6 +54,10 @@ class Meet {
         return result.isWin();
     }
 
+    public boolean isWinnerHomeTeamWOPen() {
+        return isWinnerHomeTeam();
+    }
+
     public SimpleTeam getWinner() {
         if(result.isWin()) {
             return teamHome;
@@ -126,20 +130,19 @@ class WinMeet extends Meet {
 
     @Override
     public Result getResultMeet() {
-        var goalsFor = super.getResultMeet().getGoalHome();
-        var goalsAway = super.getResultMeet().getGoalAway();
-
-        if(resultAdd != null) {
-            goalsFor += resultAdd.getGoalHome();
-            goalsAway += resultAdd.getGoalAway();
-        }
+        var resultWOPen = getResultMeetWOPen();
 
         if(resultPen != null) {
-            goalsFor += resultPen.getGoalHome();
-            goalsAway += resultPen.getGoalAway();
+            return new Result(resultWOPen.getGoalHome() + resultPen.getGoalHome()
+                    , resultWOPen.getGoalAway() + resultPen.getGoalAway());
         }
 
-        return new Result(goalsFor, goalsAway);
+        return resultWOPen;
+    }
+
+    @Override
+    public boolean isWinnerHomeTeamWOPen() {
+        return isWinnerHomeTeam();
     }
 
     @Override
@@ -158,6 +161,16 @@ class WinMeet extends Meet {
         }
 
         return res.toString();
+    }
+
+    private Result getResultMeetWOPen() {
+        var goalsFor = super.getResultMeet().getGoalHome();
+        var goalsAway = super.getResultMeet().getGoalAway();
+        if(resultAdd != null) {
+            goalsFor += resultAdd.getGoalHome();
+            goalsAway += resultAdd.getGoalAway();
+        }
+        return new Result(goalsFor, goalsAway);
     }
 }
 
@@ -227,20 +240,12 @@ class WinTwoMeet extends Meet {
 
     @Override
     public Result getResultMeet() {
-        var goalsFor = getGoalsFirstTeamMain();
-        var goalsAway = getGoalsSecondTeamMain();
-
-        if(resultAdd != null) {
-            goalsFor += resultAdd.getGoalAway();
-            goalsAway += resultAdd.getGoalHome();
-        }
-
+        var resultWOPen = getResultMeetWOPen();
         if(resultPen != null) {
-            goalsFor += resultPen.getGoalAway();
-            goalsAway += resultPen.getGoalHome();
+            return new Result(resultWOPen.getGoalHome() + resultPen.getGoalAway()
+                    , resultWOPen.getGoalAway() + resultPen.getGoalHome());
         }
-
-        return new Result(goalsFor, goalsAway);
+        return resultWOPen;
     }
 
     @Override
@@ -261,5 +266,17 @@ class WinTwoMeet extends Meet {
         }
 
         return res.toString();
+    }
+
+    private Result getResultMeetWOPen() {
+        var goalsFor = getGoalsFirstTeamMain();
+        var goalsAway = getGoalsSecondTeamMain();
+
+        if(resultAdd != null) {
+            goalsFor += resultAdd.getGoalAway();
+            goalsAway += resultAdd.getGoalHome();
+        }
+
+        return new Result(goalsFor, goalsAway);
     }
 }

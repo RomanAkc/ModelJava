@@ -4,9 +4,9 @@ import java.util.HashMap;
 
 public class UEFARatingCalculator {
     private HashMap<Integer, HashMap<Integer, UEFARatingSchemePart>> ratingScheme = new HashMap<>();
-    private Tournament tournament1stLevel = null;
-    private Tournament tournament2ndLevel = null;
-    private Tournament tournament3rdLevel = null;
+    private BaseTournament tournament1stLevel = null;
+    private BaseTournament tournament2ndLevel = null;
+    private BaseTournament tournament3rdLevel = null;
 
     public UEFARatingCalculator() {
 
@@ -17,16 +17,29 @@ public class UEFARatingCalculator {
         scheme.put(schemePart.stageID, schemePart);
     }
 
-    public void setTournament1stLevel(Tournament tournament1stLevel) {
+    public void setTournament1stLevel(BaseTournament tournament1stLevel) {
         this.tournament1stLevel = tournament1stLevel;
     }
 
-    public void setTournament2ndLevel(Tournament tournament2ndLevel) {
+    public void setTournament2ndLevel(BaseTournament tournament2ndLevel) {
         this.tournament2ndLevel = tournament2ndLevel;
     }
 
-    public void setTournament3rdLevel(Tournament tournament3rdLevel) {
+    public void setTournament3rdLevel(BaseTournament tournament3rdLevel) {
         this.tournament3rdLevel = tournament3rdLevel;
+    }
+
+    public void calc() {
+
+    }
+
+    private void calcForTournament(BaseTournament tournament) {
+        var scheme = getSchemeForTournament(tournament.getId());
+
+        for(int i = 0; i < tournament.getCntStagePool(); ++i) {
+
+        }
+
     }
 
     private HashMap<Integer, UEFARatingSchemePart> getSchemeForTournament(int tournamentID) {
