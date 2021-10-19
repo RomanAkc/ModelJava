@@ -2,9 +2,7 @@ package fss.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.TreeMap;
 
-class UEFARating implements Ratingable, CountryRatingable {
 /*Т. к., предположительно, мы будем вычислять по годам,
   то рейтинг должен принимать результаты предыдущих 4х лет.
   Также он должен принимать результаты матчей в еврокубках (турнир?),
@@ -26,12 +24,10 @@ class UEFARating implements Ratingable, CountryRatingable {
   При поиске сначала ищем в 1м хэше, если нашли - возвращаем
   Если не нашли в 1м - возврашаем из 2го
 */
-    private class Value {
-        SimpleTeam team;
-        String country;
-    }
 
-    private ArrayList<Value> data = new ArrayList<>();
+class UEFARating implements Ratingable, CountryRatingable {
+
+    private ArrayList<UEFARatingElement> data = new ArrayList<>();
     private HashMap<ClubTeam, Integer> clubPositions = new HashMap<>();
     private HashMap<Country, Integer> countryPositions = new HashMap<>();
     private ArrayList<String> countries = new ArrayList<>();

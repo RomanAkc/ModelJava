@@ -21,6 +21,7 @@ public abstract class BaseTournament {
     public abstract void calc();
 
     public abstract int getCntStagePool();
+    public abstract int getStageID(int stagePoolOrder);
     public abstract ArrayList<Table.Row> getFinalTableRows(int stageID);
     public abstract ArrayList<SimpleTeam> getFirstStageTeams(int stageID, int cntTeam);
     public abstract ArrayList<SimpleTeam> getLastStageTeams(int stageID, int cntTeam);

@@ -8,6 +8,7 @@ class Tournament extends BaseTournament {
     private Ratingable rating = null;
     private ArrayList<StagePool> stages = new ArrayList<>();
     private HashMap<Integer, StagePool> stageByID = new HashMap<>();
+    private HashMap<StagePool, Integer> idByStage = new HashMap<>();
     private HashMap<Integer, ArrayList<SimpleTeam>> teamsByStageID = new HashMap<>();
     private ArrayList<Table.WinRules> rules = null;
 
@@ -67,6 +68,7 @@ class Tournament extends BaseTournament {
 
             stages.add(stagePool);
             stageByID.put(part.ID, stagePool);
+            idByStage.put(stagePool, part.ID);
             stagePool.calc();
         }
     }
@@ -74,6 +76,14 @@ class Tournament extends BaseTournament {
     @Override
     public int getCntStagePool() {
         return stages.size();
+    }
+
+    @Override
+    public int getStageID(int stagePoolIndex) {
+        if(stagePoolIndex < 0 || stagePoolIndex >= stages.size())
+            return 0;
+
+        return idByStage.get(stages.get(stagePoolIndex));
     }
 
     @Override

@@ -2,7 +2,7 @@ package fss.model;
 
 import java.util.HashMap;
 
-public class UEFARatingCalculator {
+class UEFARatingCalculator {
     private HashMap<Integer, HashMap<Integer, UEFARatingSchemePart>> ratingScheme = new HashMap<>();
     private BaseTournament tournament1stLevel = null;
     private BaseTournament tournament2ndLevel = null;
@@ -30,14 +30,15 @@ public class UEFARatingCalculator {
     }
 
     public void calc() {
-
+        HashMap<SimpleTeam, Double> pointsByTeam = new HashMap<>();
+        calcForTournament(tournament1stLevel, pointsByTeam);
     }
 
-    private void calcForTournament(BaseTournament tournament) {
+    private void calcForTournament(BaseTournament tournament, HashMap<SimpleTeam, Double> pointsByTeam) {
         var scheme = getSchemeForTournament(tournament.getId());
 
         for(int i = 0; i < tournament.getCntStagePool(); ++i) {
-
+            var id = tournament.getStageID(i);
         }
 
     }
