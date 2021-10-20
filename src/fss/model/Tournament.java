@@ -3,6 +3,8 @@ package fss.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static fss.model.StageType.NOTHING;
+
 class Tournament extends BaseTournament {
     private Scheme scheme = null;
     private Ratingable rating = null;
@@ -87,13 +89,21 @@ class Tournament extends BaseTournament {
     }
 
     @Override
+    public StageType getStageType(int stagePoolIndex) {
+        if(stagePoolIndex < 0 || stagePoolIndex >= stages.size())
+            return StageType.NOTHING;
+
+        return stages.get(stagePoolIndex).getStageType();
+    }
+
+    @Override
     public ArrayList<Table.Row> getFinalTableRows(int stageID) {
         if(!stageByID.containsKey(stageID)) {
             return null;
         }
 
         var stagePool = stageByID.get(stageID);
-        if(stagePool.getStageType() != StagePool.StageType.CIRCLE) {
+        if(stagePool.getStageType() != StageType.CIRCLE) {
             return null;
         }
 

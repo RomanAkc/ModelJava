@@ -39,6 +39,11 @@ class UEFARatingCalculator {
 
         for(int i = 0; i < tournament.getCntStagePool(); ++i) {
             var id = tournament.getStageID(i);
+            var stageType = tournament.getStageType(i);
+
+
+
+            var meetings = tournament.getStageMeetings(id);
         }
 
     }

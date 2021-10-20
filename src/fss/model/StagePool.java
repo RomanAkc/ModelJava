@@ -3,11 +3,6 @@ package fss.model;
 import java.util.ArrayList;
 
 abstract class StagePool {
-    public enum StageType {
-        CIRCLE,
-        GROUPS,
-        PLAYOFF
-    }
 
     protected StageType stageType = StageType.PLAYOFF;
     protected String name;

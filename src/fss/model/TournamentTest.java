@@ -57,7 +57,7 @@ public class TournamentTest extends BaseTest {
     private Scheme createSchemeChampionship() {
         var scheme = new Scheme();
 
-        var part = new SchemePart(CHAMPIONSHIP_STAGE_ID, "Championship", 2, StagePool.StageType.CIRCLE);
+        var part = new SchemePart(CHAMPIONSHIP_STAGE_ID, "Championship", 2, StageType.CIRCLE);
         part.teamSources.add(new TeamsSource());
         scheme.AddPart(part);
 
@@ -163,11 +163,11 @@ public class TournamentTest extends BaseTest {
     private Scheme createSchemeContinentalClubTournament() {
         var scheme = new Scheme();
 
-        var firstQual = new SchemePart(FIRST_EUROCUP_QUALIFICATION, "First Qual", 2, StagePool.StageType.PLAYOFF);
+        var firstQual = new SchemePart(FIRST_EUROCUP_QUALIFICATION, "First Qual", 2, StageType.PLAYOFF);
         firstQual.teamSources.add(new TeamsSource());
         scheme.AddPart(firstQual);
 
-        var secondQual = new SchemePart(SECOND_EUROCUP_QUALIFICATION, "Second Qual", 2, StagePool.StageType.PLAYOFF);
+        var secondQual = new SchemePart(SECOND_EUROCUP_QUALIFICATION, "Second Qual", 2, StageType.PLAYOFF);
         secondQual.teamSources.add(new TeamsSource());
         secondQual.teamSources.add(new TeamsSource(FIRST_EUROCUP_QUALIFICATION, TypeSource.WINNERS));
         scheme.AddPart(secondQual);
@@ -177,23 +177,23 @@ public class TournamentTest extends BaseTest {
         group.teamSources.add(new TeamsSource(SECOND_EUROCUP_QUALIFICATION, TypeSource.WINNERS));
         scheme.AddPart(group);
 
-        var playOff18 = new SchemePart(EUROCUP_1_8, "1/8", 2, StagePool.StageType.PLAYOFF);
+        var playOff18 = new SchemePart(EUROCUP_1_8, "1/8", 2, StageType.PLAYOFF);
         playOff18.teamSources.add(new TeamsSource(EUROCUP_GROUP, TypeSource.N_TEAM, 1));
         playOff18.teamSources.add(new TeamsSource(EUROCUP_GROUP, TypeSource.N_TEAM, 2));
         playOff18.ratingType = RatingType.BY_ORDER;
         scheme.AddPart(playOff18);
 
-        var playOff14 = new SchemePart(EUROCUP_1_4, "1/4", 2, StagePool.StageType.PLAYOFF);
+        var playOff14 = new SchemePart(EUROCUP_1_4, "1/4", 2, StageType.PLAYOFF);
         playOff14.teamSources.add(new TeamsSource(EUROCUP_1_8, TypeSource.WINNERS));
         playOff14.ratingType = RatingType.NO;
         scheme.AddPart(playOff14);
 
-        var playOff12 = new SchemePart(EUROCUP_1_2, "1/2", 2, StagePool.StageType.PLAYOFF);
+        var playOff12 = new SchemePart(EUROCUP_1_2, "1/2", 2, StageType.PLAYOFF);
         playOff12.teamSources.add(new TeamsSource(EUROCUP_1_4, TypeSource.WINNERS));
         playOff12.ratingType = RatingType.NO;
         scheme.AddPart(playOff12);
 
-        var playOffFinal = new SchemePart(EUROCUP_FINAL, "Final", 1, StagePool.StageType.PLAYOFF);
+        var playOffFinal = new SchemePart(EUROCUP_FINAL, "Final", 1, StageType.PLAYOFF);
         playOffFinal.teamSources.add(new TeamsSource(EUROCUP_1_2, TypeSource.WINNERS));
         playOffFinal.ratingType = RatingType.NO;
         scheme.AddPart(playOffFinal);
