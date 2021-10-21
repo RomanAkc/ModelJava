@@ -8,6 +8,16 @@ class UEFARatingCalculator {
     private BaseTournament tournament2ndLevel = null;
     private BaseTournament tournament3rdLevel = null;
 
+    private class PairPoints {
+        public double homePoint = 0;
+        public double awayPoint = 0;
+
+        public PairPoints(double homePoint, double awayPoint) {
+            this.homePoint = homePoint;
+            this.awayPoint = awayPoint;
+        }
+    }
+
     public UEFARatingCalculator() {
 
     }
@@ -39,13 +49,45 @@ class UEFARatingCalculator {
 
         for(int i = 0; i < tournament.getCntStagePool(); ++i) {
             var id = tournament.getStageID(i);
+            var schemePart = getSchemePart(scheme, id);
+            boolean isHalfPoint = schemePart.ratingStageType == UEFARatingStageType.QUALIFICATION;
             var stageType = tournament.getStageType(i);
 
+            if(stageType == StageType.PLAYOFF) {
+                var meetings = tournament.getStageMeetings(id);
+
+                for(var meet : meetings) {
+                    if(!pointsByTeam.containsKey(meet.getTeamHome())) {
+                        pointsByTeam.put(meet.getTeamHome(), 0.0);
+                    }
+                    if(!pointsByTeam.containsKey(meet.getTeamAway())) {
+                        pointsByTeam.put(meet.getTeamAway(), 0.0);
+                    }
+
+                    var pH = pointsByTeam.get(meet.getTeamHome());
+                    var pA = pointsByTeam.get(meet.getTeamAway());
+
+                    //pH += schemePart.addPoint + (meet.isWinnerHomeTeamWOPen() ? (isHalfPoint ? 1.0 : 2.0) : 0.0);
+
+                    //meet.isWinnerHomeTeamWOPen()
+                }
+            }
 
 
-            var meetings = tournament.getStageMeetings(id);
+
         }
 
+    }
+
+    private PairPoints getPointsByMeet(Meet meet, boolean isHalfPoint) {
+        return new PairPoints(0, 0);
+    }
+
+    private UEFARatingSchemePart getSchemePart(HashMap<Integer, UEFARatingSchemePart> tournamentScheme, int stageID) {
+        if(tournamentScheme.containsKey(stageID))
+            return tournamentScheme.get(stageID);
+
+        return null;
     }
 
     private HashMap<Integer, UEFARatingSchemePart> getSchemeForTournament(int tournamentID) {

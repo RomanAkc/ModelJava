@@ -58,6 +58,14 @@ class Meet {
         return isWinnerHomeTeam();
     }
 
+    public boolean isDraw() {
+        return result.isDraw();
+    }
+
+    public boolean isDrawWOPen() {
+        return isDraw();
+    }
+
     public SimpleTeam getWinner() {
         if(result.isWin()) {
             return teamHome;
@@ -142,7 +150,17 @@ class WinMeet extends Meet {
 
     @Override
     public boolean isWinnerHomeTeamWOPen() {
-        return isWinnerHomeTeam();
+        return getResultMeetWOPen().isWin();
+    }
+
+    @Override
+    public boolean isDraw() {
+        return false;
+    }
+
+    @Override
+    public boolean isDrawWOPen() {
+        return getResultMeetWOPen().isDraw();
     }
 
     @Override
@@ -192,7 +210,7 @@ class WinTwoMeet extends Meet {
         return firstMeet.getResultMeet().getGoalAway() + super.getResultMeet().getGoalHome();
     }
 
-    private boolean isDraw() {
+    private boolean checkIsDraw() {
         if(getGoalsFirstTeamMain() != getGoalsSecondTeamMain()) {
             return false;
         }
@@ -226,7 +244,7 @@ class WinTwoMeet extends Meet {
         firstMeet.calcUseOwner();
         super.calcUseOwner();
 
-        if(!isDraw()) {
+        if(!checkIsDraw()) {
             return;
         }
 
@@ -246,6 +264,21 @@ class WinTwoMeet extends Meet {
                     , resultWOPen.getGoalAway() + resultPen.getGoalHome());
         }
         return resultWOPen;
+    }
+
+    @Override
+    public boolean isWinnerHomeTeamWOPen() {
+        return getResultMeetWOPen().isWin();
+    }
+
+    @Override
+    public boolean isDraw() {
+        return false;
+    }
+
+    @Override
+    public boolean isDrawWOPen() {
+        return getResultMeetWOPen().isDraw();
     }
 
     @Override
