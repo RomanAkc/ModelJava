@@ -2,6 +2,7 @@ package fss.model;
 
 import java.util.ArrayList;
 
+//Base test class
 public class BaseTest {
     protected ArrayList<SimpleTeam> generateTeams(int cnt) {
         var country = generateCounty();
