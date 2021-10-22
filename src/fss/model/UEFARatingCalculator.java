@@ -1,5 +1,7 @@
 package fss.model;
 
+import com.sun.source.tree.BreakTree;
+
 import java.util.HashMap;
 
 class UEFARatingCalculator {
@@ -11,11 +13,6 @@ class UEFARatingCalculator {
     private class PairPoints {
         public double homePoint = 0;
         public double awayPoint = 0;
-
-        public PairPoints(double homePoint, double awayPoint) {
-            this.homePoint = homePoint;
-            this.awayPoint = awayPoint;
-        }
     }
 
     public UEFARatingCalculator() {
@@ -67,6 +64,8 @@ class UEFARatingCalculator {
                     var pH = pointsByTeam.get(meet.getTeamHome());
                     var pA = pointsByTeam.get(meet.getTeamAway());
 
+                    //НАДО НАПИСАТЬ ПОЛУЧЕНИЕ 1-го и 2-го матча из WinTwoMeet
+
                     //pH += schemePart.addPoint + (meet.isWinnerHomeTeamWOPen() ? (isHalfPoint ? 1.0 : 2.0) : 0.0);
 
                     //meet.isWinnerHomeTeamWOPen()
@@ -80,7 +79,36 @@ class UEFARatingCalculator {
     }
 
     private PairPoints getPointsByMeet(Meet meet, boolean isHalfPoint) {
-        return new PairPoints(0, 0);
+        var result = new PairPoints();
+
+        if(meet instanceof WinTwoMeet) {
+            var twoMeet = (WinTwoMeet)meet;
+            AddPointByResult(twoMeet.isWinnerHomeTeamFirstMeet(), twoMeet.isDrawFirstMeet(), result);
+            AddPointByResult(twoMeet.isWinnerHomeTeamSecondMeet(), twoMeet.isDrawSecondMeet(), result);
+        } else {
+            AddPointByResult(meet.isWinnerHomeTeamWOPen(), meet.isDrawWOPen(), result);
+        }
+
+        return ModifyPointIfNeed(isHalfPoint, result);
+    }
+
+    private PairPoints ModifyPointIfNeed(boolean isHalfPoint, PairPoints result) {
+        if(isHalfPoint) {
+            result.homePoint /= 2;
+            result.awayPoint /= 2;
+        }
+        return result;
+    }
+
+    private void AddPointByResult(boolean isWinnerHome, boolean isDraw, PairPoints result) {
+        if(isWinnerHome) {
+            result.homePoint += 2;
+        } else if(isDraw) {
+            result.homePoint += 1;
+            result.awayPoint += 1;
+        } else {
+            result.awayPoint += 2;
+        }
     }
 
     private UEFARatingSchemePart getSchemePart(HashMap<Integer, UEFARatingSchemePart> tournamentScheme, int stageID) {

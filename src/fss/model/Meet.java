@@ -248,6 +248,7 @@ class WinTwoMeet extends Meet {
             return;
         }
 
+        //ОШИБКА? (НАДО ПРОВЕРИТЬ НАДО ЛИ МЕНЯТЬ МЕСТАМИ КОМАНДЫ)
         resultAdd = ResultCalculator.calcAddTime(getTeamAway().getPower(), getTeamHome().getPower());
         if(!resultAdd.isDraw()) {
            return;
@@ -279,6 +280,24 @@ class WinTwoMeet extends Meet {
     @Override
     public boolean isDrawWOPen() {
         return getResultMeetWOPen().isDraw();
+    }
+
+    public boolean isWinnerHomeTeamFirstMeet() {
+        return firstMeet.isWinnerHomeTeamWOPen();
+    }
+
+    public boolean isDrawFirstMeet() {
+        return firstMeet.isDrawWOPen();
+    }
+
+    public boolean isWinnerHomeTeamSecondMeet() {
+        return super.getResultMeet().getGoalAway() + resultAdd.getGoalAway()
+                > super.getResultMeet().getGoalHome() + resultAdd.getGoalHome();
+    }
+
+    public boolean isDrawSecondMeet() {
+        return super.getResultMeet().getGoalAway() + resultAdd.getGoalAway()
+                == super.getResultMeet().getGoalHome() + resultAdd.getGoalHome();
     }
 
     @Override
