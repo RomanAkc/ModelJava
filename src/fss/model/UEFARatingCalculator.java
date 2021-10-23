@@ -39,9 +39,14 @@ class UEFARatingCalculator {
     public void calc() {
         HashMap<SimpleTeam, Double> pointsByTeam = new HashMap<>();
         calcForTournament(tournament1stLevel, pointsByTeam);
+        calcForTournament(tournament2ndLevel, pointsByTeam);
+        calcForTournament(tournament3rdLevel, pointsByTeam);
     }
 
     private void calcForTournament(BaseTournament tournament, HashMap<SimpleTeam, Double> pointsByTeam) {
+        if(tournament == null)
+            return;
+
         var scheme = getSchemeForTournament(tournament.getId());
 
         for(int i = 0; i < tournament.getCntStagePool(); ++i) {
@@ -54,28 +59,26 @@ class UEFARatingCalculator {
                 var meetings = tournament.getStageMeetings(id);
 
                 for(var meet : meetings) {
-                    if(!pointsByTeam.containsKey(meet.getTeamHome())) {
-                        pointsByTeam.put(meet.getTeamHome(), 0.0);
-                    }
-                    if(!pointsByTeam.containsKey(meet.getTeamAway())) {
-                        pointsByTeam.put(meet.getTeamAway(), 0.0);
-                    }
-
-                    var pH = pointsByTeam.get(meet.getTeamHome());
-                    var pA = pointsByTeam.get(meet.getTeamAway());
-
-                    //НАДО НАПИСАТЬ ПОЛУЧЕНИЕ 1-го и 2-го матча из WinTwoMeet
-
-                    //pH += schemePart.addPoint + (meet.isWinnerHomeTeamWOPen() ? (isHalfPoint ? 1.0 : 2.0) : 0.0);
-
-                    //meet.isWinnerHomeTeamWOPen()
+                    var points = getPointsByMeet(meet, isHalfPoint);
+                    addPointsToPointsByTeam(meet.getTeamHome(), points.homePoint, pointsByTeam);
+                    addPointsToPointsByTeam(meet.getTeamAway(), points.awayPoint, pointsByTeam);
                 }
+            } else if(stageType == StageType.GROUPS) {
+
             }
 
 
 
         }
 
+    }
+
+    private void addPointsToPointsByTeam(SimpleTeam team, double points, HashMap<SimpleTeam, Double> pointsByTeam) {
+        if(!pointsByTeam.containsKey(team)) {
+            pointsByTeam.put(team, points);
+        } else {
+            pointsByTeam.put(team, pointsByTeam.get(team) + points);
+        }
     }
 
     private PairPoints getPointsByMeet(Meet meet, boolean isHalfPoint) {
