@@ -3,10 +3,9 @@ package fss.model;
 import java.util.ArrayList;
 
 abstract class StagePool {
-
     protected StageType stageType = StageType.PLAYOFF;
     protected String name;
-    protected ArrayList<SimpleTeam> teams = null;
+    private ArrayList<SimpleTeam> teams = null;
     protected Ratingable rating = null;
     protected int cntRounds = 0;
 
@@ -16,6 +15,10 @@ abstract class StagePool {
         this.rating = rating;
         this.name = name;
         this.cntRounds = cntRounds;
+    }
+
+    public ArrayList<SimpleTeam> getTeams() {
+        return new ArrayList<>(teams);
     }
 
     public StageType getStageType() {

@@ -13,7 +13,7 @@ class RoundRobinStagePool extends BaseRoundRobinStagePool {
     public void calc() {
         stage = new CircleStage(name, cntRounds);
         stage.addWinRules(rules);
-        stage.addTeams(teams);
+        stage.addTeams(getTeams());
         stage.calc();
     }
 
@@ -78,8 +78,8 @@ class PlayOffStagePool extends BasePlayOffStagePool {
     @Override
     public void calc() {
         stage = new PlayOffStage(name, cntRounds != 1);
-        stage.addTeams(teams);
-        stage.addMeets(Sortition.playOffSort(teams, rating, cntRounds != 1));
+        stage.addTeams(getTeams());
+        stage.addMeets(Sortition.playOffSort(getTeams(), rating, cntRounds != 1));
         stage.calc();
     }
 
@@ -126,7 +126,7 @@ class GroupsStagePool extends BaseGroupsStagePool {
 
     private void createStages() {
         stages = new ArrayList<>();
-        var groups = Sortition.groupSort(teams, cntGroups, rating);
+        var groups = Sortition.groupSort(getTeams(), cntGroups, rating);
         for(int i = 0; i < groups.size(); ++i) {
             var stage = new CircleStage(name + ". Group " + Integer.toString(i + 1), cntRounds);
             stage.addWinRules(rules);

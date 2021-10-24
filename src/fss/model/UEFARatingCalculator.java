@@ -55,6 +55,12 @@ class UEFARatingCalculator {
             boolean isHalfPoint = schemePart.ratingStageType == UEFARatingStageType.QUALIFICATION;
             var stageType = tournament.getStageType(i);
 
+            if(schemePart.addPoint > 0) {
+                for (var team : tournament.getStageTeams(id)) {
+                    addPointsToPointsByTeam(team, schemePart.addPoint, pointsByTeam);
+                }
+            }
+
             if(stageType == StageType.PLAYOFF) {
                 var meetings = tournament.getStageMeetings(id);
 

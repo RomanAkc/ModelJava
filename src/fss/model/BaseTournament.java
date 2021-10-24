@@ -31,4 +31,5 @@ public abstract class BaseTournament {
     public abstract ArrayList<SimpleTeam> getLosersStageTeams(int stageID);
     public abstract ArrayList<SimpleTeam> getAllTournamentTeams();
     public abstract ArrayList<Meet> getStageMeetings(int stageID);
+    public abstract ArrayList<SimpleTeam> getStageTeams(int stageID);
 }

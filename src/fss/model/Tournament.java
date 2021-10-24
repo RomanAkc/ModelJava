@@ -162,6 +162,16 @@ class Tournament extends BaseTournament {
     }
 
     @Override
+    public ArrayList<SimpleTeam> getStageTeams(int stageID) {
+        var stage = getStage(stageID);
+        if(stage == null) {
+            return null;
+        }
+
+        return getStage(stageID).getTeams();
+    }
+
+    @Override
     public String toString() {
         var sb = new StringBuilder();
         sb.append(String.format("Tournament %s", name));
