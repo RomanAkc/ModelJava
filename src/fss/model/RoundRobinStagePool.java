@@ -11,7 +11,7 @@ class RoundRobinStagePool extends BaseRoundRobinStagePool {
 
     @Override
     public void calc() {
-        stage = new CircleStage(name, cntRounds);
+        stage = new CircleStage(getName(), getCntRounds());
         stage.addWinRules(rules);
         stage.addTeams(getTeams());
         stage.calc();
@@ -60,7 +60,7 @@ class RoundRobinStagePool extends BaseRoundRobinStagePool {
     @Override
     public String toString() {
         var sb = new StringBuilder();
-        sb.append("Round-robin stage: " + name);
+        sb.append("Round-robin stage: " + getName());
         sb.append(System.lineSeparator());
         sb.append(stage.toString());
         sb.append(System.lineSeparator());
@@ -77,9 +77,9 @@ class PlayOffStagePool extends BasePlayOffStagePool {
 
     @Override
     public void calc() {
-        stage = new PlayOffStage(name, cntRounds != 1);
+        stage = new PlayOffStage(getName(), getCntRounds() != 1);
         stage.addTeams(getTeams());
-        stage.addMeets(Sortition.playOffSort(getTeams(), rating, cntRounds != 1));
+        stage.addMeets(Sortition.playOffSort(getTeams(), getRating(), getCntRounds() != 1));
         stage.calc();
     }
 
@@ -101,7 +101,7 @@ class PlayOffStagePool extends BasePlayOffStagePool {
     @Override
     public String toString() {
         var sb = new StringBuilder();
-        sb.append("Play off stage: " + name);
+        sb.append("Play off stage: " + getName());
         sb.append(System.lineSeparator());
         sb.append(stage.toString());
         sb.append(System.lineSeparator());
@@ -126,9 +126,9 @@ class GroupsStagePool extends BaseGroupsStagePool {
 
     private void createStages() {
         stages = new ArrayList<>();
-        var groups = Sortition.groupSort(getTeams(), cntGroups, rating);
+        var groups = Sortition.groupSort(getTeams(), cntGroups, getRating());
         for(int i = 0; i < groups.size(); ++i) {
-            var stage = new CircleStage(name + ". Group " + Integer.toString(i + 1), cntRounds);
+            var stage = new CircleStage(getName() + ". Group " + Integer.toString(i + 1), getCntRounds());
             stage.addWinRules(rules);
             stage.addTeams(groups.get(i));
             stages.add(stage);
@@ -185,7 +185,7 @@ class GroupsStagePool extends BaseGroupsStagePool {
     @Override
     public String toString() {
         var sb = new StringBuilder();
-        sb.append("Group stage: " + name);
+        sb.append("Group stage: " + getName());
         for(var stage : stages) {
             sb.append(System.lineSeparator());
             sb.append(stage.toString());

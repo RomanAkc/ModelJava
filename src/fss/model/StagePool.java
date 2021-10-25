@@ -3,11 +3,11 @@ package fss.model;
 import java.util.ArrayList;
 
 abstract class StagePool {
-    protected StageType stageType = StageType.PLAYOFF;
-    protected String name;
+    private StageType stageType = StageType.PLAYOFF;
+    private String name;
     private ArrayList<SimpleTeam> teams = null;
-    protected Ratingable rating = null;
-    protected int cntRounds = 0;
+    private Ratingable rating = null;
+    private int cntRounds = 0;
 
     public StagePool(StageType stageType, String name, ArrayList<SimpleTeam> teams, Ratingable rating, int cntRounds) {
         this.stageType = stageType;
@@ -17,12 +17,24 @@ abstract class StagePool {
         this.cntRounds = cntRounds;
     }
 
-    public ArrayList<SimpleTeam> getTeams() {
-        return new ArrayList<>(teams);
-    }
-
     public StageType getStageType() {
         return stageType;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public ArrayList<SimpleTeam> getTeams() {
+        return teams;
+    }
+
+    public Ratingable getRating() {
+        return rating;
+    }
+
+    public int getCntRounds() {
+        return cntRounds;
     }
 
     public abstract void calc();
