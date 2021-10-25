@@ -9,7 +9,7 @@ public abstract class BaseTournament {
     public BaseTournament(String name) {
         this.name = name;
     }
-    public int getId() {
+    public int getID() {
         return id;
     }
 
@@ -21,8 +21,10 @@ public abstract class BaseTournament {
     public abstract void calc();
 
     public abstract int getCntStagePool();
+    public abstract StagePool getStagePoolByIndex(int stagePoolIndex);
+    public abstract StagePool getStagePoolByStageID(int stageID);
+
     public abstract int getStageID(int stagePoolIndex);
-    public abstract StageType getStageType(int stagePoolIndex);
     public abstract ArrayList<Table.Row> getFinalTableRows(int stageID);
     public abstract ArrayList<SimpleTeam> getFirstStageTeams(int stageID, int cntTeam);
     public abstract ArrayList<SimpleTeam> getLastStageTeams(int stageID, int cntTeam);
@@ -30,6 +32,4 @@ public abstract class BaseTournament {
     public abstract ArrayList<SimpleTeam> getWinnersStageTeams(int stageID);
     public abstract ArrayList<SimpleTeam> getLosersStageTeams(int stageID);
     public abstract ArrayList<SimpleTeam> getAllTournamentTeams();
-    public abstract ArrayList<Meet> getStageMeetings(int stageID);
-    public abstract ArrayList<SimpleTeam> getStageTeams(int stageID);
 }

@@ -148,7 +148,7 @@ public class TournamentTest extends BaseTest {
             posByTeams.put(allTeams.get(i), i);
         }
 
-        var meetings = tournament.getStageMeetings(stageID);
+        var meetings = tournament.getStagePoolByStageID(stageID).getMeetings();
         for(var meet : meetings) {
             var posHome = posByTeams.get(meet.getTeamHome());
             var posAway = posByTeams.get(meet.getTeamAway());

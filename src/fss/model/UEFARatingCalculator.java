@@ -1,7 +1,5 @@
 package fss.model;
 
-import com.sun.source.tree.BreakTree;
-
 import java.util.HashMap;
 
 class UEFARatingCalculator {
@@ -47,22 +45,20 @@ class UEFARatingCalculator {
         if(tournament == null)
             return;
 
-        var scheme = getSchemeForTournament(tournament.getId());
+        var scheme = getSchemeForTournament(tournament.getID());
 
         for(int i = 0; i < tournament.getCntStagePool(); ++i) {
             var id = tournament.getStageID(i);
+            var stage = tournament.getStagePoolByIndex(i);
             var schemePart = getSchemePart(scheme, id);
+
+
+            addBonusPoints(schemePart, stage, pointsByTeam);
+
+            var stageType = stage.getStageType();
             boolean isHalfPoint = schemePart.ratingStageType == UEFARatingStageType.QUALIFICATION;
-            var stageType = tournament.getStageType(i);
-
-            if(schemePart.addPoint > 0) {
-                for (var team : tournament.getStageTeams(id)) {
-                    addPointsToPointsByTeam(team, schemePart.addPoint, pointsByTeam);
-                }
-            }
-
             if(stageType == StageType.PLAYOFF) {
-                var meetings = tournament.getStageMeetings(id);
+                var meetings = stage.getMeetings();
 
                 for(var meet : meetings) {
                     var points = getPointsByMeet(meet, isHalfPoint);
@@ -77,6 +73,14 @@ class UEFARatingCalculator {
 
         }
 
+    }
+
+    private void addBonusPoints(UEFARatingSchemePart schemePart, StagePool stage, HashMap<SimpleTeam, Double> pointsByTeam) {
+        if(schemePart.bonusPoint > 0) {
+            for (var team : stage.getTeams()) {
+                addPointsToPointsByTeam(team, schemePart.bonusPoint, pointsByTeam);
+            }
+        }
     }
 
     private void addPointsToPointsByTeam(SimpleTeam team, double points, HashMap<SimpleTeam, Double> pointsByTeam) {

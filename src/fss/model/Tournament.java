@@ -81,19 +81,25 @@ class Tournament extends BaseTournament {
     }
 
     @Override
+    public StagePool getStagePoolByIndex(int stagePoolIndex) {
+        return stages.get(stagePoolIndex);
+    }
+
+    @Override
+    public StagePool getStagePoolByStageID(int stageID) {
+        if(!stageByID.containsKey(stageID)) {
+            return null;
+        }
+
+        return stageByID.get(stageID);
+    }
+
+    @Override
     public int getStageID(int stagePoolIndex) {
         if(stagePoolIndex < 0 || stagePoolIndex >= stages.size())
             return 0;
 
         return idByStage.get(stages.get(stagePoolIndex));
-    }
-
-    @Override
-    public StageType getStageType(int stagePoolIndex) {
-        if(stagePoolIndex < 0 || stagePoolIndex >= stages.size())
-            return StageType.NOTHING;
-
-        return stages.get(stagePoolIndex).getStageType();
     }
 
     @Override
@@ -150,25 +156,6 @@ class Tournament extends BaseTournament {
         for(var teams : teamsByStageID.values())
             allTeams.addAll(teams);
         return allTeams;
-    }
-
-    @Override
-    public ArrayList<Meet> getStageMeetings(int stageID) {
-        var stage = getStage(stageID);
-        if(stage == null) {
-            return null;
-        }
-        return stage.getMeetings();
-    }
-
-    @Override
-    public ArrayList<SimpleTeam> getStageTeams(int stageID) {
-        var stage = getStage(stageID);
-        if(stage == null) {
-            return null;
-        }
-
-        return getStage(stageID).getTeams();
     }
 
     @Override
