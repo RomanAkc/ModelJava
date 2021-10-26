@@ -49,30 +49,20 @@ class UEFARatingCalculator {
 
         for(int i = 0; i < tournament.getCntStagePool(); ++i) {
             var id = tournament.getStageID(i);
-            var stage = tournament.getStagePoolByIndex(i);
+            var stage = tournament.getStagePoolByStageID(id);
             var schemePart = getSchemePart(scheme, id);
-
 
             addBonusPoints(schemePart, stage, pointsByTeam);
 
-            var stageType = stage.getStageType();
             boolean isHalfPoint = schemePart.ratingStageType == UEFARatingStageType.QUALIFICATION;
-            if(stageType == StageType.PLAYOFF) {
-                var meetings = stage.getMeetings();
+            var meetings = stage.getMeetings();
 
-                for(var meet : meetings) {
-                    var points = getPointsByMeet(meet, isHalfPoint);
-                    addPointsToPointsByTeam(meet.getTeamHome(), points.homePoint, pointsByTeam);
-                    addPointsToPointsByTeam(meet.getTeamAway(), points.awayPoint, pointsByTeam);
-                }
-            } else if(stageType == StageType.GROUPS) {
-
+            for(var meet : meetings) {
+                var points = getPointsByMeet(meet, isHalfPoint);
+                addPointsToPointsByTeam(meet.getTeamHome(), points.homePoint, pointsByTeam);
+                addPointsToPointsByTeam(meet.getTeamAway(), points.awayPoint, pointsByTeam);
             }
-
-
-
         }
-
     }
 
     private void addBonusPoints(UEFARatingSchemePart schemePart, StagePool stage, HashMap<SimpleTeam, Double> pointsByTeam) {

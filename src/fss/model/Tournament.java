@@ -81,8 +81,11 @@ class Tournament extends BaseTournament {
     }
 
     @Override
-    public StagePool getStagePoolByIndex(int stagePoolIndex) {
-        return stages.get(stagePoolIndex);
+    public int getStageID(int stagePoolIndex) {
+        if(stagePoolIndex < 0 || stagePoolIndex >= stages.size())
+            return 0;
+
+        return idByStage.get(stages.get(stagePoolIndex));
     }
 
     @Override
@@ -92,14 +95,6 @@ class Tournament extends BaseTournament {
         }
 
         return stageByID.get(stageID);
-    }
-
-    @Override
-    public int getStageID(int stagePoolIndex) {
-        if(stagePoolIndex < 0 || stagePoolIndex >= stages.size())
-            return 0;
-
-        return idByStage.get(stages.get(stagePoolIndex));
     }
 
     @Override

@@ -15,7 +15,7 @@ class Country {
         return name;
     }
 
-    public int getId() {
+    public int getID() {
         return id;
     }
 
