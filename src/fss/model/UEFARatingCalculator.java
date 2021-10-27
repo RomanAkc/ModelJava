@@ -7,15 +7,15 @@ class UEFARatingCalculator {
     private BaseTournament tournament1stLevel = null;
     private BaseTournament tournament2ndLevel = null;
     private BaseTournament tournament3rdLevel = null;
+    private HashMap<SimpleTeam, Double> pointsByTeam = new HashMap<>();
+    private HashMap<Country, Double> pointsByCountry = new HashMap<>();
 
     private class PairPoints {
         public double homePoint = 0;
         public double awayPoint = 0;
     }
 
-    public UEFARatingCalculator() {
-
-    }
+    public UEFARatingCalculator() {}
 
     public void addRatingScheme(UEFARatingSchemePart schemePart) {
         var scheme = getSchemeForTournament(schemePart.tournamentID);
@@ -35,13 +35,21 @@ class UEFARatingCalculator {
     }
 
     public void calc() {
-        HashMap<SimpleTeam, Double> pointsByTeam = new HashMap<>();
-        calcForTournament(tournament1stLevel, pointsByTeam);
-        calcForTournament(tournament2ndLevel, pointsByTeam);
-        calcForTournament(tournament3rdLevel, pointsByTeam);
+        calcForTournament(tournament1stLevel);
+        calcForTournament(tournament2ndLevel);
+        calcForTournament(tournament3rdLevel);
+        calcCountries();
     }
 
-    private void calcForTournament(BaseTournament tournament, HashMap<SimpleTeam, Double> pointsByTeam) {
+    public HashMap<SimpleTeam, Double> getPointsByTeam() {
+        return pointsByTeam;
+    }
+
+    public HashMap<Country, Double> getPointsByCountry() {
+        return pointsByCountry;
+    }
+
+    private void calcForTournament(BaseTournament tournament) {
         if(tournament == null)
             return;
 
@@ -63,6 +71,20 @@ class UEFARatingCalculator {
                 addPointsToPointsByTeam(meet.getTeamAway(), points.awayPoint, pointsByTeam);
             }
         }
+    }
+
+    private void calcCountries() {
+        for(var kv : pointsByTeam.entrySet()) {
+            var country = kv.getKey().getCountry();
+            var value = kv.getValue();
+
+            if(pointsByCountry.containsKey(country)) {
+                pointsByCountry.put(country, pointsByCountry.get(country) + value);
+            } else {
+                pointsByCountry.put(country, value);
+            }
+        }
+
     }
 
     private void addBonusPoints(UEFARatingSchemePart schemePart, StagePool stage, HashMap<SimpleTeam, Double> pointsByTeam) {

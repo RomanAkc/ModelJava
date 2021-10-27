@@ -1,7 +1,6 @@
 package fss.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 /*Т. к., предположительно, мы будем вычислять по годам,
   то рейтинг должен принимать результаты предыдущих 4х лет.
@@ -27,12 +26,14 @@ import java.util.HashMap;
 
 class UEFARating implements Ratingable, CountryRatingable {
 
-    private ArrayList<UEFARatingElement> data = new ArrayList<>();
+    private ArrayList<UEFARatingData> data = null;
     private HashMap<ClubTeam, Integer> clubPositions = new HashMap<>();
     private HashMap<Country, Integer> countryPositions = new HashMap<>();
     private ArrayList<Country> countries = new ArrayList<>();
 
-    public UEFARating() {
+    public UEFARating(ArrayList<UEFARatingData> data) {
+        this.data = data;
+        sortRatingData();
     }
 
     @Override
@@ -58,5 +59,14 @@ class UEFARating implements Ratingable, CountryRatingable {
     @Override
     public int getAllCountries() {
         return countries.size();
+    }
+
+    private void sortRatingData() {
+        Collections.sort(data, new Comparator<UEFARatingData>() {
+            @Override
+            public int compare(UEFARatingData lhs, UEFARatingData rhs) {
+                return lhs.point > rhs.point ? -1 : (lhs.point < rhs.point) ? 1 : 0;
+            }
+        });
     }
 }
