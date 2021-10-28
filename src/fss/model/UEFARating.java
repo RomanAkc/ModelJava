@@ -34,6 +34,7 @@ class UEFARating implements Ratingable, CountryRatingable {
     public UEFARating(ArrayList<UEFARatingData> data) {
         this.data = data;
         sortRatingData();
+        createPositions();
     }
 
     @Override
@@ -68,5 +69,18 @@ class UEFARating implements Ratingable, CountryRatingable {
                 return lhs.point > rhs.point ? -1 : (lhs.point < rhs.point) ? 1 : 0;
             }
         });
+    }
+
+    private void createPositions() {
+        int teamIndex = 0;
+        int countryIndex = 0;
+        for(int i = 0; i < data.size(); ++i) {
+            var value = data.get(i);
+            if(value.team != null) {
+                clubPositions.put(value.team, ++teamIndex);
+            } else {
+                countryPositions.put(value.country, ++countryIndex);
+            }
+        }
     }
 }
