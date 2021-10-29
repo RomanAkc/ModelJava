@@ -1,6 +1,8 @@
 package fss.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 //Base test class
 public class BaseTest {
@@ -14,6 +16,25 @@ public class BaseTest {
     }
 
     protected Country generateCounty() {
-        return new Country(1, "Country", WorldPart.EUROPE);
+        return generateCountryWithID(1);
+    }
+
+    protected HashMap<ClubTeam, Country> generateClubTeams(int cntCountries, int cntClubForCountry) {
+        var result = new HashMap<ClubTeam, Country>();
+
+        int teamID = 1;
+        for(int i = 0; i < cntCountries; ++i) {
+            var country = generateCountryWithID(i);
+            for(int j = 0; j < cntClubForCountry; ++j) {
+                var team = new ClubTeam(teamID, String.format("Team %d", teamID), country, 30);
+                result.put(team, country);
+            }
+        }
+
+        return result;
+    }
+
+    public Country generateCountryWithID(int id) {
+        return new Country(id, "Country" + Integer.toString(id), WorldPart.EUROPE);
     }
 }
