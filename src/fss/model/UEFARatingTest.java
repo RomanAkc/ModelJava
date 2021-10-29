@@ -4,19 +4,24 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
 public class UEFARatingTest extends BaseTest{
     @Test
-    public void UEFARatingTest1() {
-        var data = generateUEFARatingData();
+    public void UEFARatingTest() {
+        var teamsWithCountries = generateClubTeams(8, 3);
+        var countryWithoutTeam = generateCountryWithID(100500);
+
+        var data = generateUEFARatingData(teamsWithCountries, countryWithoutTeam);
     }
 
-    private ArrayList<UEFARatingData> generateUEFARatingData() {
+    private ArrayList<UEFARatingData> generateUEFARatingData(HashMap<ClubTeam, Country> teamsWithCountries,
+                                                             Country countryWithoutTeam) {
         var data = new ArrayList<UEFARatingData>();
 
-        var teamsWithCountries = generateClubTeams(8, 3);
+
 
         Country currentCountry = null;
         double pointCountry = 1.0;
@@ -34,7 +39,7 @@ public class UEFARatingTest extends BaseTest{
             addPoint += 0.1;
         }
 
-        var countryWithoutTeam = generateCountryWithID(100500);
+
         data.add(new UEFARatingData(2021, countryWithoutTeam, 2.22));
 
         return data;
