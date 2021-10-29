@@ -1,16 +1,16 @@
 package fss.model;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
-class UEFARatingTest extends BaseTest{
+public class UEFARatingTest extends BaseTest{
     @Test
-    public void UEFARatingTest() {
+    public void UEFARatingTest1() {
         var data = generateUEFARatingData();
-
     }
 
     private ArrayList<UEFARatingData> generateUEFARatingData() {
