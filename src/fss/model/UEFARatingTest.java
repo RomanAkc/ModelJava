@@ -15,13 +15,14 @@ public class UEFARatingTest extends BaseTest{
         var countryWithoutTeam = generateCountryWithID(100500);
 
         var data = generateUEFARatingData(teamsWithCountries, countryWithoutTeam);
+
+        var rating = new UEFARating(data);
+        
     }
 
     private ArrayList<UEFARatingData> generateUEFARatingData(HashMap<ClubTeam, Country> teamsWithCountries,
                                                              Country countryWithoutTeam) {
         var data = new ArrayList<UEFARatingData>();
-
-
 
         Country currentCountry = null;
         double pointCountry = 1.0;
