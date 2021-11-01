@@ -26,6 +26,7 @@ public class BaseTest {
         for(int i = 0; i < cntCountries; ++i) {
             var country = generateCountryWithID(i);
             for(int j = 0; j < cntClubForCountry; ++j) {
+                teamID += 1;
                 var team = new ClubTeam(teamID, String.format("Team %d", teamID), country, 30);
                 result.put(team, country);
             }
