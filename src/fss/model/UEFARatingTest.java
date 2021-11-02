@@ -19,7 +19,6 @@ public class UEFARatingTest extends BaseTest{
         var rating = new UEFARating(data);
 
         HashMap<ClubTeam, Double> clubToPoint = getMapClubToPoint(data);
-
         for(var team1 : teamsWithCountries.keySet()) {
             for(var team2 : teamsWithCountries.keySet()) {
                 if(team1 == team2) {
@@ -35,7 +34,20 @@ public class UEFARatingTest extends BaseTest{
                 Assert.assertEquals(pos1 < pos2, pnt1 >= pnt2);
             }
         }
+
+        HashMap<Country, Double> countryToPoint = getMapCountryToPoint(data);
+        double prevPoint = -1;
+        for(int i = 1; i < rating.getAllCountries(); ++i) {
+            Country country = rating.getCountryByPosition(i);
+            double point = countryToPoint.get(country);
+            if(i > 1) {
+                Assert.assertTrue(point <= prevPoint);
+            }
+            prevPoint = point;
+        }
     }
+
+
 
     private HashMap<ClubTeam, Double> getMapClubToPoint(ArrayList<UEFARatingData> data) {
         HashMap<ClubTeam, Double> result = new HashMap<>();
@@ -49,7 +61,20 @@ public class UEFARatingTest extends BaseTest{
         }
 
         return result;
+    }
 
+    private HashMap<Country, Double> getMapCountryToPoint(ArrayList<UEFARatingData> data) {
+        HashMap<Country, Double> result = new HashMap<>();
+
+        for(var obj : data) {
+            if(obj.country == null) {
+                continue;
+            }
+
+            result.put(obj.country, obj.point);
+        }
+
+        return result;
     }
 
     private ArrayList<UEFARatingData> generateUEFARatingData(HashMap<ClubTeam, Country> teamsWithCountries,

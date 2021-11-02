@@ -59,7 +59,7 @@ class UEFARating implements Ratingable, CountryRatingable {
 
     @Override
     public int getAllCountries() {
-        return countries.size();
+        return countries.size() - 1;
     }
 
     private void sortRatingData() {
@@ -81,6 +81,14 @@ class UEFARating implements Ratingable, CountryRatingable {
             } else {
                 countryPositions.put(value.country, ++countryIndex);
             }
+        }
+
+        for(int i = 0; i <= countryIndex; i++) {
+            countries.add(null);
+        }
+
+        for(var kv : countryPositions.entrySet()) {
+            countries.set(kv.getValue(), kv.getKey());
         }
     }
 }
