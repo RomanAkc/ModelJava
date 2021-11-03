@@ -248,8 +248,7 @@ class WinTwoMeet extends Meet {
             return;
         }
 
-        //ОШИБКА? (НАДО ПРОВЕРИТЬ НАДО ЛИ МЕНЯТЬ МЕСТАМИ КОМАНДЫ)
-        resultAdd = ResultCalculator.calcAddTime(getTeamAway().getPower(), getTeamHome().getPower());
+        resultAdd = ResultCalculator.calcAddTime(getTeamHome().getPower(), getTeamAway().getPower());
         if(!resultAdd.isDraw()) {
            return;
         }

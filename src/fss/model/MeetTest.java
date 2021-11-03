@@ -37,13 +37,15 @@ public class MeetTest extends BaseTest {
     }
 
     private WinMeet createWinMeet() {
-        var teams = generateTeams(2);
-        return new WinMeet(teams.get(0), teams.get(1));
+        var teams1 = generateTeamsWithPower(1, 30);
+        var teams2 = generateTeamsWithPower(2, 29);
+        return new WinMeet(teams1.get(0), teams2.get(1));
     }
 
     private WinTwoMeet createWinTwoMeet() {
-        var teams = generateTeams(2);
-        return new WinTwoMeet(teams.get(0), teams.get(1));
+        var teams1 = generateTeamsWithPower(1, 30);
+        var teams2 = generateTeamsWithPower(2, 29);
+        return new WinTwoMeet(teams1.get(0), teams2.get(1));
     }
 
     private Meet createMeet() {

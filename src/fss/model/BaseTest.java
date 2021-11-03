@@ -15,6 +15,15 @@ public class BaseTest {
         return teams;
     }
 
+    protected ArrayList<SimpleTeam> generateTeamsWithPower(int cnt, int power) {
+        var country = generateCounty();
+        var teams = new ArrayList<SimpleTeam>();
+        for(int i = 0; i < cnt; ++i) {
+            teams.add(new ClubTeam(i, String.format("Team %d", i), country, power, power, power));
+        }
+        return teams;
+    }
+
     protected Country generateCounty() {
         return generateCountryWithID(1);
     }
