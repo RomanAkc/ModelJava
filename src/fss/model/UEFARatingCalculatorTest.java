@@ -1,12 +1,25 @@
 package fss.model;
 
+import org.junit.Test;
+
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
 public class UEFARatingCalculatorTest extends BaseTest {
+    @Test
+    void CalculatorTest() {
+        var LC = new UEFATournamentTest("LC");
+        var LE = new UEFATournamentTest("LE");
 
+        var calculator = new UEFARatingCalculator();
+        calculator.setTournament1stLevel(LC);
+        calculator.setTournament2ndLevel(LE);
 
+        calculator.calc();
+        
+
+    }
 
 }
 
