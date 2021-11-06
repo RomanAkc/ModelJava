@@ -129,7 +129,6 @@ class CircleStage extends Stage {
 }
 
 class PlayOffStage extends Stage {
-    private boolean alreadyCalculated = false;
     private boolean twoMeets = false;
     private boolean sortTeams = true;
     private ArrayList<Meet> meets = null;
@@ -180,13 +179,8 @@ class PlayOffStage extends Stage {
 
     @Override
     public void calc() {
-        if(alreadyCalculated) {
-            return;
-        }
-
         fillMeets();
         calcMeets();
-        alreadyCalculated = true;
     }
 
     @Override
@@ -196,10 +190,8 @@ class PlayOffStage extends Stage {
 
     public ArrayList<SimpleTeam> getWinners() {
         var winners = new ArrayList<SimpleTeam>();
-        if(alreadyCalculated) {
-            for(var m : meets) {
-                winners.add(m.getWinner());
-            }
+        for(var m : meets) {
+            winners.add(m.getWinner());
         }
         return winners;
 
@@ -207,10 +199,8 @@ class PlayOffStage extends Stage {
 
     public ArrayList<SimpleTeam> getLosers() {
         var looses = new ArrayList<SimpleTeam>();
-        if(alreadyCalculated) {
-            for(var m : meets) {
-                looses.add(m.getLoser());
-            }
+        for(var m : meets) {
+            looses.add(m.getLoser());
         }
         return looses;
     }
