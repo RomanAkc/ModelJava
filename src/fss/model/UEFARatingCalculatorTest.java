@@ -88,9 +88,13 @@ public class UEFARatingCalculatorTest extends BaseTest {
         UEFATournamentTest LC = new UEFATournamentTest("LC");
 
         ArrayList<SimpleTeam> teamsQual1 = new ArrayList<>();
-       // teamsQual1.add(new ClubTeam(1, ""))
-        var Qual1 = new UEFAStagePoolTest( StageType.PLAYOFF, "LC QUAL 1", teamsQual1, null, 2);
-        LC.stages.add(Qual1);
+        teamsQual1.add(teams.get("Juventus"));
+        teamsQual1.add(teams.get("Porto"));
+        teamsQual1.add(teams.get("Rangers"));
+        teamsQual1.add(teams.get("PSV"));
+        var qual1 = new UEFAStagePoolTest( StageType.PLAYOFF, "LC QUAL 1", teamsQual1, null, 2);
+        //var meet1 = new WinTwoMeet(teamsQual1.get(0), teamsQual1.get(1));
+        LC.stages.add(qual1);
 
 
         return LC;

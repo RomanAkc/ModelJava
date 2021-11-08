@@ -1,6 +1,6 @@
 package fss.model;
 
-class Meet {
+class Meet implements Matchable {
     private SimpleTeam teamHome = null;
     private SimpleTeam teamAway = null;
     private Result result = null;
@@ -38,18 +38,22 @@ class Meet {
         return  res.toString();
     }
 
+    @Override
     public SimpleTeam getTeamHome() {
         return teamHome;
     }
 
+    @Override
     public SimpleTeam getTeamAway() {
         return teamAway;
     }
 
+    @Override
     public Result getResultMeet() {
         return result;
     }
 
+    @Override
     public boolean isWinnerHomeTeam() {
         return result.isWin();
     }
@@ -58,14 +62,16 @@ class Meet {
         return isWinnerHomeTeam();
     }
 
+    @Override
     public boolean isDraw() {
         return result.isDraw();
     }
-
+    
     public boolean isDrawWOPen() {
         return isDraw();
     }
 
+    @Override
     public SimpleTeam getWinner() {
         if(result.isWin()) {
             return teamHome;
@@ -78,6 +84,7 @@ class Meet {
         return null;
     }
 
+    @Override
     public SimpleTeam getLoser() {
         if(result.isWin()) {
             return teamAway;
