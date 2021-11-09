@@ -1,8 +1,10 @@
 package fss.model;
 
-public interface Matchable {
+public interface Gameable {
     SimpleTeam getTeamHome();
     SimpleTeam getTeamAway();
+
+    void calc();
 
     Result getResultMeet();
 
