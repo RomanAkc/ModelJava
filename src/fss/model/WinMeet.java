@@ -35,20 +35,34 @@ class WinMeet implements WinGameable {
         resultPen = ResultCalculator.calcPen();
     }
 
-    //TODO: переписывать
+    @Override
+    public Result getResultMeet() {
+        return meet.getResultMeet();
+    }
 
-
-
-
-
-
-
-
-
+    private Result getResultMeetWOPen() {
+        var goalsFor = meet.getResultMeet().getGoalHome();
+        var goalsAway = meet.getResultMeet().getGoalAway();
+        if(resultAdd != null) {
+            goalsFor += resultAdd.getGoalHome();
+            goalsAway += resultAdd.getGoalAway();
+        }
+        return new Result(goalsFor, goalsAway);
+    }
 
     @Override
     public boolean isWinnerHomeTeam() {
-        return getResultMeet().isWin();
+        var resultWOPen = getResultMeetWOPen();
+        if(resultPen != null) {
+            return new Result(resultWOPen.getGoalHome() + resultPen.getGoalHome()
+                    , resultWOPen.getGoalAway() + resultPen.getGoalAway()).isWin();
+        }
+        return resultWOPen.isWin();
+    }
+
+    @Override
+    public boolean isDraw() {
+        return false;
     }
 
     @Override
@@ -67,49 +81,14 @@ class WinMeet implements WinGameable {
         return getTeamHome();
     }
 
-
-
-   /* @Override
-    public void calc() {
-        super.calc();
-
-        if(!getResultMeet().isDraw()) {
-            return;
-        }
-
-        resultAdd = ResultCalculator.calcAddTime(getTeamHome().getPower(), getTeamAway().getPower());
-        if(!resultAdd.isDraw()) {
-            return;
-        }
-
-        resultPen = ResultCalculator.calcPen();
-    }*/
-
     @Override
-    public Result getResultMeet() {
-        var resultWOPen = getResultMeetWOPen();
-
-        if(resultPen != null) {
-            return new Result(resultWOPen.getGoalHome() + resultPen.getGoalHome()
-                    , resultWOPen.getGoalAway() + resultPen.getGoalAway());
-        }
-
-        return resultWOPen;
+    public boolean isDrawWOPen() {
+        return getResultMeetWOPen().isDraw();
     }
 
     @Override
     public boolean isWinnerHomeTeamWOPen() {
         return getResultMeetWOPen().isWin();
-    }
-
-    @Override
-    public boolean isDraw() {
-        return false;
-    }
-
-    @Override
-    public boolean isDrawWOPen() {
-        return getResultMeetWOPen().isDraw();
     }
 
     @Override
@@ -128,15 +107,5 @@ class WinMeet implements WinGameable {
         }
 
         return res.toString();
-    }
-
-    private Result getResultMeetWOPen() {
-        var goalsFor = meet.getResultMeet().getGoalHome();
-        var goalsAway = meet.getResultMeet().getGoalAway();
-        if(resultAdd != null) {
-            goalsFor += resultAdd.getGoalHome();
-            goalsAway += resultAdd.getGoalAway();
-        }
-        return new Result(goalsFor, goalsAway);
     }
 }

@@ -3,7 +3,7 @@ package fss.model;
 import java.util.*;
 
 public class Sortition {
-    public static ArrayList<Meet> playOffSort(ArrayList<SimpleTeam> teams, Ratingable rating, boolean twoMeets) {
+    public static ArrayList<WinGameable> playOffSort(ArrayList<SimpleTeam> teams, Ratingable rating, boolean twoMeets) {
         if(teams.size() % 2 != 0)
             return null;
 
@@ -45,12 +45,12 @@ public class Sortition {
         return res;
     }
 
-    private static ArrayList<Meet> getWinMeetsWithRating(ArrayList<SimpleTeam> teams, Ratingable rating, boolean twoMeets) {
+    private static ArrayList<WinGameable> getWinMeetsWithRating(ArrayList<SimpleTeam> teams, Ratingable rating, boolean twoMeets) {
         var baskets = divideIntoBaskets(teams.size() / 2, getTeamsByRating(teams, rating));
         Collections.shuffle(baskets.get(0));
         Collections.shuffle(baskets.get(1));
 
-        var res = new ArrayList<Meet>();
+        var res = new ArrayList<WinGameable>();
         for(int i = 0; i < baskets.get(1).size(); ++i) {
             if(twoMeets) {
                 res.add(new WinTwoMeet(baskets.get(1).get(i), baskets.get(0).get(i)));
@@ -61,14 +61,14 @@ public class Sortition {
         return res;
     }
 
-    private static ArrayList<Meet> getWinMeetsWORating(ArrayList<SimpleTeam> teams, boolean twoMeets) {
+    private static ArrayList<WinGameable> getWinMeetsWORating(ArrayList<SimpleTeam> teams, boolean twoMeets) {
         var teamsForShuffle = new ArrayList<>(teams);
         Collections.shuffle(teamsForShuffle);
         return getWinMeets(teamsForShuffle, twoMeets);
     }
 
-    private static ArrayList<Meet> getWinMeets(ArrayList<SimpleTeam> teamsForShuffle, boolean twoMeets) {
-        var meets = new ArrayList<Meet>();
+    private static ArrayList<WinGameable> getWinMeets(ArrayList<SimpleTeam> teamsForShuffle, boolean twoMeets) {
+        var meets = new ArrayList<WinGameable>();
         for(int i = 0; i < teamsForShuffle.size(); i = i + 2) {
             if(twoMeets) {
                 meets.add(new WinTwoMeet(teamsForShuffle.get(i), teamsForShuffle.get(i + 1)));
