@@ -13,29 +13,24 @@ class WinTwoMeet implements WinGameable {
 
     @Override
     public SimpleTeam getTeamHome() {
-        return null;
+        return firstMeet.getTeamHome();
     }
 
     @Override
     public SimpleTeam getTeamAway() {
-        return null;
+        return firstMeet.getTeamAway();
     }
 
-    //TODO: продолжить переписывать
-
-
-
-
-    private int getGoalsFirstTeamMain() {
-        return firstMeet.getResultMeet().getGoalHome() + super.getResultMeet().getGoalAway();
+    private int getGoalsFirstTeamMainTime() {
+        return firstMeet.getResultMeet().getGoalHome() + secondMeet.getResultMeet().getGoalAway();
     }
 
     private int getGoalsSecondTeamMain() {
-        return firstMeet.getResultMeet().getGoalAway() + super.getResultMeet().getGoalHome();
+        return firstMeet.getResultMeet().getGoalAway() + secondMeet.getResultMeet().getGoalHome();
     }
 
     private boolean checkIsDraw() {
-        if(getGoalsFirstTeamMain() != getGoalsSecondTeamMain()) {
+        if(getGoalsFirstTeamMainTime() != getGoalsSecondTeamMain()) {
             return false;
         }
 
@@ -43,56 +38,41 @@ class WinTwoMeet implements WinGameable {
     }
 
     @Override
-    public boolean isWinnerHomeTeam() {
-        return getResultMeet().isWin();
-    }
-
-    @Override
-    public SimpleTeam getWinner() {
-        if(isWinnerHomeTeam()) {
-            return getTeamAway(); //because teams in base class are in reverse order
-        }
-        return getTeamHome(); //because teams in base class are in reverse order
-    }
-
-    @Override
-    public SimpleTeam getLoser() {
-        if(isWinnerHomeTeam()) {
-            return getTeamHome(); //because teams in base class are in reverse order
-        }
-        return getTeamAway(); //because teams in base class are in reverse order
-    }
-
-    @Override
     public void calc() {
         firstMeet.calcUseOwner();
-        super.calcUseOwner();
+        secondMeet.calcUseOwner();
 
         if(!checkIsDraw()) {
             return;
         }
 
-        resultAdd = ResultCalculator.calcAddTime(getTeamHome().getPower(), getTeamAway().getPower());
+        resultAdd = ResultCalculator.calcAddTime(secondMeet.getTeamHome().getPower(), secondMeet.getTeamAway().getPower());
         if(!resultAdd.isDraw()) {
-           return;
+            return;
         }
 
-        resultPen = ResultCalculator.calcPen().reverse();
+        resultPen = ResultCalculator.calcPen();
     }
 
     @Override
     public Result getResultMeet() {
-        var resultWOPen = getResultMeetWOPen();
-        if(resultPen != null) {
-            return new Result(resultWOPen.getGoalHome() + resultPen.getGoalAway()
-                    , resultWOPen.getGoalAway() + resultPen.getGoalHome());
-        }
-        return resultWOPen;
+        return null;
     }
 
     @Override
-    public boolean isWinnerHomeTeamWOPen() {
-        return getResultMeetWOPen().isWin();
+    public boolean isWinnerHomeTeam() {
+        var goalsFirstTeam = getGoalsFirstTeamMainTime();
+        var goalsSecondTeam = getGoalsSecondTeamMain();
+
+        if(goalsFirstTeam != goalsSecondTeam) {
+            return goalsFirstTeam > goalsSecondTeam;
+        }
+
+        if(!resultAdd.isDraw()) {
+            return resultAdd.getGoalAway() > resultAdd.getGoalHome();
+        }
+
+        return resultPen.getGoalAway() > resultPen.getGoalHome();
     }
 
     @Override
@@ -101,9 +81,59 @@ class WinTwoMeet implements WinGameable {
     }
 
     @Override
+    public SimpleTeam getWinner() {
+        if(isWinnerHomeTeam()) {
+            return getTeamHome();
+        }
+        return getTeamAway();
+    }
+
+    @Override
+    public SimpleTeam getLoser() {
+        if(isWinnerHomeTeam()) {
+            return getTeamAway();
+        }
+        return getTeamHome();
+    }
+
+    private Result getResultMeetWOPen() {
+        var goalsFor = getGoalsFirstTeamMainTime();
+        var goalsAway = getGoalsSecondTeamMain();
+
+        if(resultAdd != null) {
+            goalsFor += resultAdd.getGoalAway();
+            goalsAway += resultAdd.getGoalHome();
+        }
+
+        return new Result(goalsFor, goalsAway);
+    }
+
+    @Override
+    public boolean isWinnerHomeTeamWOPen() {
+        return getResultMeetWOPen().isWin();
+    }
+
+    @Override
     public boolean isDrawWOPen() {
         return getResultMeetWOPen().isDraw();
     }
+
+    //TODO: продолжить переписывать
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public boolean isWinnerHomeTeamFirstMeet() {
         return firstMeet.isWinnerHomeTeamWOPen();
@@ -143,15 +173,5 @@ class WinTwoMeet implements WinGameable {
         return res.toString();
     }
 
-    private Result getResultMeetWOPen() {
-        var goalsFor = getGoalsFirstTeamMain();
-        var goalsAway = getGoalsSecondTeamMain();
 
-        if(resultAdd != null) {
-            goalsFor += resultAdd.getGoalAway();
-            goalsAway += resultAdd.getGoalHome();
-        }
-
-        return new Result(goalsFor, goalsAway);
-    }
 }
