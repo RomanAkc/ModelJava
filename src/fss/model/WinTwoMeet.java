@@ -1,6 +1,6 @@
 package fss.model;
 
-class WinTwoMeet implements WinGameable {
+class WinTwoMeet implements WinTwoGameable {
     private Meet firstMeet = null;
     private Meet secondMeet = null;
     private Result resultAdd = null;
@@ -118,39 +118,24 @@ class WinTwoMeet implements WinGameable {
         return getResultMeetWOPen().isDraw();
     }
 
-    //TODO: продолжить переписывать
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    @Override
     public boolean isWinnerHomeTeamFirstMeet() {
         return firstMeet.isWinnerHomeTeamWOPen();
     }
 
+    @Override
     public boolean isDrawFirstMeet() {
         return firstMeet.isDrawWOPen();
     }
 
+    @Override
     public boolean isWinnerHomeTeamSecondMeet() {
-        return super.getResultMeet().getGoalAway() + resultAdd.getGoalAway()
-                > super.getResultMeet().getGoalHome() + resultAdd.getGoalHome();
+        return !secondMeet.isWinnerHomeTeamWOPen() && !secondMeet.isDraw(); //because in second meet teams in reverse order
     }
 
+    @Override
     public boolean isDrawSecondMeet() {
-        return super.getResultMeet().getGoalAway() + resultAdd.getGoalAway()
-                == super.getResultMeet().getGoalHome() + resultAdd.getGoalHome();
+        return secondMeet.isDraw();
     }
 
     @Override
@@ -158,7 +143,7 @@ class WinTwoMeet implements WinGameable {
         var res = new StringBuffer();
         res.append(firstMeet.toString());
         res.append(System.lineSeparator());
-        res.append(super.toString());
+        res.append(secondMeet.toString());
 
         if(resultAdd != null) {
             res.append(", add ");
@@ -172,6 +157,4 @@ class WinTwoMeet implements WinGameable {
 
         return res.toString();
     }
-
-
 }
