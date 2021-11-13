@@ -30,7 +30,7 @@ abstract class Stage {
     }
 
     public abstract void calc();
-    public abstract ArrayList<Meet> getMeetings();
+    public abstract ArrayList<Gameable> getMeetings();
 
     @Override
     public String toString() {
@@ -88,8 +88,8 @@ class CircleStage extends Stage {
     }
 
     @Override
-    public ArrayList<Meet> getMeetings() {
-        var result = new ArrayList<Meet>();
+    public ArrayList<Gameable> getMeetings() {
+        var result = new ArrayList<Gameable>();
         for(var day : days)
             result.addAll(day.getMeetings());
         return result;
@@ -131,14 +131,14 @@ class CircleStage extends Stage {
 class PlayOffStage extends Stage {
     private boolean twoMeets = false;
     private boolean sortTeams = true;
-    private ArrayList<Meet> meets = null;
+    private ArrayList<WinGameable> meets = null;
 
     public PlayOffStage(String name, boolean twoMeets) {
         super(name);
         this.twoMeets = twoMeets;
     }
 
-    public void addMeets(ArrayList<Meet> meets) {
+    public void addMeets(ArrayList<WinGameable> meets) {
         this.meets = new ArrayList<>();
         this.meets.addAll(meets);
     }
@@ -147,7 +147,7 @@ class PlayOffStage extends Stage {
         Collections.shuffle(teams);
     }
 
-    public Meet createMeet(SimpleTeam teamHome, SimpleTeam teamAway) {
+    public WinGameable createMeet(SimpleTeam teamHome, SimpleTeam teamAway) {
         if(twoMeets) {
             return new WinTwoMeet(teamHome, teamAway);
         }
@@ -165,7 +165,7 @@ class PlayOffStage extends Stage {
             sort(teamsForPair);
         }
 
-        meets = new ArrayList<Meet>();
+        meets = new ArrayList<WinGameable>();
         for(int i = 0; i < teamsForPair.size(); i = i + 2) {
             meets.add(createMeet(teamsForPair.get(i), teamsForPair.get(i + 1)));
         }
@@ -184,7 +184,7 @@ class PlayOffStage extends Stage {
     }
 
     @Override
-    public ArrayList<Meet> getMeetings() {
+    public ArrayList<Gameable> getMeetings() {
         return new ArrayList<>(meets);
     }
 
