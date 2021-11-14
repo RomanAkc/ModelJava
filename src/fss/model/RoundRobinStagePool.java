@@ -53,7 +53,7 @@ class RoundRobinStagePool extends BaseRoundRobinStagePool {
     }
 
     @Override
-    public ArrayList<Meet> getMeetings() {
+    public ArrayList<Gameable> getMeetings() {
         return stage.getMeetings();
     }
 
@@ -94,7 +94,7 @@ class PlayOffStagePool extends BasePlayOffStagePool {
     }
 
     @Override
-    public ArrayList<Meet> getMeetings() {
+    public ArrayList<Gameable> getMeetings() {
         return stage.getMeetings();
     }
 
@@ -166,8 +166,8 @@ class GroupsStagePool extends BaseGroupsStagePool {
     }
 
     @Override
-    public ArrayList<Meet> getMeetings() {
-        var result = new ArrayList<Meet>();
+    public ArrayList<Gameable> getMeetings() {
+        var result = new ArrayList<Gameable>();
         for(var stage : stages)
             result.addAll(stage.getMeetings());
         return result;

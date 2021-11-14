@@ -21,18 +21,7 @@ public class MeetTest extends BaseTest {
         for(int i = 0; i < 1000; ++i) {
             var meet = createWinTwoMeet();
             meet.calc();
-            var result = meet.getResultMeet();
-            Assert.assertNotEquals(result.getGoalHome(), result.getGoalAway());
-        }
-    }
-
-    @Test
-    public void winMeetResult() {
-        for(int i = 0; i < 1000; ++i) {
-            var meet = createWinMeet();
-            meet.calc();
-            var result = meet.getResultMeet();
-            Assert.assertNotEquals(result.getGoalHome(), result.getGoalAway());
+            Assert.assertEquals(meet.getResultMeet(), null);
         }
     }
 

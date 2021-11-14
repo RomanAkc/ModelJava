@@ -66,9 +66,11 @@ class UEFARatingCalculator {
             var meetings = stage.getMeetings();
 
             for(var meet : meetings) {
-                var points = getPointsByMeet(meet, isHalfPoint);
-                addPointsToPointsByTeam(meet.getTeamHome(), points.homePoint, pointsByTeam);
-                addPointsToPointsByTeam(meet.getTeamAway(), points.awayPoint, pointsByTeam);
+                if(meet instanceof WinGameable) {
+                    var points = getPointsByMeet((WinGameable)meet, isHalfPoint);
+                    addPointsToPointsByTeam(meet.getTeamHome(), points.homePoint, pointsByTeam);
+                    addPointsToPointsByTeam(meet.getTeamAway(), points.awayPoint, pointsByTeam);
+                }
             }
         }
     }
@@ -103,11 +105,11 @@ class UEFARatingCalculator {
         }
     }
 
-    private PairPoints getPointsByMeet(Meet meet, boolean isHalfPoint) {
+    private PairPoints getPointsByMeet(WinGameable meet, boolean isHalfPoint) {
         var result = new PairPoints();
 
-        if(meet instanceof WinTwoMeet) {
-            var twoMeet = (WinTwoMeet)meet;
+        if(meet instanceof WinTwoGameable) {
+            var twoMeet = (WinTwoGameable)meet;
             AddPointByResult(twoMeet.isWinnerHomeTeamFirstMeet(), twoMeet.isDrawFirstMeet(), result);
             AddPointByResult(twoMeet.isWinnerHomeTeamSecondMeet(), twoMeet.isDrawSecondMeet(), result);
         } else {

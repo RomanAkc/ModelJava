@@ -40,7 +40,7 @@ abstract class StagePool {
     public abstract void calc();
     public abstract ArrayList<SimpleTeam> getWinners();
     public abstract ArrayList<SimpleTeam> getLosers();
-    public abstract ArrayList<Meet> getMeetings();
+    public abstract ArrayList<Gameable> getMeetings();
 }
 
 abstract class CommonRoundRobinGroupsStagePool extends StagePool {

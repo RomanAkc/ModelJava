@@ -113,7 +113,7 @@ public class UEFARatingCalculatorTest extends BaseTest {
 class UEFAStagePoolTest extends StagePool {
     public ArrayList<SimpleTeam> winners = new ArrayList<>();
     public ArrayList<SimpleTeam> losers = new ArrayList<>();
-    public ArrayList<Meet> meets = new ArrayList<>();
+    public ArrayList<Gameable> meets = new ArrayList<>();
 
     public UEFAStagePoolTest(StageType stageType, String name, ArrayList<SimpleTeam> teams, Ratingable rating, int cntRounds) {
         super(stageType, name, teams, rating, cntRounds);
@@ -135,7 +135,7 @@ class UEFAStagePoolTest extends StagePool {
     }
 
     @Override
-    public ArrayList<Meet> getMeetings() {
+    public ArrayList<Gameable> getMeetings() {
         return meets;
     }
 }
