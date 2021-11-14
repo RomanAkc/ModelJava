@@ -94,7 +94,7 @@ class WinMeet implements WinGameable {
     @Override
     public String toString() {
         var res = new StringBuffer();
-        res.append(super.toString());
+        res.append(meet.toString());
 
         if(resultAdd != null) {
             res.append(", add ");

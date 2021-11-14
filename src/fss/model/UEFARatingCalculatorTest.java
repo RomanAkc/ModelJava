@@ -93,7 +93,7 @@ public class UEFARatingCalculatorTest extends BaseTest {
         teamsQual1.add(teams.get("Rangers"));
         teamsQual1.add(teams.get("PSV"));
         var qual1 = new UEFAStagePoolTest( StageType.PLAYOFF, "LC QUAL 1", teamsQual1, null, 2);
-        //var meet1 = new WinTwoMeet(teamsQual1.get(0), teamsQual1.get(1));
+        //var meet1 = new WinTwoMeet(teamsQual1.get(0), teamsQual1.get(3));
         LC.stages.add(qual1);
 
 
