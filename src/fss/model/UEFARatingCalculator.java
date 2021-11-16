@@ -105,15 +105,18 @@ class UEFARatingCalculator {
         }
     }
 
-    private PairPoints getPointsByMeet(WinGameable meet, boolean isHalfPoint) {
+    private PairPoints getPointsByMeet(Gameable meet, boolean isHalfPoint) {
         var result = new PairPoints();
 
         if(meet instanceof WinTwoGameable) {
             var twoMeet = (WinTwoGameable)meet;
             AddPointByResult(twoMeet.isWinnerHomeTeamFirstMeet(), twoMeet.isDrawFirstMeet(), result);
             AddPointByResult(twoMeet.isWinnerHomeTeamSecondMeet(), twoMeet.isDrawSecondMeet(), result);
+        } else if (meet instanceof  WinGameable) {
+            var oneMeet = (WinGameable)meet;
+            AddPointByResult(oneMeet.isWinnerHomeTeamWOPen(), oneMeet.isDrawWOPen(), result);
         } else {
-            AddPointByResult(meet.isWinnerHomeTeamWOPen(), meet.isDrawWOPen(), result);
+            AddPointByResult(meet.isWinnerHomeTeam(), meet.isDraw(), result);
         }
 
         return ModifyPointIfNeed(isHalfPoint, result);

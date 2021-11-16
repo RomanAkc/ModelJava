@@ -89,8 +89,38 @@ public class UEFARatingCalculatorTest extends BaseTest {
 
         LC.stages.add(getLCQual1());
         LC.stages.add(getLCQual2());
+        LC.stages.add(getLCGroup());
 
         return LC;
+    }
+
+    private UEFAStagePoolTest getLCGroup() {
+        ArrayList<SimpleTeam> teamsGroup = new ArrayList<>();
+        teamsGroup.add(teams.get("Real Madrid"));
+        teamsGroup.add(teams.get("Juventus"));
+        teamsGroup.add(teams.get("PSG"));
+        teamsGroup.add(teams.get("Bayern Munich"));
+        teamsGroup.add(teams.get("Barcelona"));
+        teamsGroup.add(teams.get("Chelsea"));
+        teamsGroup.add(teams.get("Internazionale"));
+        teamsGroup.add(teams.get("Spartak Moscow"));
+
+        UEFAStagePoolTest groupStage = new UEFAStagePoolTest( StageType.GROUPS, "LC GROUPS", teamsGroup, null, 2);
+
+        WinTwoMeetTest meet01Group1 = new WinTwoMeetTest(teamsGroup.get(0), teamsGroup.get(1));
+        WinTwoMeetTest meet02Group1 = new WinTwoMeetTest(teamsGroup.get(2), teamsGroup.get(3));
+        WinTwoMeetTest meet03Group1 = new WinTwoMeetTest(teamsGroup.get(3), teamsGroup.get(0));
+        WinTwoMeetTest meet04Group1 = new WinTwoMeetTest(teamsGroup.get(1), teamsGroup.get(2));
+        WinTwoMeetTest meet05Group1 = new WinTwoMeetTest(teamsGroup.get(3), teamsGroup.get(1));
+        WinTwoMeetTest meet06Group1 = new WinTwoMeetTest(teamsGroup.get(0), teamsGroup.get(2));
+        WinTwoMeetTest meet07Group1 = new WinTwoMeetTest(teamsGroup.get(1), teamsGroup.get(3));
+        WinTwoMeetTest meet08Group1 = new WinTwoMeetTest(teamsGroup.get(2), teamsGroup.get(0));
+        WinTwoMeetTest meet09Group1 = new WinTwoMeetTest(teamsGroup.get(0), teamsGroup.get(3));
+        WinTwoMeetTest meet10Group1 = new WinTwoMeetTest(teamsGroup.get(2), teamsGroup.get(1));
+        WinTwoMeetTest meet11Group1 = new WinTwoMeetTest(teamsGroup.get(1), teamsGroup.get(0));
+        WinTwoMeetTest meet12Group1 = new WinTwoMeetTest(teamsGroup.get(3), teamsGroup.get(2));
+
+        return groupStage;
     }
 
     private UEFAStagePoolTest getLCQual2() {
@@ -113,6 +143,10 @@ public class UEFARatingCalculatorTest extends BaseTest {
         var qual2 = new UEFAStagePoolTest( StageType.PLAYOFF, "LC QUAL 2", teamsQual2, null, 2);
         qual2.meets.add(meet1);
         qual2.meets.add(meet2);
+        qual2.winners.add(teams.get("Juventus"));
+        qual2.winners.add(teams.get("Barcelona"));
+        qual2.losers.add(teams.get("Manchester City"));
+        qual2.losers.add(teams.get("Rangers"));
         return qual2;
     }
 
@@ -132,10 +166,13 @@ public class UEFARatingCalculatorTest extends BaseTest {
         meet2.SetSecondMeetResult(1,0);
         meet2.SetAddTimeMeetResult(1,0);
 
-
         var qual1 = new UEFAStagePoolTest( StageType.PLAYOFF, "LC QUAL 1", teamsQual1, null, 2);
         qual1.meets.add(meet1);
         qual1.meets.add(meet2);
+        qual1.winners.add(teams.get("Juventus"));
+        qual1.winners.add(teams.get("Rangers"));
+        qual1.losers.add(teams.get("Porto"));
+        qual1.losers.add(teams.get("PSV"));
         return qual1;
     }
 
