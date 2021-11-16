@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 3  Italy   2     1  1
 4  Germany 1        1  1
 5  France  1        1  1
-6  Russia  1        1    1
+6  Russia  1        1     1
 7  Portuga 1     1  1
 8  Scotlan 1     1  1
 9  Netherl 1     1  1     1
@@ -87,17 +87,56 @@ public class UEFARatingCalculatorTest extends BaseTest {
     private UEFATournamentTest getLCTournament() {
         UEFATournamentTest LC = new UEFATournamentTest("LC");
 
+        LC.stages.add(getLCQual1());
+        LC.stages.add(getLCQual2());
+
+        return LC;
+    }
+
+    private UEFAStagePoolTest getLCQual2() {
+        ArrayList<SimpleTeam> teamsQual2 = new ArrayList<>();
+        teamsQual2.add(teams.get("Juventus"));
+        teamsQual2.add(teams.get("Rangers"));
+        teamsQual2.add(teams.get("Barcelona"));
+        teamsQual2.add(teams.get("Manchester City"));
+
+        WinTwoMeetTest meet1 = new WinTwoMeetTest(teamsQual2.get(0), teamsQual2.get(3));
+        meet1.SetFirstMeetResult(0, 0);
+        meet1.SetSecondMeetResult(1,1);
+        meet1.SetAddTimeMeetResult(0,0);
+        meet1.SetPenMeetResult(2,4);
+
+        WinTwoMeetTest meet2 = new WinTwoMeetTest(teamsQual2.get(1), teamsQual2.get(2));
+        meet2.SetFirstMeetResult(2, 3);
+        meet2.SetSecondMeetResult(4,1);
+
+        var qual2 = new UEFAStagePoolTest( StageType.PLAYOFF, "LC QUAL 2", teamsQual2, null, 2);
+        qual2.meets.add(meet1);
+        qual2.meets.add(meet2);
+        return qual2;
+    }
+
+    private UEFAStagePoolTest getLCQual1() {
         ArrayList<SimpleTeam> teamsQual1 = new ArrayList<>();
         teamsQual1.add(teams.get("Juventus"));
         teamsQual1.add(teams.get("Porto"));
         teamsQual1.add(teams.get("Rangers"));
         teamsQual1.add(teams.get("PSV"));
+
+        var meet1 = new WinTwoMeetTest(teamsQual1.get(0), teamsQual1.get(3));
+        meet1.SetFirstMeetResult(3, 0);
+        meet1.SetSecondMeetResult(1,1);
+
+        var meet2 = new WinTwoMeetTest(teamsQual1.get(1), teamsQual1.get(2));
+        meet2.SetFirstMeetResult(2, 1);
+        meet2.SetSecondMeetResult(1,0);
+        meet2.SetAddTimeMeetResult(1,0);
+
+
         var qual1 = new UEFAStagePoolTest( StageType.PLAYOFF, "LC QUAL 1", teamsQual1, null, 2);
-        //var meet1 = new WinTwoMeet(teamsQual1.get(0), teamsQual1.get(3));
-        LC.stages.add(qual1);
-
-
-        return LC;
+        qual1.meets.add(meet1);
+        qual1.meets.add(meet2);
+        return qual1;
     }
 
     private UEFATournamentTest getLETournament(UEFATournamentTest LC) {
