@@ -66,11 +66,9 @@ class UEFARatingCalculator {
             var meetings = stage.getMeetings();
 
             for(var meet : meetings) {
-                if(meet instanceof WinGameable) {
-                    var points = getPointsByMeet((WinGameable)meet, isHalfPoint);
-                    addPointsToPointsByTeam(meet.getTeamHome(), points.homePoint, pointsByTeam);
-                    addPointsToPointsByTeam(meet.getTeamAway(), points.awayPoint, pointsByTeam);
-                }
+                var points = getPointsByMeet(meet, isHalfPoint);
+                addPointsToPointsByTeam(meet.getTeamHome(), points.homePoint, pointsByTeam);
+                addPointsToPointsByTeam(meet.getTeamAway(), points.awayPoint, pointsByTeam);
             }
         }
     }

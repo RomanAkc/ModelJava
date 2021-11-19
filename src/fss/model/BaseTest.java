@@ -240,6 +240,12 @@ public class BaseTest {
             this.secondTeam = secondTeam;
         }
 
+        public MeetTest(SimpleTeam firstTeam, SimpleTeam secondTeam, int goalHome, int goalAway) {
+            this.firstTeam = firstTeam;
+            this.secondTeam = secondTeam;
+            SetMeetResult(goalHome, goalAway);
+        }
+
         public void SetMeetResult(int goalHome, int goalAway) {
             result = new Result(goalHome, goalAway);
         }

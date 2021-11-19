@@ -106,19 +106,32 @@ public class UEFARatingCalculatorTest extends BaseTest {
         teamsGroup.add(teams.get("Spartak Moscow"));
 
         UEFAStagePoolTest groupStage = new UEFAStagePoolTest( StageType.GROUPS, "LC GROUPS", teamsGroup, null, 2);
+        groupStage.meets.add(new MeetTest(teamsGroup.get(0), teamsGroup.get(1), 1, 0));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(2), teamsGroup.get(3), 1, 2));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(3), teamsGroup.get(0), 3, 0));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(1), teamsGroup.get(2), 4, 1));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(3), teamsGroup.get(1), 1, 1));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(0), teamsGroup.get(2), 2, 0));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(1), teamsGroup.get(3), 2, 1));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(2), teamsGroup.get(0), 1, 1));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(0), teamsGroup.get(3), 2, 1));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(2), teamsGroup.get(1), 1, 0));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(1), teamsGroup.get(0), 3, 2));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(3), teamsGroup.get(2), 0, 0));
 
-        WinTwoMeetTest meet01Group1 = new WinTwoMeetTest(teamsGroup.get(0), teamsGroup.get(1));
-        WinTwoMeetTest meet02Group1 = new WinTwoMeetTest(teamsGroup.get(2), teamsGroup.get(3));
-        WinTwoMeetTest meet03Group1 = new WinTwoMeetTest(teamsGroup.get(3), teamsGroup.get(0));
-        WinTwoMeetTest meet04Group1 = new WinTwoMeetTest(teamsGroup.get(1), teamsGroup.get(2));
-        WinTwoMeetTest meet05Group1 = new WinTwoMeetTest(teamsGroup.get(3), teamsGroup.get(1));
-        WinTwoMeetTest meet06Group1 = new WinTwoMeetTest(teamsGroup.get(0), teamsGroup.get(2));
-        WinTwoMeetTest meet07Group1 = new WinTwoMeetTest(teamsGroup.get(1), teamsGroup.get(3));
-        WinTwoMeetTest meet08Group1 = new WinTwoMeetTest(teamsGroup.get(2), teamsGroup.get(0));
-        WinTwoMeetTest meet09Group1 = new WinTwoMeetTest(teamsGroup.get(0), teamsGroup.get(3));
-        WinTwoMeetTest meet10Group1 = new WinTwoMeetTest(teamsGroup.get(2), teamsGroup.get(1));
-        WinTwoMeetTest meet11Group1 = new WinTwoMeetTest(teamsGroup.get(1), teamsGroup.get(0));
-        WinTwoMeetTest meet12Group1 = new WinTwoMeetTest(teamsGroup.get(3), teamsGroup.get(2));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(4), teamsGroup.get(5), 1, 2));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(6), teamsGroup.get(7), 5, 0));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(7), teamsGroup.get(4), 1, 0));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(5), teamsGroup.get(6), 1, 1));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(7), teamsGroup.get(5), 0, 0));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(4), teamsGroup.get(6), 0, 1));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(5), teamsGroup.get(7), 3, 0));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(6), teamsGroup.get(4), 2, 0));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(4), teamsGroup.get(7), 1, 1));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(6), teamsGroup.get(5), 3, 2));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(5), teamsGroup.get(4), 1, 1));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(7), teamsGroup.get(6), 1, 1));
+
 
         return groupStage;
     }
