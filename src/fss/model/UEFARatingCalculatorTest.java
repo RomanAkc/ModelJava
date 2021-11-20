@@ -90,8 +90,41 @@ public class UEFARatingCalculatorTest extends BaseTest {
         LC.stages.add(getLCQual1());
         LC.stages.add(getLCQual2());
         LC.stages.add(getLCGroup());
+        LC.stages.add(getLC12());
+        //LC.stages.add(getLCFinal());
 
         return LC;
+    }
+
+    /*private UEFAStagePoolTest getLCFinal() {
+        ArrayList<SimpleTeam> teamsF = new ArrayList<>();
+        teamsF.add(teams.get("Chelsea"));
+        teamsF.add(teams.get("Internazionale"));
+
+        WinMeetTest
+    }*/
+
+    private UEFAStagePoolTest getLC12() {
+        ArrayList<SimpleTeam> teams12 = new ArrayList<>();
+        teams12.add(teams.get("Chelsea"));
+        teams12.add(teams.get("Juventus"));
+        teams12.add(teams.get("Real Madrid"));
+        teams12.add(teams.get("Internazionale"));
+
+        WinTwoMeetTest meet1 = new WinTwoMeetTest(teams12.get(0), teams12.get(1));
+        meet1.SetFirstMeetResult(2, 0);
+        meet1.SetSecondMeetResult(1,1);
+
+        WinTwoMeetTest meet2 = new WinTwoMeetTest(teams12.get(2), teams12.get(3));
+        meet2.SetFirstMeetResult(2, 2);
+        meet2.SetSecondMeetResult(0,0);
+        meet2.SetAddTimeMeetResult(0, 0);
+        meet2.SetPenMeetResult(7, 6);
+
+        var lc12 = new UEFAStagePoolTest( StageType.PLAYOFF, "LC 1/2", teams12, null, 2);
+        lc12.meets.add(meet1);
+        lc12.meets.add(meet2);
+        return lc12;
     }
 
     private UEFAStagePoolTest getLCGroup() {
@@ -116,8 +149,13 @@ public class UEFARatingCalculatorTest extends BaseTest {
         groupStage.meets.add(new MeetTest(teamsGroup.get(2), teamsGroup.get(0), 1, 1));
         groupStage.meets.add(new MeetTest(teamsGroup.get(0), teamsGroup.get(3), 2, 1));
         groupStage.meets.add(new MeetTest(teamsGroup.get(2), teamsGroup.get(1), 1, 0));
-        groupStage.meets.add(new MeetTest(teamsGroup.get(1), teamsGroup.get(0), 3, 2));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(1), teamsGroup.get(0), 4, 2));
         groupStage.meets.add(new MeetTest(teamsGroup.get(3), teamsGroup.get(2), 0, 0));
+
+        //RM - 6 3 1 2 10 +
+        //Ju - 6 3 1 2 10 +
+        //PS - 6 1 2 3 5
+        //Ba - 6 2 2 2 8
 
         groupStage.meets.add(new MeetTest(teamsGroup.get(4), teamsGroup.get(5), 1, 2));
         groupStage.meets.add(new MeetTest(teamsGroup.get(6), teamsGroup.get(7), 5, 0));
@@ -132,6 +170,10 @@ public class UEFARatingCalculatorTest extends BaseTest {
         groupStage.meets.add(new MeetTest(teamsGroup.get(5), teamsGroup.get(4), 1, 1));
         groupStage.meets.add(new MeetTest(teamsGroup.get(7), teamsGroup.get(6), 1, 1));
 
+        //Ba - 6 0 2 4 2
+        //Ch - 6 2 3 1 9 +
+        //In - 6 4 2 0 14 +
+        //Sp - 6 1 3 2 6
 
         return groupStage;
     }
@@ -156,10 +198,10 @@ public class UEFARatingCalculatorTest extends BaseTest {
         var qual2 = new UEFAStagePoolTest( StageType.PLAYOFF, "LC QUAL 2", teamsQual2, null, 2);
         qual2.meets.add(meet1);
         qual2.meets.add(meet2);
-        qual2.winners.add(teams.get("Juventus"));
-        qual2.winners.add(teams.get("Barcelona"));
-        qual2.losers.add(teams.get("Manchester City"));
-        qual2.losers.add(teams.get("Rangers"));
+        //qual2.winners.add(teams.get("Juventus"));
+        //qual2.winners.add(teams.get("Barcelona"));
+        //qual2.losers.add(teams.get("Manchester City"));
+        //qual2.losers.add(teams.get("Rangers"));
         return qual2;
     }
 
