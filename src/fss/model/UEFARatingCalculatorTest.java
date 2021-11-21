@@ -77,12 +77,23 @@ public class UEFARatingCalculatorTest extends BaseTest {
         UEFATournamentTest LC = getLCTournament();
         UEFATournamentTest LE = getLETournament(LC);
 
-        var calculator = new UEFARatingCalculator();
+        UEFARatingCalculator calculator = new UEFARatingCalculator();
         calculator.setTournament1stLevel(LC);
         calculator.setTournament2ndLevel(LE);
 
+        AddSchemeForTournament(LC, calculator);
+        AddSchemeForTournament(LE, calculator);
+
         calculator.calc();
     }
+
+    private void AddSchemeForTournament(UEFATournamentTest tournament, UEFARatingCalculator calculator) {
+
+        for(int i = 0; i < tournament.stages.size(); ++i) {
+
+        }
+    }
+
 
     private UEFATournamentTest getLCTournament() {
         UEFATournamentTest LC = new UEFATournamentTest("LC");
@@ -91,18 +102,23 @@ public class UEFARatingCalculatorTest extends BaseTest {
         LC.stages.add(getLCQual2());
         LC.stages.add(getLCGroup());
         LC.stages.add(getLC12());
-        //LC.stages.add(getLCFinal());
+        LC.stages.add(getLCFinal());
 
         return LC;
     }
 
-    /*private UEFAStagePoolTest getLCFinal() {
+    private UEFAStagePoolTest getLCFinal() {
         ArrayList<SimpleTeam> teamsF = new ArrayList<>();
         teamsF.add(teams.get("Chelsea"));
         teamsF.add(teams.get("Internazionale"));
 
-        WinMeetTest
-    }*/
+        WinMeetTest finalLC = new WinMeetTest(teamsF.get(0), teamsF.get(1));
+        finalLC.SetMeetResult(2, 3);
+
+        var lcFinal = new UEFAStagePoolTest( StageType.PLAYOFF, "LC Final", teamsF, null, 1);
+        lcFinal.meets.add(finalLC);
+        return lcFinal;
+    }
 
     private UEFAStagePoolTest getLC12() {
         ArrayList<SimpleTeam> teams12 = new ArrayList<>();
@@ -305,17 +321,17 @@ class UEFATournamentTest extends BaseTournament {
 
     @Override
     public int getCntStagePool() {
-        return 0;
+        return stages.size();
     }
 
     @Override
     public int getStageID(int stagePoolIndex) {
-        return 0;
+        return stagePoolIndex;
     }
 
     @Override
     public StagePool getStagePoolByStageID(int stageID) {
-        return null;
+        return stages.get(stageID);
     }
 
     @Override
