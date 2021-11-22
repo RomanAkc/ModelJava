@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-/*         LC Q1 Q2 LE Q1 Q2
+/*         LC Q2 Q1 LE Q1 Q2
 1  Spain   2  1     1
 2  England 2  1     1     1
 3  Italy   2     1  1
@@ -81,16 +81,25 @@ public class UEFARatingCalculatorTest extends BaseTest {
         calculator.setTournament1stLevel(LC);
         calculator.setTournament2ndLevel(LE);
 
-        AddSchemeForTournament(LC, calculator);
-        AddSchemeForTournament(LE, calculator);
+        AddSchemeForTournament(LC, 1, calculator);
+        AddSchemeForTournament(LE, 2, calculator);
 
         calculator.calc();
     }
 
-    private void AddSchemeForTournament(UEFATournamentTest tournament, UEFARatingCalculator calculator) {
+    private void AddSchemeForTournament(UEFATournamentTest tournament, int tournamentID, UEFARatingCalculator calculator) {
 
         for(int i = 0; i < tournament.stages.size(); ++i) {
+            UEFAStagePoolTest stage = (UEFAStagePoolTest)tournament.stages.get(i);
 
+            UEFARatingSchemePart schemePart = new UEFARatingSchemePart();
+            schemePart.tournamentID = tournamentID;
+            schemePart.stageID = i;
+            schemePart.ratingStageType = stage.getName().contains("QUAL")
+                    ? UEFARatingStageType.QUALIFICATION : UEFARatingStageType.NORMAL;
+            schemePart.bonusPoint = stage.bonusPoint;
+
+            calculator.addRatingScheme(schemePart);
         }
     }
 
@@ -115,7 +124,8 @@ public class UEFARatingCalculatorTest extends BaseTest {
         WinMeetTest finalLC = new WinMeetTest(teamsF.get(0), teamsF.get(1));
         finalLC.SetMeetResult(2, 3);
 
-        var lcFinal = new UEFAStagePoolTest( StageType.PLAYOFF, "LC Final", teamsF, null, 1);
+        var lcFinal = new UEFAStagePoolTest( StageType.PLAYOFF, "LC Final", teamsF, 1);
+        lcFinal.bonusPoint = 2;
         lcFinal.meets.add(finalLC);
         return lcFinal;
     }
@@ -137,7 +147,8 @@ public class UEFARatingCalculatorTest extends BaseTest {
         meet2.SetAddTimeMeetResult(0, 0);
         meet2.SetPenMeetResult(7, 6);
 
-        var lc12 = new UEFAStagePoolTest( StageType.PLAYOFF, "LC 1/2", teams12, null, 2);
+        var lc12 = new UEFAStagePoolTest( StageType.PLAYOFF, "LC 1/2", teams12, 2);
+        lc12.bonusPoint = 2;
         lc12.meets.add(meet1);
         lc12.meets.add(meet2);
         return lc12;
@@ -154,7 +165,9 @@ public class UEFARatingCalculatorTest extends BaseTest {
         teamsGroup.add(teams.get("Internazionale"));
         teamsGroup.add(teams.get("Spartak Moscow"));
 
-        UEFAStagePoolTest groupStage = new UEFAStagePoolTest( StageType.GROUPS, "LC GROUPS", teamsGroup, null, 2);
+        UEFAStagePoolTest groupStage = new UEFAStagePoolTest( StageType.GROUPS, "LC GROUPS", teamsGroup, 2);
+        groupStage.bonusPoint = 5;
+
         groupStage.meets.add(new MeetTest(teamsGroup.get(0), teamsGroup.get(1), 1, 0));
         groupStage.meets.add(new MeetTest(teamsGroup.get(2), teamsGroup.get(3), 1, 2));
         groupStage.meets.add(new MeetTest(teamsGroup.get(3), teamsGroup.get(0), 3, 0));
@@ -211,7 +224,7 @@ public class UEFARatingCalculatorTest extends BaseTest {
         meet2.SetFirstMeetResult(2, 3);
         meet2.SetSecondMeetResult(4,1);
 
-        var qual2 = new UEFAStagePoolTest( StageType.PLAYOFF, "LC QUAL 2", teamsQual2, null, 2);
+        var qual2 = new UEFAStagePoolTest( StageType.PLAYOFF, "LC QUAL 2", teamsQual2, 2);
         qual2.meets.add(meet1);
         qual2.meets.add(meet2);
         //qual2.winners.add(teams.get("Juventus"));
@@ -237,7 +250,7 @@ public class UEFARatingCalculatorTest extends BaseTest {
         meet2.SetSecondMeetResult(1,0);
         meet2.SetAddTimeMeetResult(1,0);
 
-        var qual1 = new UEFAStagePoolTest( StageType.PLAYOFF, "LC QUAL 1", teamsQual1, null, 2);
+        var qual1 = new UEFAStagePoolTest( StageType.PLAYOFF, "LC QUAL 1", teamsQual1, 2);
         qual1.meets.add(meet1);
         qual1.meets.add(meet2);
         qual1.winners.add(teams.get("Juventus"));
@@ -261,9 +274,10 @@ class UEFAStagePoolTest extends StagePool {
     public ArrayList<SimpleTeam> winners = new ArrayList<>();
     public ArrayList<SimpleTeam> losers = new ArrayList<>();
     public ArrayList<Gameable> meets = new ArrayList<>();
+    int bonusPoint = 0;
 
-    public UEFAStagePoolTest(StageType stageType, String name, ArrayList<SimpleTeam> teams, Ratingable rating, int cntRounds) {
-        super(stageType, name, teams, rating, cntRounds);
+    public UEFAStagePoolTest(StageType stageType, String name, ArrayList<SimpleTeam> teams, int cntRounds) {
+        super(stageType, name, teams, null, cntRounds);
     }
 
     @Override
