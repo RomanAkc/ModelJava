@@ -88,7 +88,6 @@ public class UEFARatingCalculatorTest extends BaseTest {
     }
 
     private void AddSchemeForTournament(UEFATournamentTest tournament, int tournamentID, UEFARatingCalculator calculator) {
-
         for(int i = 0; i < tournament.stages.size(); ++i) {
             UEFAStagePoolTest stage = (UEFAStagePoolTest)tournament.stages.get(i);
 
@@ -263,9 +262,33 @@ public class UEFARatingCalculatorTest extends BaseTest {
     private UEFATournamentTest getLETournament(UEFATournamentTest LC) {
         UEFATournamentTest LE = new UEFATournamentTest("LE");
 
-
+        LC.stages.add(getLEQual1());
+        LC.stages.add(getLEQual2());
+        LC.stages.add(getLEGroup());
+        LC.stages.add(getLE14());
+        LC.stages.add(getLE12());
+        LC.stages.add(getLEFinal());
 
         return LE;
+    }
+
+    private UEFAStagePoolTest getLEQual1() {
+        return null;
+    }
+    private UEFAStagePoolTest getLEQual2() {
+        return null;
+    }
+    private UEFAStagePoolTest getLEGroup() {
+        return null;
+    }
+    private UEFAStagePoolTest getLE14() {
+        return null;
+    }
+    private UEFAStagePoolTest getLE12() {
+        return null;
+    }
+    private UEFAStagePoolTest getLEFinal() {
+        return null;
     }
 
 }
