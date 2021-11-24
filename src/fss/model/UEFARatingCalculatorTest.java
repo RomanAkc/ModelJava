@@ -273,7 +273,25 @@ public class UEFARatingCalculatorTest extends BaseTest {
     }
 
     private UEFAStagePoolTest getLEQual1() {
-        return null;
+        ArrayList<SimpleTeam> teamsQual1 = new ArrayList<>();
+        teamsQual1.add(teams.get("Tottenham Hotspur"));
+        teamsQual1.add(teams.get("Zenit St Petersburg"));
+        teamsQual1.add(teams.get("Willem II"));
+        teamsQual1.add(teams.get("Sturm"));
+
+        var meet1 = new WinTwoMeetTest(teamsQual1.get(0), teamsQual1.get(2));
+        meet1.SetFirstMeetResult(6, 0);
+        meet1.SetSecondMeetResult(0,3);
+
+        var meet2 = new WinTwoMeetTest(teamsQual1.get(1), teamsQual1.get(3));
+        meet2.SetFirstMeetResult(2, 0);
+        meet2.SetSecondMeetResult(0,1);
+
+        var qual1 = new UEFAStagePoolTest( StageType.PLAYOFF, "LE QUAL 1", teamsQual1, 2);
+        qual1.meets.add(meet1);
+        qual1.meets.add(meet2);
+        
+        return qual1;
     }
     private UEFAStagePoolTest getLEQual2() {
         return null;
