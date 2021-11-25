@@ -290,14 +290,84 @@ public class UEFARatingCalculatorTest extends BaseTest {
         var qual1 = new UEFAStagePoolTest( StageType.PLAYOFF, "LE QUAL 1", teamsQual1, 2);
         qual1.meets.add(meet1);
         qual1.meets.add(meet2);
-        
+
         return qual1;
     }
     private UEFAStagePoolTest getLEQual2() {
-        return null;
+        ArrayList<SimpleTeam> teamsQual1 = new ArrayList<>();
+        teamsQual1.add(teams.get("Tottenham Hotspur"));
+        teamsQual1.add(teams.get("Zenit St Petersburg"));
+        teamsQual1.add(teams.get("Bremen"));
+        teamsQual1.add(teams.get("Lyon"));
+
+        var meet1 = new WinTwoMeetTest(teamsQual1.get(3), teamsQual1.get(1));
+        meet1.SetFirstMeetResult(1, 1);
+        meet1.SetSecondMeetResult(1,1);
+        meet1.SetAddTimeMeetResult(0,0);
+        meet1.SetPenMeetResult(7,6);
+
+        var meet2 = new WinTwoMeetTest(teamsQual1.get(2), teamsQual1.get(0));
+        meet2.SetFirstMeetResult(1, 0);
+        meet2.SetSecondMeetResult(1,0);
+        meet2.SetAddTimeMeetResult(0,1);
+
+        var qual2 = new UEFAStagePoolTest( StageType.PLAYOFF, "LE QUAL 2", teamsQual1, 2);
+        qual2.meets.add(meet1);
+        qual2.meets.add(meet2);
+
+        return qual2;
     }
     private UEFAStagePoolTest getLEGroup() {
-        return null;
+        ArrayList<SimpleTeam> teamsGroup = new ArrayList<>();
+        teamsGroup.add(teams.get("Zenit St Petersburg"));
+        teamsGroup.add(teams.get("Atletico Madrid"));
+        teamsGroup.add(teams.get("Celtic"));
+        teamsGroup.add(teams.get("Benfica"));
+        teamsGroup.add(teams.get("Bremen"));
+        teamsGroup.add(teams.get("Fiorentina"));
+        teamsGroup.add(teams.get("Manchester City"));
+        teamsGroup.add(teams.get("Rangers"));
+
+        UEFAStagePoolTest groupStage = new UEFAStagePoolTest( StageType.GROUPS, "LC GROUPS", teamsGroup, 2);
+        groupStage.bonusPoint = 5;
+
+        groupStage.meets.add(new MeetTest(teamsGroup.get(0), teamsGroup.get(1), 0, 1));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(2), teamsGroup.get(3), 1, 0));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(3), teamsGroup.get(0), 2, 4));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(1), teamsGroup.get(2), 2, 0));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(3), teamsGroup.get(1), 1, 0));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(0), teamsGroup.get(2), 2, 2));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(1), teamsGroup.get(3), 2, 1));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(2), teamsGroup.get(0), 1, 0));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(0), teamsGroup.get(3), 4, 0));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(2), teamsGroup.get(1), 2, 2));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(1), teamsGroup.get(0), 1, 2));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(3), teamsGroup.get(2), 0, 1));
+
+        //Ze - 6 3 1 2 10 +
+        //AM - 6 3 1 2 10 +
+        //Ce - 6 3 2 1 11 +
+        //Be - 6 1 0 5 3
+
+        groupStage.meets.add(new MeetTest(teamsGroup.get(4), teamsGroup.get(5), 3, 1));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(6), teamsGroup.get(7), 2, 0));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(7), teamsGroup.get(4), 1, 1));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(5), teamsGroup.get(6), 1, 0));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(7), teamsGroup.get(5), 1, 0));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(4), teamsGroup.get(6), 4, 3));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(5), teamsGroup.get(7), 1, 0));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(6), teamsGroup.get(4), 2, 3));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(4), teamsGroup.get(7), 2, 1));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(6), teamsGroup.get(5), 2, 3));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(5), teamsGroup.get(4), 1, 0));
+        groupStage.meets.add(new MeetTest(teamsGroup.get(7), teamsGroup.get(6), 1, 1));
+
+        //Br - 6 4 1 1 13 +
+        //Fi - 6 4 0 2 12 +
+        //MC - 6 1 1 4 4
+        //Ra - 6 1 2 3 5 +
+
+        return groupStage;
     }
     private UEFAStagePoolTest getLE14() {
         return null;
