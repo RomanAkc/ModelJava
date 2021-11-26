@@ -370,13 +370,77 @@ public class UEFARatingCalculatorTest extends BaseTest {
         return groupStage;
     }
     private UEFAStagePoolTest getLE14() {
-        return null;
+        ArrayList<SimpleTeam> teams14 = new ArrayList<>();
+        teams14.add(teams.get("Zenit St Petersburg"));
+        teams14.add(teams.get("Atletico Madrid"));
+        teams14.add(teams.get("Celtic"));
+        teams14.add(teams.get("Bremen"));
+        teams14.add(teams.get("Fiorentina"));
+        teams14.add(teams.get("Rangers"));
+        teams14.add(teams.get("Bayern Munich"));
+        teams14.add(teams.get("Spartak Moscow"));
+
+        var meet1 = new WinTwoMeetTest(teams14.get(0), teams14.get(6));
+        meet1.SetFirstMeetResult(1, 1);
+        meet1.SetSecondMeetResult(2,0);
+
+        var meet2 = new WinTwoMeetTest(teams14.get(1), teams14.get(5));
+        meet2.SetFirstMeetResult(3, 0);
+        meet2.SetSecondMeetResult(1,0);
+
+        var meet3 = new WinTwoMeetTest(teams14.get(2), teams14.get(7));
+        meet3.SetFirstMeetResult(2, 1);
+        meet3.SetSecondMeetResult(2,0);
+
+        var meet4 = new WinTwoMeetTest(teams14.get(3), teams14.get(4));
+        meet4.SetFirstMeetResult(1, 1);
+        meet4.SetSecondMeetResult(0,0);
+        meet4.SetAddTimeMeetResult(1,1);
+        meet4.SetSecondMeetResult(4,2);
+
+        var le14 = new UEFAStagePoolTest( StageType.PLAYOFF, "LE 1/4", teams14, 2);
+        le14.meets.add(meet1);
+        le14.meets.add(meet2);
+        le14.meets.add(meet3);
+        le14.meets.add(meet4);
+
+        return le14;
+
     }
     private UEFAStagePoolTest getLE12() {
-        return null;
+        ArrayList<SimpleTeam> teams12 = new ArrayList<>();
+        teams12.add(teams.get("Bayern Munich"));
+        teams12.add(teams.get("Atletico Madrid"));
+        teams12.add(teams.get("Spartak Moscow"));
+        teams12.add(teams.get("Fiorentina"));
+
+        var meet1 = new WinTwoMeetTest(teams12.get(0), teams12.get(2));
+        meet1.SetFirstMeetResult(1, 2);
+        meet1.SetSecondMeetResult(0,3);
+
+        var meet2 = new WinTwoMeetTest(teams12.get(1), teams12.get(4));
+        meet2.SetFirstMeetResult(1, 0);
+        meet2.SetSecondMeetResult(1,0);
+        meet2.SetAddTimeMeetResult(1,0);
+
+        var le12 = new UEFAStagePoolTest( StageType.PLAYOFF, "LE QUAL 2", teams12, 2);
+        le12.meets.add(meet1);
+        le12.meets.add(meet2);
+
+        return le12;
     }
     private UEFAStagePoolTest getLEFinal() {
-        return null;
+        ArrayList<SimpleTeam> teamsF = new ArrayList<>();
+        teamsF.add(teams.get("Bayern Munich"));
+        teamsF.add(teams.get("Fiorentina"));
+
+        WinMeetTest finalLC = new WinMeetTest(teamsF.get(0), teamsF.get(1));
+        finalLC.SetMeetResult(3, 1);
+
+        var leFinal = new UEFAStagePoolTest( StageType.PLAYOFF, "LC Final", teamsF, 1);
+        leFinal.bonusPoint = 2;
+        leFinal.meets.add(finalLC);
+        return leFinal;
     }
 
 }
