@@ -85,6 +85,9 @@ public class UEFARatingCalculatorTest extends BaseTest {
         AddSchemeForTournament(LE, 2, calculator);
 
         calculator.calc();
+
+        HashMap<SimpleTeam, Double> pointsByTeam = calculator.getPointsByTeam();
+        HashMap<Country, Double> pointsByCountry = calculator.getPointsByCountry();
     }
 
     private void AddSchemeForTournament(UEFATournamentTest tournament, int tournamentID, UEFARatingCalculator calculator) {
@@ -262,12 +265,12 @@ public class UEFARatingCalculatorTest extends BaseTest {
     private UEFATournamentTest getLETournament(UEFATournamentTest LC) {
         UEFATournamentTest LE = new UEFATournamentTest("LE");
 
-        LC.stages.add(getLEQual1());
-        LC.stages.add(getLEQual2());
-        LC.stages.add(getLEGroup());
-        LC.stages.add(getLE14());
-        LC.stages.add(getLE12());
-        LC.stages.add(getLEFinal());
+        LE.stages.add(getLEQual1());
+        LE.stages.add(getLEQual2());
+        LE.stages.add(getLEGroup(LC));
+        LE.stages.add(getLE14(LC));
+        LE.stages.add(getLE12());
+        LE.stages.add(getLEFinal());
 
         return LE;
     }
@@ -317,7 +320,7 @@ public class UEFARatingCalculatorTest extends BaseTest {
 
         return qual2;
     }
-    private UEFAStagePoolTest getLEGroup() {
+    private UEFAStagePoolTest getLEGroup(UEFATournamentTest LC) {
         ArrayList<SimpleTeam> teamsGroup = new ArrayList<>();
         teamsGroup.add(teams.get("Zenit St Petersburg"));
         teamsGroup.add(teams.get("Atletico Madrid"));
@@ -369,7 +372,7 @@ public class UEFARatingCalculatorTest extends BaseTest {
 
         return groupStage;
     }
-    private UEFAStagePoolTest getLE14() {
+    private UEFAStagePoolTest getLE14(UEFATournamentTest LC) {
         ArrayList<SimpleTeam> teams14 = new ArrayList<>();
         teams14.add(teams.get("Zenit St Petersburg"));
         teams14.add(teams.get("Atletico Madrid"));
