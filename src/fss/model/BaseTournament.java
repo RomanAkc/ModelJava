@@ -9,6 +9,11 @@ public abstract class BaseTournament {
     public BaseTournament(String name) {
         this.name = name;
     }
+
+    public void setID(int id) {
+        this.id = id;
+    }
+
     public int getID() {
         return id;
     }
