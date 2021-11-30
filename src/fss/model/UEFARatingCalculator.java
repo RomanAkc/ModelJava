@@ -3,12 +3,17 @@ package fss.model;
 import java.util.HashMap;
 
 class UEFARatingCalculator {
+    public class CountryPointData {
+        public HashMap<SimpleTeam, Double> pointsByTeam = new HashMap<>();
+        public Double pointsOnTeam = 0.0;
+    }
+
     private HashMap<Integer, HashMap<Integer, UEFARatingSchemePart>> ratingScheme = new HashMap<>();
     private BaseTournament tournament1stLevel = null;
     private BaseTournament tournament2ndLevel = null;
     private BaseTournament tournament3rdLevel = null;
     private HashMap<SimpleTeam, Double> pointsByTeam = new HashMap<>();
-    private HashMap<Country, Double> pointsByCountry = new HashMap<>();
+    private HashMap<Country, CountryPointData> pointsByCountry = new HashMap<>();
 
     private class PairPoints {
         public double homePoint = 0;
@@ -45,7 +50,7 @@ class UEFARatingCalculator {
         return pointsByTeam;
     }
 
-    public HashMap<Country, Double> getPointsByCountry() {
+    public HashMap<Country, CountryPointData> getPointsByCountry() {
         return pointsByCountry;
     }
 
@@ -79,12 +84,23 @@ class UEFARatingCalculator {
             var value = kv.getValue();
 
             if(pointsByCountry.containsKey(country)) {
-                pointsByCountry.put(country, pointsByCountry.get(country) + value);
+                CountryPointData data = pointsByCountry.get(country);
+                data.pointsByTeam.put(kv.getKey(), value);
             } else {
-                pointsByCountry.put(country, value);
+                CountryPointData data = new CountryPointData();
+                data.pointsByTeam.put(kv.getKey(), value);
+                pointsByCountry.put(country, data);
             }
         }
 
+        for(var v : pointsByCountry.values()) {
+            double sumPoints = 0.0;
+            for(var points : v.pointsByTeam.values()) {
+                sumPoints += points;
+            }
+
+            v.pointsOnTeam = sumPoints / (double) v.pointsByTeam.size();
+        }
     }
 
     private void addBonusPoints(UEFARatingSchemePart schemePart, StagePool stage, HashMap<SimpleTeam, Double> pointsByTeam) {
