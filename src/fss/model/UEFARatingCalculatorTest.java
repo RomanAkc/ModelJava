@@ -94,6 +94,23 @@ public class UEFARatingCalculatorTest extends BaseTest {
         Assert.assertEquals(22, pointsByTeam.size());
         Assert.assertEquals(10, pointsByCountry.size());
 
+        CheckCountryCounts(pointsByCountry);
+        CheckClubPoints(pointsByTeam);
+    }
+
+    private void CheckClubPoints(HashMap<SimpleTeam, Double> pointsByTeam) {
+        HashMap<SimpleTeam, Double> realPointsByTeam = new HashMap<>();
+        realPointsByTeam.put(teams.get("Real Madrid"), 18.0);
+
+        for(var kv : realPointsByTeam.entrySet()) {
+            Double points = pointsByTeam.get(kv.getKey());
+            Assert.assertEquals(kv.getValue(), points);
+        }
+
+
+    }
+
+    private void CheckCountryCounts(HashMap<Country, UEFARatingCalculator.CountryPointData> pointsByCountry) {
         String[] arrThreeTeams = {"Spain", "England", "Italy"};
         List<String> listThreeTeams = java.util.Arrays.asList(arrThreeTeams);
         for(var kv : pointsByCountry.entrySet()) {

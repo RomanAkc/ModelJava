@@ -99,7 +99,7 @@ class UEFARatingCalculator {
                 sumPoints += points;
             }
 
-            v.pointsOnTeam = sumPoints / (double) v.pointsByTeam.size();
+            v.pointsOnTeam = round(sumPoints / (double) v.pointsByTeam.size());
         }
     }
 
@@ -112,11 +112,17 @@ class UEFARatingCalculator {
     }
 
     private void addPointsToPointsByTeam(SimpleTeam team, double points, HashMap<SimpleTeam, Double> pointsByTeam) {
+        points = round(points);
         if(!pointsByTeam.containsKey(team)) {
             pointsByTeam.put(team, points);
         } else {
             pointsByTeam.put(team, pointsByTeam.get(team) + points);
         }
+    }
+
+    private double round(double value) {
+        double scale = 1000;
+        return Math.ceil(value * scale) / scale;
     }
 
     private PairPoints getPointsByMeet(Gameable meet, boolean isHalfPoint) {
