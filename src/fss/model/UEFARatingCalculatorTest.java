@@ -96,18 +96,58 @@ public class UEFARatingCalculatorTest extends BaseTest {
 
         CheckCountryCounts(pointsByCountry);
         CheckClubPoints(pointsByTeam);
+        CheckCountryPoints(pointsByCountry);
+    }
+
+    private void CheckCountryPoints(HashMap<Country, UEFARatingCalculator.CountryPointData> pointsByCountry) {
+        HashMap<Country, Double> realPointsByCountry = new HashMap<>();
+        realPointsByCountry.put(countries.get("Spain"), 13.333);
+        realPointsByCountry.put(countries.get("England"), 9.000);
+        realPointsByCountry.put(countries.get("Italy"), 19.167);
+        realPointsByCountry.put(countries.get("Germany"), 15.500);
+        realPointsByCountry.put(countries.get("France"), 4.500);
+        realPointsByCountry.put(countries.get("Russia"), 12.500);
+        realPointsByCountry.put(countries.get("Portugal"), 1.500);
+        realPointsByCountry.put(countries.get("Scotland"), 7.500);
+        realPointsByCountry.put(countries.get("Netherlands"), 0.25);
+        realPointsByCountry.put(countries.get("Austria"), 0.0);
+
+
+        for(var kv : realPointsByCountry.entrySet()) {
+            Double points = pointsByCountry.get(kv.getKey()).pointsOnTeam;
+            Assert.assertEquals(kv.getValue(), points);
+        }
     }
 
     private void CheckClubPoints(HashMap<SimpleTeam, Double> pointsByTeam) {
         HashMap<SimpleTeam, Double> realPointsByTeam = new HashMap<>();
         realPointsByTeam.put(teams.get("Real Madrid"), 18.0);
+        realPointsByTeam.put(teams.get("Barcelona"), 8.0);
+        realPointsByTeam.put(teams.get("Atletico Madrid"), 14.0);
+        realPointsByTeam.put(teams.get("Chelsea"), 20.0);
+        realPointsByTeam.put(teams.get("Manchester City"), 4.0);
+        realPointsByTeam.put(teams.get("Tottenham Hotspur"), 3.0);
+        realPointsByTeam.put(teams.get("Internazionale"), 24.0);
+        realPointsByTeam.put(teams.get("Juventus"), 19.5);
+        realPointsByTeam.put(teams.get("Fiorentina"), 14.0);
+        realPointsByTeam.put(teams.get("Bayern Munich"), 19.0);
+        realPointsByTeam.put(teams.get("Bremen"), 12.0);
+        realPointsByTeam.put(teams.get("PSG"), 8.0);
+        realPointsByTeam.put(teams.get("Lyon"), 1.0);
+        realPointsByTeam.put(teams.get("Spartak Moscow"), 14.0);
+        realPointsByTeam.put(teams.get("Zenit St Petersburg"), 11.0);
+        realPointsByTeam.put(teams.get("Porto"), 1.0);
+        realPointsByTeam.put(teams.get("Benfica"), 2.0);
+        realPointsByTeam.put(teams.get("Rangers"), 5.0);
+        realPointsByTeam.put(teams.get("Celtic"), 10.0);
+        realPointsByTeam.put(teams.get("PSV"), 0.5);
+        realPointsByTeam.put(teams.get("Willem II"), 0.0);
+        realPointsByTeam.put(teams.get("Sturm"), 0.0);
 
         for(var kv : realPointsByTeam.entrySet()) {
             Double points = pointsByTeam.get(kv.getKey());
             Assert.assertEquals(kv.getValue(), points);
         }
-
-
     }
 
     private void CheckCountryCounts(HashMap<Country, UEFARatingCalculator.CountryPointData> pointsByCountry) {

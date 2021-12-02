@@ -122,7 +122,7 @@ class UEFARatingCalculator {
 
     private double round(double value) {
         double scale = 1000;
-        return Math.ceil(value * scale) / scale;
+        return Math.round(value * scale) / scale;
     }
 
     private PairPoints getPointsByMeet(Gameable meet, boolean isHalfPoint) {
