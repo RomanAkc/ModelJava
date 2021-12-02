@@ -235,7 +235,7 @@ public class UEFARatingCalculatorTest extends BaseTest {
 
     private UEFAStagePoolTest getLCQual1() {
         ArrayList<SimpleTeam> stageTeams = fillStageTeams("Juventus", "Porto", "Rangers", "PSV");
-        UEFAStagePoolTest lcQual1 = new UEFAStagePoolTest( StageType.PLAYOFF, "LC QUAL 1", stageTeams, 2);
+        UEFAStagePoolTest lcQual1 = new UEFAStagePoolTest( StageType.PLAYOFF, "LC QUAL 1", stageTeams, 0);
 
         addWinTwoMeetToStagePool(stageTeams.get(0), stageTeams.get(3), 3, 0, 1, 1
                 , false, 0, 0, false, 0, 0, lcQual1);
@@ -247,7 +247,7 @@ public class UEFARatingCalculatorTest extends BaseTest {
 
     private UEFAStagePoolTest getLCQual2() {
         ArrayList<SimpleTeam> stageTeams = fillStageTeams("Juventus", "Rangers", "Barcelona", "Manchester City");
-        var lcQual2 = new UEFAStagePoolTest( StageType.PLAYOFF, "LC QUAL 2", stageTeams, 2);
+        var lcQual2 = new UEFAStagePoolTest( StageType.PLAYOFF, "LC QUAL 2", stageTeams, 0);
 
         addWinTwoMeetToStagePool(stageTeams.get(0), stageTeams.get(3), 0, 0, 1, 1
                 , true, 0, 0, true, 2, 4, lcQual2);
@@ -261,8 +261,7 @@ public class UEFARatingCalculatorTest extends BaseTest {
         ArrayList<SimpleTeam> stageTeams = fillStageTeams("Real Madrid", "Juventus", "PSG", "Bayern Munich"
                 , "Barcelona", "Chelsea", "Internazionale", "Spartak Moscow");
 
-        UEFAStagePoolTest groupStage = new UEFAStagePoolTest( StageType.GROUPS, "LC GROUPS", stageTeams, 2);
-        groupStage.bonusPoint = 4;
+        UEFAStagePoolTest groupStage = new UEFAStagePoolTest( StageType.GROUPS, "LC GROUPS", stageTeams, 4);
 
         addMeetToStagePool(stageTeams.get(0), stageTeams.get(1), 1, 0, groupStage);
         addMeetToStagePool(stageTeams.get(2), stageTeams.get(3), 1, 2, groupStage);
@@ -305,8 +304,7 @@ public class UEFARatingCalculatorTest extends BaseTest {
 
     private UEFAStagePoolTest getLC12() {
         ArrayList<SimpleTeam> stageTeams = fillStageTeams("Chelsea", "Juventus", "Real Madrid", "Internazionale");
-        var lc12 = new UEFAStagePoolTest( StageType.PLAYOFF, "LC 1/2", stageTeams, 2);
-        lc12.bonusPoint = 5;
+        var lc12 = new UEFAStagePoolTest( StageType.PLAYOFF, "LC 1/2", stageTeams, 5);
 
         addWinTwoMeetToStagePool(stageTeams.get(0), stageTeams.get(1), 2, 0, 1, 1
                 , false, 0, 0, false, 0, 0, lc12);
@@ -320,7 +318,6 @@ public class UEFARatingCalculatorTest extends BaseTest {
         ArrayList<SimpleTeam> stageTeams = fillStageTeams("Chelsea", "Internazionale");
 
         UEFAStagePoolTest lcFinal = new UEFAStagePoolTest( StageType.PLAYOFF, "LC Final", stageTeams, 1);
-        lcFinal.bonusPoint = 1;
         addWinMeetToStagePool(stageTeams.get(0), stageTeams.get(1), 2, 3, lcFinal);
 
         return lcFinal;
@@ -341,7 +338,7 @@ public class UEFARatingCalculatorTest extends BaseTest {
 
     private UEFAStagePoolTest getLEQual1() {
         ArrayList<SimpleTeam> stageTeams = fillStageTeams("Tottenham Hotspur", "Zenit St Petersburg", "Willem II", "Sturm");
-        UEFAStagePoolTest leQual1 = new UEFAStagePoolTest( StageType.PLAYOFF, "LE QUAL 1", stageTeams, 2);
+        UEFAStagePoolTest leQual1 = new UEFAStagePoolTest( StageType.PLAYOFF, "LE QUAL 1", stageTeams, 0);
 
         addWinTwoMeetToStagePool(stageTeams.get(0), stageTeams.get(2), 6, 0, 0, 3
                 , false, 0, 0, false, 0, 0, leQual1);
@@ -352,7 +349,7 @@ public class UEFARatingCalculatorTest extends BaseTest {
     }
     private UEFAStagePoolTest getLEQual2() {
         ArrayList<SimpleTeam> stageTeams = fillStageTeams("Tottenham Hotspur", "Zenit St Petersburg", "Bremen", "Lyon");
-        UEFAStagePoolTest leQual2 = new UEFAStagePoolTest( StageType.PLAYOFF, "LE QUAL 2", stageTeams, 2);
+        UEFAStagePoolTest leQual2 = new UEFAStagePoolTest( StageType.PLAYOFF, "LE QUAL 2", stageTeams, 0);
 
         addWinTwoMeetToStagePool(stageTeams.get(3), stageTeams.get(1), 1, 1, 1, 1
                 , true, 0, 0, true, 7, 6, leQual2);
@@ -364,7 +361,7 @@ public class UEFARatingCalculatorTest extends BaseTest {
     private UEFAStagePoolTest getLEGroup() {
         ArrayList<SimpleTeam> stageTeams = fillStageTeams("Zenit St Petersburg", "Atletico Madrid", "Celtic", "Benfica"
             , "Bremen", "Fiorentina", "Manchester City", "Rangers");
-        UEFAStagePoolTest groupStage = new UEFAStagePoolTest( StageType.GROUPS, "LE GROUPS", stageTeams, 2);
+        UEFAStagePoolTest groupStage = new UEFAStagePoolTest( StageType.GROUPS, "LE GROUPS", stageTeams, 0);
 
         addMeetToStagePool(stageTeams.get(0), stageTeams.get(1), 0, 1, groupStage);
         addMeetToStagePool(stageTeams.get(2), stageTeams.get(3), 1, 0, groupStage);
@@ -407,7 +404,7 @@ public class UEFARatingCalculatorTest extends BaseTest {
     private UEFAStagePoolTest getLE14() {
         ArrayList<SimpleTeam> stageTeams = fillStageTeams("Zenit St Petersburg", "Atletico Madrid", "Celtic", "Bremen"
                 , "Fiorentina", "Rangers", "Bayern Munich", "Spartak Moscow");
-        UEFAStagePoolTest le14 = new UEFAStagePoolTest( StageType.PLAYOFF, "LE 1/4", stageTeams, 2);
+        UEFAStagePoolTest le14 = new UEFAStagePoolTest( StageType.PLAYOFF, "LE 1/4", stageTeams, 0);
 
         addWinTwoMeetToStagePool(stageTeams.get(0), stageTeams.get(6), 1, 1, 2, 0
                 , false, 0, 0, false, 0, 0, le14);
@@ -423,8 +420,7 @@ public class UEFARatingCalculatorTest extends BaseTest {
     }
     private UEFAStagePoolTest getLE12() {
         ArrayList<SimpleTeam> stageTeams = fillStageTeams("Bayern Munich", "Atletico Madrid", "Spartak Moscow", "Fiorentina");
-        UEFAStagePoolTest le12 = new UEFAStagePoolTest( StageType.PLAYOFF, "LE 1/2", stageTeams, 2);
-        le12.bonusPoint = 1;
+        UEFAStagePoolTest le12 = new UEFAStagePoolTest( StageType.PLAYOFF, "LE 1/2", stageTeams, 1);
 
         addWinTwoMeetToStagePool(stageTeams.get(0), stageTeams.get(2), 1, 2, 0, 3
                 , false, 0, 0, false, 0, 0, le12);
@@ -436,7 +432,6 @@ public class UEFARatingCalculatorTest extends BaseTest {
     private UEFAStagePoolTest getLEFinal() {
         ArrayList<SimpleTeam> stageTeams = fillStageTeams("Bayern Munich", "Fiorentina");
         UEFAStagePoolTest leFinal = new UEFAStagePoolTest( StageType.PLAYOFF, "LC Final", stageTeams, 1);
-        leFinal.bonusPoint = 1;
 
         addWinMeetToStagePool(stageTeams.get(0), stageTeams.get(1), 3, 1, leFinal);
 
@@ -451,8 +446,9 @@ class UEFAStagePoolTest extends StagePool {
     public ArrayList<Gameable> meets = new ArrayList<>();
     int bonusPoint = 0;
 
-    public UEFAStagePoolTest(StageType stageType, String name, ArrayList<SimpleTeam> teams, int cntRounds) {
-        super(stageType, name, teams, null, cntRounds);
+    public UEFAStagePoolTest(StageType stageType, String name, ArrayList<SimpleTeam> teams, int bonusPoint) {
+        super(stageType, name, teams, null, 2);
+        this.bonusPoint = bonusPoint;
     }
 
     @Override
