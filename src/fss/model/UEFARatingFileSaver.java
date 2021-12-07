@@ -1,9 +1,9 @@
 package fss.model;
 
-public class UEFARatingSaver implements RatingSaveable {
+public class UEFARatingFileSaver implements RatingSaveable {
     UEFARating rating = null;
 
-    public UEFARatingSaver(UEFARating rating) {
+    public UEFARatingFileSaver(UEFARating rating) {
         this.rating = rating;
     }
 
