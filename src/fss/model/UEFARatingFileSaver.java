@@ -12,7 +12,11 @@ public class UEFARatingFileSaver implements RatingSaveable {
     }
 
     @Override
-    public boolean SaveRating(Ratingable rating) {
+    public boolean SaveRating(Ratingable rtg) {
+        UEFARating rating = (UEFARating)rtg;
+
+
+
         return false;
     }
 }

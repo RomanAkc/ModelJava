@@ -1,7 +1,5 @@
 package fss.model;
 
-//Сделать страну классом? Или enum?
-
 class UEFARatingData {
     public int year = 0;
     public ClubTeam team = null;

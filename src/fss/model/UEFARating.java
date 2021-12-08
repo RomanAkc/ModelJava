@@ -24,17 +24,30 @@ import java.util.*;
   Если не нашли в 1м - возврашаем из 2го
 */
 
-class UEFARating implements Ratingable, CountryRatingable {
+/*
+  Работаем примерно так:
+  1.Вычитываем рейтинг на старте сезона, используем его
+  2.В конце сезона с помощью UEFARatingCalculator считаем результаты сезона
+  3.Обновляем данные (UEFARatingData), выбрасывая те, что за прошлый год и добавляя новые
+  4.Сохраняем данные для вычитывания рейтинга
+* */
 
-    private ArrayList<UEFARatingData> data = null;
+class UEFARating implements Ratingable, CountryRatingable {
+    private ArrayList<UEFARatingData> data = new ArrayList<>();
+    private ArrayList<UEFARatingData> rawData = null;
     private HashMap<ClubTeam, Integer> clubPositions = new HashMap<>();
     private HashMap<Country, Integer> countryPositions = new HashMap<>();
     private ArrayList<Country> countries = new ArrayList<>();
 
     public UEFARating(ArrayList<UEFARatingData> data) {
-        this.data = data;
-        sortRatingData();
+        rawData = data;
+        createData();
+        sortData();
         createPositions();
+    }
+
+    public ArrayList<UEFARatingData> getRawData() {
+        return rawData;
     }
 
     @Override
@@ -62,7 +75,34 @@ class UEFARating implements Ratingable, CountryRatingable {
         return countries.size() - 1;
     }
 
-    private void sortRatingData() {
+    private void createData() {
+        HashMap<ClubTeam, UEFARatingData> hashDataTeams = new HashMap<>();
+        HashMap<Country, UEFARatingData> hashDataCountries = new HashMap<>();
+
+        for(var obj : rawData) {
+            ClubTeam team = obj.team;
+            if(team != null) {
+                if(hashDataTeams.containsKey(team)) {
+                    hashDataTeams.get(team).point += obj.point;
+                } else {
+                    UEFARatingData data = new UEFARatingData(0, team, obj.point);
+                    hashDataTeams.put(team, data);
+                }
+            } else {
+                if(hashDataCountries.containsKey(obj.country)) {
+                    hashDataCountries.get(obj.country).point += obj.point;
+                } else {
+                    UEFARatingData data = new UEFARatingData(0, obj.country, obj.point);
+                    hashDataCountries.put(obj.country, data);
+                }
+            }
+        }
+
+        data.addAll(hashDataTeams.values());
+        data.addAll(hashDataCountries.values());
+    }
+
+    private void sortData() {
         Collections.sort(data, new Comparator<UEFARatingData>() {
             @Override
             public int compare(UEFARatingData lhs, UEFARatingData rhs) {
