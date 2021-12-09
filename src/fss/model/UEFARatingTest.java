@@ -7,21 +7,32 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import static org.junit.Assert.*;
-
 public class UEFARatingTest extends BaseTest{
     @Test
-    public void UEFARatingTest() {
+    public void UEFARatingTestOneYear() {
         var teamsWithCountries = generateClubTeams(8, 3);
         var countryWithoutTeam = generateCountryWithID(100500);
 
-        var data = generateUEFARatingData(teamsWithCountries, countryWithoutTeam);
+        var data = generateRatingDataOneYear(teamsWithCountries, countryWithoutTeam);
         var rating = new UEFARating(data);
 
+        checkRatingAndData(teamsWithCountries, data, rating);
+    }
+
+    @Test
+    public void UEFARatingTestFiveYears() {
+        HashMap<ClubTeam, Country> teamsWithCountries = generateClubTeams(8, 3);
+        ArrayList<UEFARatingData> data = generateRatingDataFiveYears(teamsWithCountries);
+        UEFARating rating = new UEFARating(data);
+
+        checkRatingAndData(teamsWithCountries, data, rating);
+    }
+
+    private void checkRatingAndData(HashMap<ClubTeam, Country> teamsWithCountries, ArrayList<UEFARatingData> data, UEFARating rating) {
         HashMap<ClubTeam, Double> clubToPoint = getMapClubToPoint(data);
-        for(var team1 : teamsWithCountries.keySet()) {
-            for(var team2 : teamsWithCountries.keySet()) {
-                if(team1 == team2) {
+        for (var team1 : teamsWithCountries.keySet()) {
+            for (var team2 : teamsWithCountries.keySet()) {
+                if (team1 == team2) {
                     continue;
                 }
 
@@ -37,17 +48,15 @@ public class UEFARatingTest extends BaseTest{
 
         HashMap<Country, Double> countryToPoint = getMapCountryToPoint(data);
         double prevPoint = -1;
-        for(int i = 1; i < rating.getAllCountries(); ++i) {
+        for (int i = 1; i < rating.getAllCountries(); ++i) {
             Country country = rating.getCountryByPosition(i);
             double point = countryToPoint.get(country);
-            if(i > 1) {
+            if (i > 1) {
                 Assert.assertTrue(point <= prevPoint);
             }
             prevPoint = point;
         }
     }
-
-
 
     private HashMap<ClubTeam, Double> getMapClubToPoint(ArrayList<UEFARatingData> data) {
         HashMap<ClubTeam, Double> result = new HashMap<>();
@@ -57,7 +66,12 @@ public class UEFARatingTest extends BaseTest{
                 continue;
             }
 
-            result.put(obj.team, obj.point);
+            double points = 0.0;
+            if(result.containsKey(obj.team)) {
+                points = result.get(obj.team);
+            }
+
+            result.put(obj.team, points + obj.point);
         }
 
         return result;
@@ -71,14 +85,19 @@ public class UEFARatingTest extends BaseTest{
                 continue;
             }
 
-            result.put(obj.country, obj.point);
+            double points = 0.0;
+            if(result.containsKey(obj.country)) {
+                points = result.get(obj.country);
+            }
+
+            result.put(obj.country, points + obj.point);
         }
 
         return result;
     }
 
-    private ArrayList<UEFARatingData> generateUEFARatingData(HashMap<ClubTeam, Country> teamsWithCountries,
-                                                             Country countryWithoutTeam) {
+    private ArrayList<UEFARatingData> generateRatingDataOneYear(HashMap<ClubTeam, Country> teamsWithCountries,
+                                                                Country countryWithoutTeam) {
         var data = new ArrayList<UEFARatingData>();
 
         HashSet<Country> usedCountries = new HashSet<>();
@@ -92,7 +111,6 @@ public class UEFARatingTest extends BaseTest{
                 pointCountry = 1.0;
                 pointClub = 3.0;
                 data.add(new UEFARatingData(2021, currentCountry, pointCountry + addPoint));
-
             }
 
             data.add(new UEFARatingData(2021, obj.getKey(), pointClub + addPoint));
@@ -101,6 +119,50 @@ public class UEFARatingTest extends BaseTest{
 
         data.add(new UEFARatingData(2021, countryWithoutTeam, 2.22));
         return data;
+    }
+
+    private class CountryPointData
+    {
+        public double points = 0.0;
+        public int cntTeams = 0;
+
+        public CountryPointData(double points, int cntTeams) {
+            this.points = points;
+            this.cntTeams = cntTeams;
+        }
+    }
+
+    private ArrayList<UEFARatingData> generateRatingDataFiveYears(HashMap<ClubTeam, Country> teamsWithCountries) {
+        var data = new ArrayList<UEFARatingData>();
+
+        for(int year = 2017; year <= 2021; ++year) {
+            HashMap<Country, CountryPointData> countriesPoints = new HashMap<>();
+
+            for(var kv : teamsWithCountries.entrySet()) {
+                ClubTeam team = kv.getKey();
+                double teamPoints = (double) RandomWrapper.getRandom(0, 20000) / 1000.0;
+                data.add(new UEFARatingData(year, team, teamPoints));
+
+                Country country = kv.getValue();
+                if(!countriesPoints.containsKey(country)) {
+                    countriesPoints.put(country, new CountryPointData(teamPoints, 1));
+                } else {
+                    CountryPointData countryPoints = countriesPoints.get(country);
+                    countryPoints.cntTeams++;
+                    countryPoints.points += teamPoints;
+                }
+            }
+
+            for(var countryPoints : countriesPoints.entrySet()) {
+                data.add(new UEFARatingData(year, countryPoints.getKey(), getSumCountryPoints(countryPoints.getValue().cntTeams, countryPoints.getValue().points)));
+            }
+        }
+
+        return data;
+    }
+
+    private double getSumCountryPoints(int cntClubs, double countryPoints) {
+        return (cntClubs == 0 ? 0.0 : countryPoints / (double) cntClubs) * 0.2;
     }
 
 }
