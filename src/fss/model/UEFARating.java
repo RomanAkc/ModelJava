@@ -33,7 +33,7 @@ import java.util.*;
 * */
 
 class UEFARating implements Ratingable, CountryRatingable {
-    private ArrayList<UEFARatingData> data = new ArrayList<>();
+    private ArrayList<UEFARatingData> data = null;
     private ArrayList<UEFARatingData> rawData = null;
     private HashMap<ClubTeam, Integer> clubPositions = new HashMap<>();
     private HashMap<Country, Integer> countryPositions = new HashMap<>();
@@ -41,7 +41,7 @@ class UEFARating implements Ratingable, CountryRatingable {
 
     public UEFARating(ArrayList<UEFARatingData> data) {
         rawData = data;
-        createData();
+        this.data = createData();
         sortData();
         createPositions();
     }
@@ -75,7 +75,7 @@ class UEFARating implements Ratingable, CountryRatingable {
         return countries.size() - 1;
     }
 
-    private void createData() {
+    private ArrayList<UEFARatingData> createData() {
         HashMap<ClubTeam, UEFARatingData> hashDataTeams = new HashMap<>();
         HashMap<Country, UEFARatingData> hashDataCountries = new HashMap<>();
 
@@ -98,8 +98,10 @@ class UEFARating implements Ratingable, CountryRatingable {
             }
         }
 
+        ArrayList<UEFARatingData> data = new ArrayList<>();
         data.addAll(hashDataTeams.values());
         data.addAll(hashDataCountries.values());
+        return data;
     }
 
     private void sortData() {
