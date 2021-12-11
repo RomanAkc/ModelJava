@@ -40,10 +40,29 @@ class UEFARating implements Ratingable, CountryRatingable {
     private ArrayList<Country> countries = new ArrayList<>();
 
     public UEFARating(ArrayList<UEFARatingData> data) {
-        rawData = data;
-        this.data = createData();
+        rawData = new ArrayList<UEFARatingData>(data);
+        calculate();
+    }
+
+    private void calculate() {
+        data = createData();
         sortData();
         createPositions();
+    }
+
+    public void recalcWithChangeData(ArrayList<UEFARatingData> data) {
+        Collections.sort(rawData, new Comparator<UEFARatingData>() {
+            @Override
+            public int compare(UEFARatingData lhs, UEFARatingData rhs) {
+                return lhs.year < rhs.year ? 1 : (lhs.year > rhs.year) ? -1 : 0;
+            }
+        });
+
+        int yearForDel = !rawData.isEmpty() ? rawData.get(0).year : 0;
+        rawData.removeIf(el -> el.year == yearForDel);
+
+        rawData.addAll(data);
+        calculate();
     }
 
     public ArrayList<UEFARatingData> getRawData() {
