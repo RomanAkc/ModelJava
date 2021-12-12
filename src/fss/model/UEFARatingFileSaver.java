@@ -1,5 +1,7 @@
 package fss.model;
 
+import java.util.ArrayList;
+
 public class UEFARatingFileSaver implements RatingSaveable {
     UEFARating rating = null;
 
@@ -14,7 +16,9 @@ public class UEFARatingFileSaver implements RatingSaveable {
     @Override
     public boolean SaveRating(Ratingable rtg) {
         UEFARating rating = (UEFARating)rtg;
+        ArrayList<UEFARatingData> data = rating.getRawData();
 
+        //Сохранить в файл (откуда взять его имя?)
 
 
         return false;

@@ -40,7 +40,7 @@ class UEFARating implements Ratingable, CountryRatingable {
     private ArrayList<Country> countries = new ArrayList<>();
 
     public UEFARating(ArrayList<UEFARatingData> data) {
-        rawData = new ArrayList<UEFARatingData>(data);
+        rawData = new ArrayList<>(data);
         calculate();
     }
 
@@ -51,12 +51,10 @@ class UEFARating implements Ratingable, CountryRatingable {
     }
 
     public void recalcWithChangeData(ArrayList<UEFARatingData> data) {
-        Collections.sort(rawData, new Comparator<UEFARatingData>() {
-            @Override
-            public int compare(UEFARatingData lhs, UEFARatingData rhs) {
-                return lhs.year < rhs.year ? 1 : (lhs.year > rhs.year) ? -1 : 0;
-            }
-        });
+        Collections.sort(rawData,
+           (UEFARatingData lhs, UEFARatingData rhs) ->
+                lhs.year < rhs.year ? 1 : (lhs.year > rhs.year) ? -1 : 0
+        );
 
         int yearForDel = !rawData.isEmpty() ? rawData.get(0).year : 0;
         rawData.removeIf(el -> el.year == yearForDel);
@@ -124,12 +122,10 @@ class UEFARating implements Ratingable, CountryRatingable {
     }
 
     private void sortData() {
-        Collections.sort(data, new Comparator<UEFARatingData>() {
-            @Override
-            public int compare(UEFARatingData lhs, UEFARatingData rhs) {
-                return lhs.point > rhs.point ? -1 : (lhs.point < rhs.point) ? 1 : 0;
-            }
-        });
+        Collections.sort(data,
+            (UEFARatingData lhs, UEFARatingData rhs)
+                    -> lhs.point > rhs.point ? -1 : (lhs.point < rhs.point) ? 1 : 0
+        );
     }
 
     private void createPositions() {
