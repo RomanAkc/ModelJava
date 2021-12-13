@@ -11,9 +11,8 @@ public class UEFARatingTest extends BaseTest{
     @Test
     public void UEFARatingTestOneYear() {
         var teamsWithCountries = generateClubTeams(8, 3);
-        var countryWithoutTeam = generateCountryWithID(100500);
 
-        var data = generateRatingDataOneYear(teamsWithCountries, countryWithoutTeam);
+        var data = generateRatingDataOneYear(teamsWithCountries);
         var rating = new UEFARating(data);
 
         checkRatingAndData(teamsWithCountries, data, rating);
@@ -26,6 +25,10 @@ public class UEFARatingTest extends BaseTest{
         UEFARating rating = new UEFARating(data);
 
         checkRatingAndData(teamsWithCountries, data, rating);
+
+
+        rating.recalcWithChangeData(generateRatingDataOneYear(teamsWithCountries));
+        checkRatingAndData(teamsWithCountries, rating.getRawData(), rating);
     }
 
     private void checkRatingAndData(HashMap<ClubTeam, Country> teamsWithCountries, ArrayList<UEFARatingData> data, UEFARating rating) {
@@ -96,8 +99,7 @@ public class UEFARatingTest extends BaseTest{
         return result;
     }
 
-    private ArrayList<UEFARatingData> generateRatingDataOneYear(HashMap<ClubTeam, Country> teamsWithCountries,
-                                                                Country countryWithoutTeam) {
+    private ArrayList<UEFARatingData> generateRatingDataOneYear(HashMap<ClubTeam, Country> teamsWithCountries) {
         var data = new ArrayList<UEFARatingData>();
 
         HashSet<Country> usedCountries = new HashSet<>();
@@ -117,7 +119,6 @@ public class UEFARatingTest extends BaseTest{
             addPoint += 0.1;
         }
 
-        data.add(new UEFARatingData(2021, countryWithoutTeam, 2.22));
         return data;
     }
 
@@ -135,7 +136,7 @@ public class UEFARatingTest extends BaseTest{
     private ArrayList<UEFARatingData> generateRatingDataFiveYears(HashMap<ClubTeam, Country> teamsWithCountries) {
         var data = new ArrayList<UEFARatingData>();
 
-        for(int year = 2017; year <= 2021; ++year) {
+        for(int year = 2016; year <= 2020; ++year) {
             HashMap<Country, CountryPointData> countriesPoints = new HashMap<>();
 
             for(var kv : teamsWithCountries.entrySet()) {
@@ -164,5 +165,11 @@ public class UEFARatingTest extends BaseTest{
     private double getSumCountryPoints(int cntClubs, double countryPoints) {
         return (cntClubs == 0 ? 0.0 : countryPoints / (double) cntClubs) * 0.2;
     }
+
+    /*private ArrayList<UEFARatingData> generateRatingDataNewYear(ArrayList<UEFARatingData> oldData) {
+        for(var obj : oldData) {
+
+        }
+    }*/
 
 }

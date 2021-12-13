@@ -53,7 +53,7 @@ class UEFARating implements Ratingable, CountryRatingable {
     public void recalcWithChangeData(ArrayList<UEFARatingData> data) {
         Collections.sort(rawData,
            (UEFARatingData lhs, UEFARatingData rhs) ->
-                lhs.year < rhs.year ? 1 : (lhs.year > rhs.year) ? -1 : 0
+                lhs.year < rhs.year ? -1 : (lhs.year > rhs.year) ? 1 : 0
         );
 
         int yearForDel = !rawData.isEmpty() ? rawData.get(0).year : 0;
@@ -129,6 +129,10 @@ class UEFARating implements Ratingable, CountryRatingable {
     }
 
     private void createPositions() {
+        clubPositions.clear();
+        countryPositions.clear();
+        countries.clear();
+
         int teamIndex = 0;
         int countryIndex = 0;
         for(int i = 0; i < data.size(); ++i) {
