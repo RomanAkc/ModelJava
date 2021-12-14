@@ -26,7 +26,6 @@ public class UEFARatingTest extends BaseTest{
 
         checkRatingAndData(teamsWithCountries, data, rating);
 
-
         rating.recalcWithChangeData(generateRatingDataOneYear(teamsWithCountries));
         checkRatingAndData(teamsWithCountries, rating.getRawData(), rating);
     }

@@ -1,12 +1,15 @@
 package fss.model;
 
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 public class UEFARatingFileSaver implements RatingSaveable {
     UEFARating rating = null;
+    FileOutputStream fileStream = null;
 
-    public UEFARatingFileSaver(UEFARating rating) {
+    public UEFARatingFileSaver(UEFARating rating, FileOutputStream fileStream) {
         this.rating = rating;
+        this.fileStream = fileStream;
     }
 
     public boolean Save() {
