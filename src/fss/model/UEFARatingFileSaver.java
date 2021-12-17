@@ -1,13 +1,13 @@
 package fss.model;
 
-import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 public class UEFARatingFileSaver implements RatingSaveable {
-    UEFARating rating = null;
-    FileOutputStream fileStream = null;
+    private UEFARating rating = null;
+    private FileOutputStream fileStream = null;
 
     public UEFARatingFileSaver(UEFARating rating, FileOutputStream fileStream) {
         this.rating = rating;
@@ -18,15 +18,27 @@ public class UEFARatingFileSaver implements RatingSaveable {
         return SaveRating(rating);
     }
 
-    //Прочитать про слово throws
+    //TODO: добавить класс для проверки сериализации/десириализации.
+    //В статье https://habr.com/ru/post/431524/ сказано, что
+    //даже если внутри 2-х объектов ссылка на один и тот же
+    //объект, то он будет сериализован (и восстановлен) только один раз
+    //надо проверить данный факт
     @Override
-    public boolean SaveRating(Ratingable rtg) throws IOException {
+    public boolean SaveRating(Ratingable rtg) {
         UEFARating rating = (UEFARating)rtg;
         ArrayList<UEFARatingData> data = rating.getRawData();
 
-        fileStream.write(Integer.toString(data.size()).getBytes());
+        try {
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileStream);
+            objectOutputStream.writeInt(data.size());
+            for(var obj : data) {
+                objectOutputStream.writeObject(obj);
+            }
+            objectOutputStream.flush();
 
-
-        return false;
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
     }
 }
