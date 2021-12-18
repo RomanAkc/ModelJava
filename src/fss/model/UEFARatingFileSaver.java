@@ -14,7 +14,7 @@ public class UEFARatingFileSaver implements RatingSaveable {
         this.fileStream = fileStream;
     }
 
-    public boolean Save() throws IOException {
+    public boolean Save() {
         return SaveRating(rating);
     }
 

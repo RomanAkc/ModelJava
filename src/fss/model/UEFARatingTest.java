@@ -3,6 +3,10 @@ package fss.model;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -165,10 +169,29 @@ public class UEFARatingTest extends BaseTest{
         return (cntClubs == 0 ? 0.0 : countryPoints / (double) cntClubs) * 0.2;
     }
 
-    /*private ArrayList<UEFARatingData> generateRatingDataNewYear(ArrayList<UEFARatingData> oldData) {
-        for(var obj : oldData) {
+    @Test
+    public void UEFARatingTestSaveReadFile() {
+        HashMap<ClubTeam, Country> teamsWithCountries = generateClubTeams(8, 3);
+        ArrayList<UEFARatingData> data = generateRatingDataFiveYears(teamsWithCountries);
+        UEFARating rating = new UEFARating(data);
 
+        String fileName = "UEFARatingTestSaveReadFile.dat";
+        FileOutputStream fileStream = null;
+        try {
+            fileStream = new FileOutputStream(fileName);
+        } catch (FileNotFoundException e) {
+            Assert.assertTrue(false);
         }
-    }*/
 
+        UEFARatingFileSaver saver = new UEFARatingFileSaver(rating, fileStream);
+        saver.Save();
+
+        try {
+            fileStream.close();
+        } catch (IOException e) {
+            Assert.assertTrue(false);
+        }
+
+        Assert.assertTrue(Files.exists(Paths.get(fileName)));
+    }
 }
