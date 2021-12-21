@@ -3,6 +3,7 @@ package fss.model;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -176,6 +177,14 @@ public class UEFARatingTest extends BaseTest{
         UEFARating rating = new UEFARating(data);
 
         String fileName = "UEFARatingTestSaveReadFile.dat";
+        writeRatingToFile(rating, fileName);
+
+        Assert.assertTrue(Files.exists(Paths.get(fileName)));
+
+        //UEFARatingFileReader reader =
+    }
+
+    private void writeRatingToFile(UEFARating rating, String fileName) {
         FileOutputStream fileStream = null;
         try {
             fileStream = new FileOutputStream(fileName);
@@ -191,7 +200,27 @@ public class UEFARatingTest extends BaseTest{
         } catch (IOException e) {
             Assert.assertTrue(false);
         }
+    }
 
-        Assert.assertTrue(Files.exists(Paths.get(fileName)));
+    private UEFARating readRatingFromFile(String fileName) {
+        FileInputStream fileStream = null;
+        try {
+            fileStream = new FileInputStream(fileName);
+        } catch (FileNotFoundException e) {
+            Assert.assertTrue(false);
+            return null;
+        }
+
+        UEFARatingFileReader reader = new UEFARatingFileReader(fileStream);
+        UEFARating rating = (UEFARating)reader.ReadRating();
+        Assert.assertTrue(rating != null);
+
+        try {
+            fileStream.close();
+        } catch (IOException e) {
+            Assert.assertTrue(false);
+        }
+
+        return rating;
     }
 }
