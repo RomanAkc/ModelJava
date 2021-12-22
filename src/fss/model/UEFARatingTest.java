@@ -181,7 +181,8 @@ public class UEFARatingTest extends BaseTest{
 
         Assert.assertTrue(Files.exists(Paths.get(fileName)));
 
-        //UEFARatingFileReader reader =
+        UEFARating readedRating = readRatingFromFile(fileName);
+        compareRatingData(rating.getRawData(), readedRating.getRawData());
     }
 
     private void writeRatingToFile(UEFARating rating, String fileName) {
@@ -222,5 +223,9 @@ public class UEFARatingTest extends BaseTest{
         }
 
         return rating;
+    }
+
+    private void compareRatingData(ArrayList<UEFARatingData> data1, ArrayList<UEFARatingData> data2) {
+
     }
 }
