@@ -226,6 +226,6 @@ public class UEFARatingTest extends BaseTest{
     }
 
     private void compareRatingData(ArrayList<UEFARatingData> data1, ArrayList<UEFARatingData> data2) {
-
+        Assert.assertEquals(data1.size(), data2.size());
     }
 }
