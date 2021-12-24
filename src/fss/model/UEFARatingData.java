@@ -5,8 +5,8 @@ import java.util.HashMap;
 
 class UEFARatingData implements Serializable {
     public int year = 0;
-    public transient ClubTeam team = null;
-    public transient Country country = null;
+    public ClubTeam team = null;
+    public Country country = null;
     public double point = 0.0;
     private int teamID = -1;
     private int countryID = -1;

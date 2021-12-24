@@ -55,7 +55,7 @@ class NationalTeam extends SimpleTeam {
     }
 }
 
-class ClubTeam extends SimpleTeam {
+class ClubTeam extends SimpleTeam implements Serializable {
     private String name;
 
     public ClubTeam(int id, String name, Country country, int power, int minPower, int maxPower) {

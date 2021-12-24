@@ -1,6 +1,8 @@
 package fss.model;
 
-class Country {
+import java.io.Serializable;
+
+class Country implements Serializable {
     private int id;
     private String name;
     private WorldPart worldPart;
