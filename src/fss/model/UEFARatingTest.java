@@ -8,9 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 public class UEFARatingTest extends BaseTest{
     @Test
@@ -225,7 +223,61 @@ public class UEFARatingTest extends BaseTest{
         return rating;
     }
 
-    private void compareRatingData(ArrayList<UEFARatingData> data1, ArrayList<UEFARatingData> data2) {
-        Assert.assertEquals(data1.size(), data2.size());
+    private class CompareUEFARatingData implements Comparator<UEFARatingData> {
+        @Override
+        public int compare(UEFARatingData lhs, UEFARatingData rhs) {
+            if(lhs.year != rhs.year) {
+                return lhs.year < rhs.year ? -1 : 1;
+            }
+
+            if(lhs.team != null && rhs.team != null) {
+                if(lhs.team == rhs.team)
+                    return 0;
+
+                return lhs.team.getID() < rhs.team.getID() ? -1 : 1;
+            }
+
+            if(lhs.team != null && rhs.team == null)
+                return 1;
+
+            if(lhs.team == null && rhs.team != null)
+                return -1;
+
+            if(lhs.country == rhs.country)
+                return 0;
+
+            return lhs.country.getID() < rhs.country.getID() ? -1 : 1;
+        }
+    }
+
+    private void compareRatingData(ArrayList<UEFARatingData> d1, ArrayList<UEFARatingData> d2) {
+        Assert.assertEquals(d1.size(), d2.size());
+
+        ArrayList<UEFARatingData> data1 = new ArrayList<>(d1);
+        ArrayList<UEFARatingData> data2 = new ArrayList<>(d2);
+
+        data1.sort(new CompareUEFARatingData());
+        data2.sort(new CompareUEFARatingData());
+
+        int size = data1.size();
+        for(int i = 0; i < size; ++i) {
+            UEFARatingData obj1 = data1.get(i);
+            UEFARatingData obj2 = data2.get(i);
+
+            Assert.assertEquals(obj1.point, obj2.point, 3);
+            Assert.assertEquals(obj1.year, obj2.year);
+            Assert.assertEquals(obj1.team != null, obj2.team != null);
+            if(obj1.team != null) {
+                Assert.assertEquals(obj1.team.getID(), obj2.team.getID());
+                Assert.assertEquals(obj1.team.getName(), obj2.team.getName());
+            }
+
+            Assert.assertEquals(obj1.country != null, obj2.country != null);
+            if(obj1.country != null) {
+                Assert.assertEquals(obj1.country.getID(), obj2.country.getID());
+                Assert.assertEquals(obj1.country.getName(), obj2.country.getName());
+            }
+        }
+
     }
 }
