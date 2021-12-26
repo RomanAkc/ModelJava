@@ -105,7 +105,7 @@ public class UEFARatingTest extends BaseTest{
         var data = new ArrayList<UEFARatingData>();
 
         HashSet<Country> usedCountries = new HashSet<>();
-        double pointCountry = 1.0;
+        double pointCountry;
         double pointClub = 3.0;
         double addPoint = 0.0;
         for(var obj : teamsWithCountries.entrySet()) {
@@ -124,10 +124,10 @@ public class UEFARatingTest extends BaseTest{
         return data;
     }
 
-    private class CountryPointData
+    private static class CountryPointData
     {
-        public double points = 0.0;
-        public int cntTeams = 0;
+        public double points;
+        public int cntTeams;
 
         public CountryPointData(double points, int cntTeams) {
             this.points = points;
@@ -179,8 +179,12 @@ public class UEFARatingTest extends BaseTest{
 
         Assert.assertTrue(Files.exists(Paths.get(fileName)));
 
-        UEFARating readedRating = readRatingFromFile(fileName);
-        compareRatingData(rating.getRawData(), readedRating.getRawData());
+        UEFARating readRating = readRatingFromFile(fileName);
+        if(readRating != null) {
+            compareRatingData(rating.getRawData(), readRating.getRawData());
+        } else {
+            Assert.fail();
+        }
     }
 
     private void writeRatingToFile(UEFARating rating, String fileName) {
@@ -188,7 +192,7 @@ public class UEFARatingTest extends BaseTest{
         try {
             fileStream = new FileOutputStream(fileName);
         } catch (FileNotFoundException e) {
-            Assert.assertTrue(false);
+            Assert.fail();
         }
 
         UEFARatingFileSaver saver = new UEFARatingFileSaver(rating, fileStream);
@@ -197,33 +201,33 @@ public class UEFARatingTest extends BaseTest{
         try {
             fileStream.close();
         } catch (IOException e) {
-            Assert.assertTrue(false);
+            Assert.fail();
         }
     }
 
     private UEFARating readRatingFromFile(String fileName) {
-        FileInputStream fileStream = null;
+        FileInputStream fileStream;
         try {
             fileStream = new FileInputStream(fileName);
         } catch (FileNotFoundException e) {
-            Assert.assertTrue(false);
+            Assert.fail();
             return null;
         }
 
         UEFARatingFileReader reader = new UEFARatingFileReader(fileStream);
         UEFARating rating = (UEFARating)reader.ReadRating();
-        Assert.assertTrue(rating != null);
+        Assert.assertNotNull(rating);
 
         try {
             fileStream.close();
         } catch (IOException e) {
-            Assert.assertTrue(false);
+            Assert.fail();
         }
 
         return rating;
     }
 
-    private class CompareUEFARatingData implements Comparator<UEFARatingData> {
+    private static class CompareUEFARatingData implements Comparator<UEFARatingData> {
         @Override
         public int compare(UEFARatingData lhs, UEFARatingData rhs) {
             if(lhs.year != rhs.year) {
@@ -237,10 +241,10 @@ public class UEFARatingTest extends BaseTest{
                 return lhs.team.getID() < rhs.team.getID() ? -1 : 1;
             }
 
-            if(lhs.team != null && rhs.team == null)
+            if(lhs.team != null)
                 return 1;
 
-            if(lhs.team == null && rhs.team != null)
+            if(rhs.team != null)
                 return -1;
 
             if(lhs.country == rhs.country)
