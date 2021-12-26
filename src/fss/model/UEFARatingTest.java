@@ -12,24 +12,14 @@ import java.util.*;
 
 public class UEFARatingTest extends BaseTest{
     @Test
-    public void UEFARatingTestOneYear() {
-        var teamsWithCountries = generateClubTeams(8, 3);
-
-        var data = generateRatingDataOneYear(teamsWithCountries);
-        var rating = new UEFARating(data);
-
-        checkRatingAndData(teamsWithCountries, data, rating);
-    }
-
-    @Test
     public void UEFARatingTestFiveYears() {
         HashMap<ClubTeam, Country> teamsWithCountries = generateClubTeams(8, 3);
-        ArrayList<UEFARatingData> data = generateRatingDataFiveYears(teamsWithCountries);
+        ArrayList<UEFARatingData> data = generateRatingDataForYears(teamsWithCountries, 2016, 2021);
         UEFARating rating = new UEFARating(data);
 
         checkRatingAndData(teamsWithCountries, data, rating);
 
-        rating.recalcWithChangeData(generateRatingDataOneYear(teamsWithCountries));
+        rating.recalcWithChangeData(generateRatingDataForYears(teamsWithCountries, 2022, 2022));
         checkRatingAndData(teamsWithCountries, rating.getRawData(), rating);
     }
 
@@ -101,29 +91,6 @@ public class UEFARatingTest extends BaseTest{
         return result;
     }
 
-    private ArrayList<UEFARatingData> generateRatingDataOneYear(HashMap<ClubTeam, Country> teamsWithCountries) {
-        var data = new ArrayList<UEFARatingData>();
-
-        HashSet<Country> usedCountries = new HashSet<>();
-        double pointCountry;
-        double pointClub = 3.0;
-        double addPoint = 0.0;
-        for(var obj : teamsWithCountries.entrySet()) {
-            if(!usedCountries.contains(obj.getValue())) {
-                var currentCountry = obj.getValue();
-                usedCountries.add(currentCountry);
-                pointCountry = 1.0;
-                pointClub = 3.0;
-                data.add(new UEFARatingData(2021, currentCountry, pointCountry + addPoint));
-            }
-
-            data.add(new UEFARatingData(2021, obj.getKey(), pointClub + addPoint));
-            addPoint += 0.1;
-        }
-
-        return data;
-    }
-
     private static class CountryPointData
     {
         public double points;
@@ -135,10 +102,10 @@ public class UEFARatingTest extends BaseTest{
         }
     }
 
-    private ArrayList<UEFARatingData> generateRatingDataFiveYears(HashMap<ClubTeam, Country> teamsWithCountries) {
+    private ArrayList<UEFARatingData> generateRatingDataForYears(HashMap<ClubTeam, Country> teamsWithCountries, int yearStart, int yearEnd) {
         var data = new ArrayList<UEFARatingData>();
 
-        for(int year = 2016; year <= 2020; ++year) {
+        for(int year = yearStart; year <= yearEnd; ++year) {
             HashMap<Country, CountryPointData> countriesPoints = new HashMap<>();
 
             for(var kv : teamsWithCountries.entrySet()) {
@@ -171,7 +138,7 @@ public class UEFARatingTest extends BaseTest{
     @Test
     public void UEFARatingTestSaveReadFile() {
         HashMap<ClubTeam, Country> teamsWithCountries = generateClubTeams(8, 3);
-        ArrayList<UEFARatingData> data = generateRatingDataFiveYears(teamsWithCountries);
+        ArrayList<UEFARatingData> data = generateRatingDataForYears(teamsWithCountries, 2016, 2021);
         UEFARating rating = new UEFARating(data);
 
         String fileName = "UEFARatingTestSaveReadFile.dat";
@@ -183,6 +150,12 @@ public class UEFARatingTest extends BaseTest{
         if(readRating != null) {
             compareRatingData(rating.getRawData(), readRating.getRawData());
         } else {
+            Assert.fail();
+        }
+
+        try {
+            Files.delete(Paths.get(fileName));
+        } catch (IOException e) {
             Assert.fail();
         }
     }
@@ -268,8 +241,9 @@ public class UEFARatingTest extends BaseTest{
             UEFARatingData obj1 = data1.get(i);
             UEFARatingData obj2 = data2.get(i);
 
-            Assert.assertEquals(obj1.point, obj2.point, 3);
             Assert.assertEquals(obj1.year, obj2.year);
+            Assert.assertEquals(obj1.point, obj2.point, 3);
+
             Assert.assertEquals(obj1.team != null, obj2.team != null);
             if(obj1.team != null) {
                 Assert.assertEquals(obj1.team.getID(), obj2.team.getID());
@@ -282,6 +256,5 @@ public class UEFARatingTest extends BaseTest{
                 Assert.assertEquals(obj1.country.getName(), obj2.country.getName());
             }
         }
-
     }
 }
