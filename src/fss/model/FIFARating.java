@@ -1,7 +1,6 @@
 package fss.model;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class FIFARating implements Ratingable {
     /*
@@ -36,6 +35,21 @@ public class FIFARating implements Ratingable {
     Если в матчах стадий плей-офф финальных турниров результат команды окажется хуже ожидаемого (поражение или победа по пенальти над существенно более слабой командой), то её рейтинг не изменяется.
     */
 
+    private static class DoublePair {
+        public double valHome = 0.0;
+        public double valAway = 0.0;
+
+        public DoublePair() {
+        }
+
+        public DoublePair(double valHome, double valAway) {
+            this.valHome = valHome;
+            this.valAway = valAway;
+        }
+    }
+
+    private HashMap<NationalTeam, Double> ratingByNational = new HashMap<>();
+
     static HashMap<FIFAMeetImportance, Integer> meetCoeff = new HashMap<>() {{
        put(FIFAMeetImportance.FRIENDLY_OUT, 5);
        put(FIFAMeetImportance.FRIENDLY_IN, 10);
@@ -54,7 +68,46 @@ public class FIFARating implements Ratingable {
     }
 
     public void addMeet(Gameable meet, FIFAMeetImportance importance) {
+        if( !(meet.getTeamHome() instanceof NationalTeam) ) {
+            throw new IllegalArgumentException("FIFARating add meet teamHome is not NationalTeam");
+        }
+
+        if( !(meet.getTeamAway() instanceof NationalTeam) ) {
+            throw new IllegalArgumentException("FIFARating add meet bad teamAway is not NationalTeam");
+        }
+
+        double curRatingHome = ratingByNational.get(meet.getTeamHome());
+        double curRatingAway = ratingByNational.get(meet.getTeamAway());
+
+
+
 
         int I = meetCoeff.get(importance);
+    }
+
+    private DoublePair calcWe(double ratingHome, double ratingAway) {
+        return new DoublePair(calcWeOneTeam(ratingHome, ratingAway), calcWeOneTeam(ratingAway, ratingHome));
+    }
+
+    private double calcWeOneTeam(double ratingHome, double ratingAway) {
+        return 1 / (Math.pow(10.0, -(ratingHome - ratingAway) / 600.0) + 1);
+    }
+
+    private DoublePair calcW(Gameable meet) {
+        if(meet instanceof Meet) {
+            return calcWForMeet((Meet) meet);
+        }
+
+        throw new IllegalArgumentException("FIFARating calcW meet's instance is not support");
+    }
+
+    private DoublePair calcWForMeet(Meet meet) {
+        if(meet.isDraw()) {
+            return new DoublePair(0.5, 0.5);
+        } else if(meet.isWinnerHomeTeam()) {
+            return new DoublePair(1.0, 0.0);
+        }
+
+        return new DoublePair(0.0, 1.0);
     }
 }
