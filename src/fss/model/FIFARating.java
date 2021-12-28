@@ -50,16 +50,16 @@ public class FIFARating implements Ratingable {
 
     private HashMap<NationalTeam, Double> ratingByNational = new HashMap<>();
 
-    static HashMap<FIFAMeetImportance, Integer> meetCoeff = new HashMap<>() {{
-       put(FIFAMeetImportance.FRIENDLY_OUT, 5);
-       put(FIFAMeetImportance.FRIENDLY_IN, 10);
-       put(FIFAMeetImportance.NATION_LEAGUE_GROUP, 15);
-       put(FIFAMeetImportance.NATION_LEAGUE_PLAYOFF, 25);
-       put(FIFAMeetImportance.QUALIFYING, 25);
-       put(FIFAMeetImportance.CONFEDERATION_UNDER14, 35);
-       put(FIFAMeetImportance.CONFEDERATION_BEGINFROM14, 40);
-       put(FIFAMeetImportance.WORLD_UNDER14, 50);
-       put(FIFAMeetImportance.WORLD_BEGINFROM14, 60);
+    static HashMap<FIFAMeetImportance, Double> meetCoeff = new HashMap<>() {{
+       put(FIFAMeetImportance.FRIENDLY_OUT, 5.0);
+       put(FIFAMeetImportance.FRIENDLY_IN, 10.0);
+       put(FIFAMeetImportance.NATION_LEAGUE_GROUP, 15.0);
+       put(FIFAMeetImportance.NATION_LEAGUE_PLAYOFF, 25.0);
+       put(FIFAMeetImportance.QUALIFYING, 25.0);
+       put(FIFAMeetImportance.CONFEDERATION_UNDER14, 35.0);
+       put(FIFAMeetImportance.CONFEDERATION_BEGINFROM14, 40.0);
+       put(FIFAMeetImportance.WORLD_UNDER14, 50.0);
+       put(FIFAMeetImportance.WORLD_BEGINFROM14, 60.0);
     }};
 
     @Override
@@ -76,13 +76,25 @@ public class FIFARating implements Ratingable {
             throw new IllegalArgumentException("FIFARating add meet bad teamAway is not NationalTeam");
         }
 
-        double curRatingHome = ratingByNational.get(meet.getTeamHome());
-        double curRatingAway = ratingByNational.get(meet.getTeamAway());
+        if(!ratingByNational.containsKey(meet.getTeamHome()))
+            ratingByNational.put((NationalTeam) meet.getTeamHome(), 0.0);
 
+        if(!ratingByNational.containsKey(meet.getTeamAway()))
+            ratingByNational.put((NationalTeam) meet.getTeamAway(), 0.0);
 
+        double P_beforeHome = ratingByNational.get(meet.getTeamHome());
+        double P_beforeAway = ratingByNational.get(meet.getTeamAway());
 
+        double I = meetCoeff.get(importance);
 
-        int I = meetCoeff.get(importance);
+        DoublePair W_e = calcWe(P_beforeHome, P_beforeAway);
+        DoublePair W = calcW(meet);
+
+        double PHome = P_beforeHome + I * (W.valHome - W_e.valHome);
+        double PAway = P_beforeAway + I * (W.valAway - W_e.valAway);
+
+        ratingByNational.put((NationalTeam) meet.getTeamHome(), PHome);
+        ratingByNational.put((NationalTeam) meet.getTeamAway(), PAway);
     }
 
     private DoublePair calcWe(double ratingHome, double ratingAway) {
@@ -96,6 +108,10 @@ public class FIFARating implements Ratingable {
     private DoublePair calcW(Gameable meet) {
         if(meet instanceof Meet) {
             return calcWForMeet((Meet) meet);
+        } else if(meet instanceof WinMeet) {
+            return calcWForWinMeet((WinMeet) meet);
+        } else if(meet instanceof WinTwoMeet) {
+            return calcWForWinTwoMeet((WinTwoMeet) meet);
         }
 
         throw new IllegalArgumentException("FIFARating calcW meet's instance is not support");
@@ -109,5 +125,41 @@ public class FIFARating implements Ratingable {
         }
 
         return new DoublePair(0.0, 1.0);
+    }
+
+    private DoublePair calcWForWinMeet(WinMeet meet) {
+        if(meet.isWinnerHomeTeamWOPen()) {
+            return new DoublePair(1.0, 0.0);
+        } else if(meet.isWinnerHomeTeam()) {
+            return new DoublePair(0.75, 0.5);
+        } else if(meet.isDrawWOPen()) {
+            return new DoublePair(0.5, 0.75);
+        }
+
+        return new DoublePair(0.0, 1.0);
+    }
+
+    private DoublePair calcWForWinTwoMeet(WinTwoMeet meet) {
+        DoublePair result = new DoublePair();
+
+        if(meet.isWinnerHomeTeamFirstMeet()) {
+            result.valHome += 1.0;
+        } else if(meet.isDrawFirstMeet()) {
+            result.valHome += 0.5;
+            result.valAway += 0.5;
+        } else {
+            result.valAway += 1.0;
+        }
+
+        if(meet.isWinnerHomeTeamSecondMeet()) {
+            result.valAway += 1.0;
+        } else if(meet.isDrawSecondMeet()) {
+            result.valHome += 0.5;
+            result.valAway += 0.5;
+        } else {
+            result.valHome += 1.0;
+        }
+
+        return result;
     }
 }
