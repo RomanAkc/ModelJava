@@ -1,6 +1,8 @@
 package fss.model;
 
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.TreeSet;
 
 public class FIFARating implements Ratingable {
     /*
@@ -48,7 +50,25 @@ public class FIFARating implements Ratingable {
         }
     }
 
+    private static class RatingData {
+        public double rating;
+        public NationalTeam team;
+
+        public RatingData(double rating, NationalTeam team) {
+            this.rating = rating;
+            this.team = team;
+        }
+    }
+
     private HashMap<NationalTeam, Double> ratingByNational = new HashMap<>();
+    private TreeSet<RatingData> ratingData = new TreeSet<>((lhs, rhs) -> {
+        if(lhs.rating < rhs.rating) {
+            return -1;
+        } else if(lhs.rating > rhs.rating) {
+            return 1;
+        }
+        return 0;
+    });
 
     static HashMap<FIFAMeetImportance, Double> meetCoeff = new HashMap<>() {{
        put(FIFAMeetImportance.FRIENDLY_OUT, 5.0);
@@ -64,16 +84,20 @@ public class FIFARating implements Ratingable {
 
     @Override
     public int getTeamPosition(SimpleTeam team) {
+        if( !(team instanceof NationalTeam) || !ratingByNational.containsKey(team)) {
+            return Integer.MAX_VALUE;
+        }
+
         return 0;
     }
 
     public void addMeet(Gameable meet, FIFAMeetImportance importance) {
         if( !(meet.getTeamHome() instanceof NationalTeam) ) {
-            throw new IllegalArgumentException("FIFARating add meet teamHome is not NationalTeam");
+            throw new IllegalArgumentException("FIFARating.addMeet teamHome is not NationalTeam");
         }
 
         if( !(meet.getTeamAway() instanceof NationalTeam) ) {
-            throw new IllegalArgumentException("FIFARating add meet bad teamAway is not NationalTeam");
+            throw new IllegalArgumentException("FIFARating.addMeet teamAway is not NationalTeam");
         }
 
         if(!ratingByNational.containsKey(meet.getTeamHome()))
@@ -114,7 +138,7 @@ public class FIFARating implements Ratingable {
             return calcWForWinTwoMeet((WinTwoMeet) meet);
         }
 
-        throw new IllegalArgumentException("FIFARating calcW meet's instance is not support");
+        throw new IllegalArgumentException("FIFARating.calcW meet's instance is not support");
     }
 
     private DoublePair calcWForMeet(Meet meet) {
@@ -161,5 +185,16 @@ public class FIFARating implements Ratingable {
         }
 
         return result;
+    }
+
+    private void updateRatingData(NationalTeam team, double rating) {
+        if(ratingByNational.containsKey(team)) {
+            double oldRating = ratingByNational.get(team);
+            ratingData.removeIf(data -> data.rating == oldRating && data.team == team);
+            ratingByNational.remove(team);
+        }
+
+        ratingData.add(new RatingData(rating, team));
+        ratingByNational.put(team, rating);
     }
 }
