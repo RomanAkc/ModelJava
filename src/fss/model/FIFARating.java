@@ -1,7 +1,7 @@
 package fss.model;
 
-import java.util.Comparator;
 import java.util.HashMap;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class FIFARating implements Ratingable {
@@ -37,6 +37,41 @@ public class FIFARating implements Ratingable {
     Если в матчах стадий плей-офф финальных турниров результат команды окажется хуже ожидаемого (поражение или победа по пенальти над существенно более слабой командой), то её рейтинг не изменяется.
     */
 
+    static HashMap<FIFAMeetImportance, Double> meetCoeff = new HashMap<>() {{
+        put(FIFAMeetImportance.FRIENDLY_OUT, 5.0);
+        put(FIFAMeetImportance.FRIENDLY_IN, 10.0);
+        put(FIFAMeetImportance.NATION_LEAGUE_GROUP, 15.0);
+        put(FIFAMeetImportance.NATION_LEAGUE_PLAYOFF, 25.0);
+        put(FIFAMeetImportance.QUALIFYING, 25.0);
+        put(FIFAMeetImportance.CONFEDERATION_UNDER14, 35.0);
+        put(FIFAMeetImportance.CONFEDERATION_BEGINFROM14, 40.0);
+        put(FIFAMeetImportance.WORLD_UNDER14, 50.0);
+        put(FIFAMeetImportance.WORLD_BEGINFROM14, 60.0);
+    }};
+
+    private HashMap<NationalTeam, Double> ratingByNational = new HashMap<>();
+    private TreeSet<RatingData> ratingData = new TreeSet<>((lhs, rhs) -> {
+        if(lhs.rating < rhs.rating) {
+            return 1;
+        } else if(lhs.rating > rhs.rating) {
+            return -1;
+        }
+
+        if(lhs.team.getID() < rhs.team.getID()) {
+            return 1;
+        }
+
+        return -1;
+    });
+
+    public FIFARating(HashMap<NationalTeam, Double> ratingByNational) {
+        this.ratingByNational = ratingByNational;
+
+        for(var kv : ratingByNational.entrySet()) {
+            ratingData.add(new RatingData(kv.getValue(), kv.getKey()));
+        }
+    }
+
     private static class DoublePair {
         public double valHome = 0.0;
         public double valAway = 0.0;
@@ -60,35 +95,16 @@ public class FIFARating implements Ratingable {
         }
     }
 
-    private HashMap<NationalTeam, Double> ratingByNational = new HashMap<>();
-    private TreeSet<RatingData> ratingData = new TreeSet<>((lhs, rhs) -> {
-        if(lhs.rating < rhs.rating) {
-            return -1;
-        } else if(lhs.rating > rhs.rating) {
-            return 1;
-        }
-        return 0;
-    });
-
-    static HashMap<FIFAMeetImportance, Double> meetCoeff = new HashMap<>() {{
-       put(FIFAMeetImportance.FRIENDLY_OUT, 5.0);
-       put(FIFAMeetImportance.FRIENDLY_IN, 10.0);
-       put(FIFAMeetImportance.NATION_LEAGUE_GROUP, 15.0);
-       put(FIFAMeetImportance.NATION_LEAGUE_PLAYOFF, 25.0);
-       put(FIFAMeetImportance.QUALIFYING, 25.0);
-       put(FIFAMeetImportance.CONFEDERATION_UNDER14, 35.0);
-       put(FIFAMeetImportance.CONFEDERATION_BEGINFROM14, 40.0);
-       put(FIFAMeetImportance.WORLD_UNDER14, 50.0);
-       put(FIFAMeetImportance.WORLD_BEGINFROM14, 60.0);
-    }};
-
     @Override
     public int getTeamPosition(SimpleTeam team) {
         if( !(team instanceof NationalTeam) || !ratingByNational.containsKey(team)) {
             return Integer.MAX_VALUE;
         }
 
-        return 0;
+        NationalTeam nationalTeam = (NationalTeam) team;
+        double rating = ratingByNational.get(nationalTeam);
+        SortedSet<RatingData> head = ratingData.headSet(new RatingData(rating, nationalTeam));
+        return head.size() + 1;
     }
 
     public void addMeet(Gameable meet, FIFAMeetImportance importance) {
@@ -117,8 +133,8 @@ public class FIFARating implements Ratingable {
         double PHome = P_beforeHome + I * (W.valHome - W_e.valHome);
         double PAway = P_beforeAway + I * (W.valAway - W_e.valAway);
 
-        ratingByNational.put((NationalTeam) meet.getTeamHome(), PHome);
-        ratingByNational.put((NationalTeam) meet.getTeamAway(), PAway);
+        updateRatingData((NationalTeam) meet.getTeamHome(), PHome);
+        updateRatingData((NationalTeam) meet.getTeamAway(), PAway);
     }
 
     private DoublePair calcWe(double ratingHome, double ratingAway) {
