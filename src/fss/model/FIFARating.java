@@ -37,7 +37,7 @@ public class FIFARating implements Ratingable {
     Если в матчах стадий плей-офф финальных турниров результат команды окажется хуже ожидаемого (поражение или победа по пенальти над существенно более слабой командой), то её рейтинг не изменяется.
     */
 
-    static HashMap<FIFAMeetImportance, Double> meetCoeff = new HashMap<>() {{
+    static final HashMap<FIFAMeetImportance, Double> meetCoeff = new HashMap<>() {{
         put(FIFAMeetImportance.FRIENDLY_OUT, 5.0);
         put(FIFAMeetImportance.FRIENDLY_IN, 10.0);
         put(FIFAMeetImportance.NATION_LEAGUE_GROUP, 15.0);
@@ -49,8 +49,12 @@ public class FIFARating implements Ratingable {
         put(FIFAMeetImportance.WORLD_BEGINFROM14, 60.0);
     }};
 
-    private HashMap<NationalTeam, Double> ratingByNational = new HashMap<>();
+    private HashMap<NationalTeam, Double> ratingByNational;
     private TreeSet<RatingData> ratingData = new TreeSet<>((lhs, rhs) -> {
+        if(lhs == rhs) {
+            return 0;
+        }
+
         if(lhs.rating < rhs.rating) {
             return 1;
         } else if(lhs.rating > rhs.rating) {
@@ -63,14 +67,6 @@ public class FIFARating implements Ratingable {
 
         return -1;
     });
-
-    public FIFARating(HashMap<NationalTeam, Double> ratingByNational) {
-        this.ratingByNational = ratingByNational;
-
-        for(var kv : ratingByNational.entrySet()) {
-            ratingData.add(new RatingData(kv.getValue(), kv.getKey()));
-        }
-    }
 
     private static class DoublePair {
         public double valHome = 0.0;
@@ -86,12 +82,20 @@ public class FIFARating implements Ratingable {
     }
 
     private static class RatingData {
-        public double rating;
-        public NationalTeam team;
+        public final double rating;
+        public final NationalTeam team;
 
         public RatingData(double rating, NationalTeam team) {
             this.rating = rating;
             this.team = team;
+        }
+    }
+
+    public FIFARating(HashMap<NationalTeam, Double> ratingByNational) {
+        this.ratingByNational = ratingByNational;
+
+        for(var kv : ratingByNational.entrySet()) {
+            ratingData.add(new RatingData(kv.getValue(), kv.getKey()));
         }
     }
 
@@ -116,14 +120,17 @@ public class FIFARating implements Ratingable {
             throw new IllegalArgumentException("FIFARating.addMeet teamAway is not NationalTeam");
         }
 
-        if(!ratingByNational.containsKey(meet.getTeamHome()))
-            ratingByNational.put((NationalTeam) meet.getTeamHome(), 0.0);
+        NationalTeam teamHome = (NationalTeam) meet.getTeamHome();
+        NationalTeam teamAway = (NationalTeam) meet.getTeamAway();
 
-        if(!ratingByNational.containsKey(meet.getTeamAway()))
-            ratingByNational.put((NationalTeam) meet.getTeamAway(), 0.0);
+        if(!ratingByNational.containsKey(teamHome))
+            ratingByNational.put(teamAway, 0.0);
 
-        double P_beforeHome = ratingByNational.get(meet.getTeamHome());
-        double P_beforeAway = ratingByNational.get(meet.getTeamAway());
+        if(!ratingByNational.containsKey(teamHome))
+            ratingByNational.put(teamAway, 0.0);
+
+        double P_beforeHome = ratingByNational.get(teamHome);
+        double P_beforeAway = ratingByNational.get(teamAway);
 
         double I = meetCoeff.get(importance);
 
@@ -133,8 +140,12 @@ public class FIFARating implements Ratingable {
         double PHome = P_beforeHome + I * (W.valHome - W_e.valHome);
         double PAway = P_beforeAway + I * (W.valAway - W_e.valAway);
 
-        updateRatingData((NationalTeam) meet.getTeamHome(), PHome);
-        updateRatingData((NationalTeam) meet.getTeamAway(), PAway);
+        updateRatingData(teamHome, PHome);
+        updateRatingData(teamAway, PAway);
+    }
+
+    public HashMap<NationalTeam, Double> getRawData() {
+        return ratingByNational;
     }
 
     private DoublePair calcWe(double ratingHome, double ratingAway) {
