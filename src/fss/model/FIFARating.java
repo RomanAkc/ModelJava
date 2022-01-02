@@ -1,10 +1,11 @@
 package fss.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-public class FIFARating implements Ratingable {
+public class FIFARating implements Ratingable, Serializable {
     /*
     Правила расчета:
     P=P_before+I*(W-W_e), где
@@ -81,7 +82,7 @@ public class FIFARating implements Ratingable {
         }
     }
 
-    private static class RatingData {
+    private static class RatingData implements Serializable {
         public final double rating;
         public final NationalTeam team;
 
