@@ -340,6 +340,6 @@ public class BaseTest {
     }
 
     public Country generateCountryWithID(int id) {
-        return new Country(id, "Country" + Integer.toString(id), WorldPart.EUROPE);
+        return new Country(id, "Country" + id, WorldPart.EUROPE);
     }
 }
