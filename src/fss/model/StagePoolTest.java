@@ -3,16 +3,13 @@ package fss.model;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.TreeSet;
 
 public class StagePoolTest extends BaseTest {
     @Test
     public void calcStagePoolPlayOff() {
-        var teams = generateTeams(8);
+        var teams = generateClubTeams(8);
         calcStagePoolPlayOff(teams, true);
         calcStagePoolPlayOff(teams, false);
     }
@@ -39,7 +36,7 @@ public class StagePoolTest extends BaseTest {
 
     @Test
     public void calcStagePoolCircle() {
-        var teams = generateTeams(8);
+        var teams = generateClubTeams(8);
         calcStagePoolCircle(teams, 1);
         calcStagePoolCircle(teams, 2);
         calcStagePoolCircle(teams, 3);
@@ -59,7 +56,7 @@ public class StagePoolTest extends BaseTest {
 
     @Test
     public void calcStagePoolGroups() {
-        var teams = generateTeams(51);
+        var teams = generateClubTeams(51);
         var rating = new RatingByTeamOrder(teams);
         var stagePool = new GroupsStagePool("Test", 10, teams, rating, 2);
         stagePool.calc();

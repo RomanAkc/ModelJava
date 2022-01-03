@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 public class FIFARatingFileSaver implements RatingSaveable {
-    private FIFARating rating;
-    private FileOutputStream fileStream;
+    private final FIFARating rating;
+    private final FileOutputStream fileStream;
 
     public FIFARatingFileSaver(FIFARating rating, FileOutputStream fileStream) {
         this.rating = rating;

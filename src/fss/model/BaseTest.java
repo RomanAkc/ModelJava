@@ -301,7 +301,7 @@ public class BaseTest {
         }
     }
 
-    protected ArrayList<SimpleTeam> generateTeams(int cnt) {
+    protected ArrayList<SimpleTeam> generateClubTeams(int cnt) {
         var country = generateCounty();
         var teams = new ArrayList<SimpleTeam>();
         for(int i = 0; i < cnt; ++i) {
@@ -310,7 +310,7 @@ public class BaseTest {
         return teams;
     }
 
-    protected ArrayList<SimpleTeam> generateTeamsWithPower(int cnt, int power) {
+    protected ArrayList<SimpleTeam> generateClubTeamsWithPower(int cnt, int power) {
         var country = generateCounty();
         var teams = new ArrayList<SimpleTeam>();
         for(int i = 0; i < cnt; ++i) {
@@ -323,7 +323,7 @@ public class BaseTest {
         return generateCountryWithID(1);
     }
 
-    protected HashMap<ClubTeam, Country> generateClubTeams(int cntCountries, int cntClubForCountry) {
+    protected HashMap<ClubTeam, Country> generateClubTeamsWithCountries(int cntCountries, int cntClubForCountry) {
         var result = new HashMap<ClubTeam, Country>();
 
         int teamID = 1;

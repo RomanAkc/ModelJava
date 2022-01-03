@@ -13,7 +13,7 @@ import java.util.*;
 public class UEFARatingTest extends BaseTest{
     @Test
     public void UEFARatingTestFiveYears() {
-        HashMap<ClubTeam, Country> teamsWithCountries = generateClubTeams(8, 3);
+        HashMap<ClubTeam, Country> teamsWithCountries = generateClubTeamsWithCountries(8, 3);
         ArrayList<UEFARatingData> data = generateRatingDataForYears(teamsWithCountries, 2016, 2021);
         UEFARating rating = new UEFARating(data);
 
@@ -137,7 +137,7 @@ public class UEFARatingTest extends BaseTest{
 
     @Test
     public void UEFARatingTestSaveReadFile() {
-        HashMap<ClubTeam, Country> teamsWithCountries = generateClubTeams(8, 3);
+        HashMap<ClubTeam, Country> teamsWithCountries = generateClubTeamsWithCountries(8, 3);
         ArrayList<UEFARatingData> data = generateRatingDataForYears(teamsWithCountries, 2016, 2021);
         UEFARating rating = new UEFARating(data);
 

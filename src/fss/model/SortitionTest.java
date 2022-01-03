@@ -6,7 +6,7 @@ import org.junit.Test;
 public class SortitionTest extends BaseTest {
     @Test
     public void playOffSortCntResultTeamWORating() {
-       var teams = generateTeams(4);
+       var teams = generateClubTeams(4);
        var meets = Sortition.playOffSort(teams, null, false);
        Assert.assertEquals(meets.size(), teams.size() / 2);
     }
@@ -14,7 +14,7 @@ public class SortitionTest extends BaseTest {
     @Test
     public void playOffSortWithRating() {
         int cntTeams = 8;
-        var teams = generateTeams(cntTeams);
+        var teams = generateClubTeams(cntTeams);
         var meets = Sortition.playOffSort(teams, new RatingByTeamOrder(teams), false);
 
         var head = teams.subList(0, teams.size() / 2);
@@ -28,7 +28,7 @@ public class SortitionTest extends BaseTest {
 
     @Test
     public void playOffSortBadCntTeams() {
-        var teams = generateTeams(3);
+        var teams = generateClubTeams(3);
         var sortedTeam = Sortition.playOffSort(teams, null, false);
         Assert.assertEquals(sortedTeam, null);
     }
@@ -55,13 +55,13 @@ public class SortitionTest extends BaseTest {
 
     @Test
     public void groupSortBadCnt() {
-        var teams = generateTeams(7);
+        var teams = generateClubTeams(7);
         var groups = Sortition.groupSort(teams, 4,  null);
         Assert.assertEquals(groups, null);
     }
 
     private void groupSortWORating(int cntTeams, int cntGroups) {
-        var teams = generateTeams(cntTeams);
+        var teams = generateClubTeams(cntTeams);
         var groups = Sortition.groupSort(teams, cntGroups,  null);
 
         int numTeamInGroup = cntTeams / cntGroups;
@@ -79,7 +79,7 @@ public class SortitionTest extends BaseTest {
     }
 
     private void groupSortWithRating(int cntTeams, int cntGroups) {
-        var teams = generateTeams(cntTeams);
+        var teams = generateClubTeams(cntTeams);
         var groups = Sortition.groupSort(teams, cntGroups, new RatingByTeamOrder(teams));
 
         int index = 0;
