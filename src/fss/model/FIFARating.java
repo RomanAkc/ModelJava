@@ -138,8 +138,8 @@ public class FIFARating implements Ratingable, Serializable {
         DoublePair W_e = calcWe(P_beforeHome, P_beforeAway);
         DoublePair W = calcW(meet);
 
-        double PHome = P_beforeHome + I * (W.valHome - W_e.valHome);
-        double PAway = P_beforeAway + I * (W.valAway - W_e.valAway);
+        double PHome = Math.round(P_beforeHome + I * (W.valHome - W_e.valHome));
+        double PAway = Math.round(P_beforeAway + I * (W.valAway - W_e.valAway));
 
         updateRatingData(teamHome, PHome);
         updateRatingData(teamAway, PAway);
@@ -158,18 +158,16 @@ public class FIFARating implements Ratingable, Serializable {
     }
 
     private DoublePair calcW(Gameable meet) {
-        if(meet instanceof Meet) {
-            return calcWForMeet((Meet) meet);
-        } else if(meet instanceof WinMeet) {
-            return calcWForWinMeet((WinMeet) meet);
-        } else if(meet instanceof WinTwoMeet) {
-            return calcWForWinTwoMeet((WinTwoMeet) meet);
+        if(meet instanceof WinTwoGameable) {
+            return calcWForWinTwoMeet((WinTwoGameable) meet);
+        } else if(meet instanceof WinGameable) {
+            return calcWForWinMeet((WinGameable) meet);
         }
 
-        throw new IllegalArgumentException("FIFARating.calcW meet's instance is not support");
+        return calcWForMeet(meet);
     }
 
-    private DoublePair calcWForMeet(Meet meet) {
+    private DoublePair calcWForMeet(Gameable meet) {
         if(meet.isDraw()) {
             return new DoublePair(0.5, 0.5);
         } else if(meet.isWinnerHomeTeam()) {
@@ -179,7 +177,7 @@ public class FIFARating implements Ratingable, Serializable {
         return new DoublePair(0.0, 1.0);
     }
 
-    private DoublePair calcWForWinMeet(WinMeet meet) {
+    private DoublePair calcWForWinMeet(WinGameable meet) {
         if(meet.isWinnerHomeTeamWOPen()) {
             return new DoublePair(1.0, 0.0);
         } else if(meet.isWinnerHomeTeam()) {
@@ -191,7 +189,7 @@ public class FIFARating implements Ratingable, Serializable {
         return new DoublePair(0.0, 1.0);
     }
 
-    private DoublePair calcWForWinTwoMeet(WinTwoMeet meet) {
+    private DoublePair calcWForWinTwoMeet(WinTwoGameable meet) {
         DoublePair result = new DoublePair();
 
         if(meet.isWinnerHomeTeamFirstMeet()) {

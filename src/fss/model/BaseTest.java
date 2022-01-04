@@ -342,4 +342,14 @@ public class BaseTest {
     public Country generateCountryWithID(int id) {
         return new Country(id, "Country" + id, WorldPart.EUROPE);
     }
+
+    public ArrayList<NationalTeam> genereateNational(int cnt) {
+        ArrayList<NationalTeam> result = new ArrayList<>();
+
+        for(int i = 0; i < cnt; ++i) {
+            result.add(new NationalTeam(i, new Country(i, Integer.toString(i), WorldPart.EUROPE), 30,30,30));
+        }
+
+        return result;
+    }
 }
