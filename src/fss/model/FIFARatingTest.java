@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 public class FIFARatingTest extends BaseTest {
     @Test
@@ -72,7 +74,20 @@ public class FIFARatingTest extends BaseTest {
         }
     }
 
-    private boolean compareRatingData(HashMap<NationalTeam, Double> data1, HashMap<NationalTeam, Double> data2) {
+    private boolean compareRatingData(HashMap<NationalTeam, Double> oldData, HashMap<NationalTeam, Double> newData) {
+        TreeMap<NationalTeam, Double> mapNewData = new TreeMap<>(Comparator.comparing(NationalTeam::getName));
+        mapNewData.putAll(newData);
+
+        for(var kv : oldData.entrySet()) {
+            if(!mapNewData.containsKey(kv.getKey())) {
+                return false;
+            }
+
+            if(Math.abs(kv.getValue() - mapNewData.get(kv.getKey())) != 0.0) {
+                return false;
+            }
+        }
+
         return true;
     }
 
