@@ -39,7 +39,7 @@ abstract class SimpleTeam implements Serializable {
     }
 }
 
-class NationalTeam extends SimpleTeam {
+class NationalTeam extends SimpleTeam implements Serializable {
     public NationalTeam(int id, Country country, int power, int minPower, int maxPower) {
         super(id, country, power, minPower, maxPower);
     }

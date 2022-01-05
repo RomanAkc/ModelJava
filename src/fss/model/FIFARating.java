@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-public class FIFARating implements Ratingable, Serializable {
+public class FIFARating implements Ratingable {
     /*
     Правила расчета:
     P=P_before+I*(W-W_e), где
@@ -50,8 +50,8 @@ public class FIFARating implements Ratingable, Serializable {
         put(FIFAMeetImportance.WORLD_BEGINFROM14, 60.0);
     }};
 
-    private HashMap<NationalTeam, Double> ratingByNational;
-    private TreeSet<RatingData> ratingData = new TreeSet<>((lhs, rhs) -> {
+    private final HashMap<NationalTeam, Double> ratingByNational;
+    private final TreeSet<RatingData> ratingData = new TreeSet<>((lhs, rhs) -> {
         if(lhs == rhs) {
             return 0;
         }

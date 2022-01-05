@@ -3,6 +3,7 @@ package fss.model;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.HashMap;
 
 public class FIFARatingFileSaver implements RatingSaveable {
     private final FIFARating rating;
@@ -23,7 +24,14 @@ public class FIFARatingFileSaver implements RatingSaveable {
 
         try {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileStream);
-            objectOutputStream.writeObject(rating);
+            HashMap<NationalTeam, Double> data = rating.getRawData();
+
+            objectOutputStream.writeInt(data.size());
+            for(var obj : data.entrySet()) {
+                objectOutputStream.writeObject(obj.getKey());
+                objectOutputStream.writeDouble(obj.getValue());
+            }
+
             objectOutputStream.flush();
 
             return true;

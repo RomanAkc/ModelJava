@@ -146,7 +146,7 @@ public class UEFARatingTest extends BaseTest{
 
         Assert.assertTrue(Files.exists(Paths.get(fileName)));
 
-        UEFARating readRating = readRatingFromFile(fileName);
+        UEFARating readRating = (UEFARating) readRatingFromFile(fileName);
         if(readRating != null) {
             compareRatingData(rating.getRawData(), readRating.getRawData());
         } else {
@@ -160,44 +160,16 @@ public class UEFARatingTest extends BaseTest{
         }
     }
 
-    private void writeRatingToFile(UEFARating rating, String fileName) {
-        FileOutputStream fileStream = null;
-        try {
-            fileStream = new FileOutputStream(fileName);
-        } catch (FileNotFoundException e) {
-            Assert.fail();
-        }
-
-        UEFARatingFileSaver saver = new UEFARatingFileSaver(rating, fileStream);
+    @Override
+    protected void saveRating(Ratingable rating, FileOutputStream fileStream) {
+        UEFARatingFileSaver saver = new UEFARatingFileSaver((UEFARating) rating, fileStream);
         saver.Save();
-
-        try {
-            fileStream.close();
-        } catch (IOException e) {
-            Assert.fail();
-        }
     }
 
-    private UEFARating readRatingFromFile(String fileName) {
-        FileInputStream fileStream;
-        try {
-            fileStream = new FileInputStream(fileName);
-        } catch (FileNotFoundException e) {
-            Assert.fail();
-            return null;
-        }
-
+    @Override
+    protected Ratingable readRating(FileInputStream fileStream) {
         UEFARatingFileReader reader = new UEFARatingFileReader(fileStream);
-        UEFARating rating = (UEFARating)reader.ReadRating();
-        Assert.assertNotNull(rating);
-
-        try {
-            fileStream.close();
-        } catch (IOException e) {
-            Assert.fail();
-        }
-
-        return rating;
+        return reader.ReadRating();
     }
 
     private static class CompareUEFARatingData implements Comparator<UEFARatingData> {
