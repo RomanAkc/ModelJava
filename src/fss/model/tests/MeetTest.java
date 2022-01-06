@@ -1,5 +1,9 @@
-package fss.model;
+package fss.model.tests;
 
+import fss.model.Meet;
+import fss.model.WinMeet;
+import fss.model.WinTwoMeet;
+import fss.model.tests.BaseTest;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -1,5 +1,6 @@
-package fss.model;
+package fss.model.tests;
 
+import fss.model.*;
 import org.junit.Assert;
 
 import java.io.FileInputStream;

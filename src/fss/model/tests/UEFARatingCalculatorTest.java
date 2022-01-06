@@ -1,13 +1,12 @@
-package fss.model;
+package fss.model.tests;
 
+import fss.model.*;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 /*         LC Q2 Q1 LE Q1 Q2
 1  Spain   2  1     1

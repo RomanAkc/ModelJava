@@ -1,6 +1,6 @@
 package fss.model;
 
-class WinMeet implements WinGameable {
+public class WinMeet implements WinGameable {
     private Meet meet = null;
     private Result resultAdd = null;
     private Result resultPen = null;

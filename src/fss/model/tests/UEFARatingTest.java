@@ -1,16 +1,17 @@
-package fss.model;
+package fss.model.tests;
 
+import fss.model.*;
+import fss.model.tests.BaseTest;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.*;
 
-public class UEFARatingTest extends BaseTest{
+public class UEFARatingTest extends BaseTest {
     @Test
     public void UEFARatingTestFiveYears() {
         HashMap<ClubTeam, Country> teamsWithCountries = generateClubTeamsWithCountries(8, 3);

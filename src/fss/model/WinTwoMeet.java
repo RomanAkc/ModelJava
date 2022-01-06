@@ -1,6 +1,6 @@
 package fss.model;
 
-class WinTwoMeet implements WinTwoGameable {
+public class WinTwoMeet implements WinTwoGameable {
     private Meet firstMeet = null;
     private Meet secondMeet = null;
     private Result resultAdd = null;

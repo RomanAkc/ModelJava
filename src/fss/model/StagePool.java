@@ -2,7 +2,7 @@ package fss.model;
 
 import java.util.ArrayList;
 
-abstract class StagePool {
+public abstract class StagePool {
     private StageType stageType = StageType.PLAYOFF;
     private String name;
     private ArrayList<SimpleTeam> teams = null;

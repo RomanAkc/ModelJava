@@ -22,7 +22,7 @@ public class Scheme implements Iterable<SchemePart> {
     private ArrayList<SchemePart> parts = new ArrayList<>();
     private HashMap<Integer, SchemePart> partHash = new HashMap<>();
 
-    void AddPart(SchemePart part) {
+    public void AddPart(SchemePart part) {
         parts.add(part);
         partHash.put(part.ID, part);
     }

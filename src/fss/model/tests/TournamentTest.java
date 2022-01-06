@@ -1,5 +1,7 @@
-package fss.model;
+package fss.model.tests;
 
+import fss.model.*;
+import fss.model.tests.BaseTest;
 import org.junit.Assert;
 import org.junit.Test;
 

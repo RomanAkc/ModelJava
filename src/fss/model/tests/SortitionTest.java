@@ -1,5 +1,8 @@
-package fss.model;
+package fss.model.tests;
 
+import fss.model.RatingByTeamOrder;
+import fss.model.Sortition;
+import fss.model.tests.BaseTest;
 import org.junit.Assert;
 import org.junit.Test;
 

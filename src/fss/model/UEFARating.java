@@ -32,7 +32,7 @@ import java.util.*;
   4.Сохраняем данные для вычитывания рейтинга
 * */
 
-class UEFARating implements Ratingable, CountryRatingable {
+public class UEFARating implements Ratingable, CountryRatingable {
     private ArrayList<UEFARatingData> data = null;
     private ArrayList<UEFARatingData> rawData = null;
     private HashMap<ClubTeam, Integer> clubPositions = new HashMap<>();

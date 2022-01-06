@@ -1,6 +1,6 @@
 package fss.model;
 
-class Meet implements Gameable {
+public class Meet implements Gameable {
     private SimpleTeam teamHome = null;
     private SimpleTeam teamAway = null;
     private Result result = null;

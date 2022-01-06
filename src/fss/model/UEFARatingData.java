@@ -3,7 +3,7 @@ package fss.model;
 import java.io.*;
 import java.util.HashMap;
 
-class UEFARatingData implements Serializable {
+public class UEFARatingData implements Serializable {
     public int year = 0;
     public ClubTeam team = null;
     public Country country = null;

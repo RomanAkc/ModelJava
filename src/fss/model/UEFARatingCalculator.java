@@ -2,7 +2,7 @@ package fss.model;
 
 import java.util.HashMap;
 
-class UEFARatingCalculator {
+public class UEFARatingCalculator {
     public class CountryPointData {
         public HashMap<SimpleTeam, Double> pointsByTeam = new HashMap<>();
         public Double pointsOnTeam = 0.0;

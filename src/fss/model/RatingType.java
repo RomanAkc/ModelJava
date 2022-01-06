@@ -1,6 +1,6 @@
 package fss.model;
 
-enum RatingType {
+public enum RatingType {
     NO,
     STANDART,
     BY_ORDER,

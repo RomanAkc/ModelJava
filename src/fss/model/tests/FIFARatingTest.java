@@ -1,5 +1,7 @@
-package fss.model;
+package fss.model.tests;
 
+import fss.model.*;
+import fss.model.tests.BaseTest;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -29,11 +31,10 @@ public class FIFARatingTest extends BaseTest {
     }
 
     private HashMap<NationalTeam, Double> getRatingByNational(ArrayList<NationalTeam> nationals) {
-        HashMap<NationalTeam, Double> ratingByNational = new HashMap<>() {{
+        return new HashMap<>() {{
             put(nationals.get(0), 457.0);
             put(nationals.get(1), 465.0);
         }};
-        return ratingByNational;
     }
 
     @Override
@@ -60,9 +61,9 @@ public class FIFARatingTest extends BaseTest {
 
         Assert.assertTrue(Files.exists(Paths.get(fileName)));
 
-        FIFARating readedRating = (FIFARating) readRatingFromFile(fileName);
-        if(readedRating != null) {
-            Assert.assertTrue(compareRatingData(rating.getRawData(), readedRating.getRawData()));
+        FIFARating readRating = (FIFARating) readRatingFromFile(fileName);
+        if(readRating != null) {
+            Assert.assertTrue(compareRatingData(rating.getRawData(), readRating.getRawData()));
         } else {
             Assert.fail();
         }

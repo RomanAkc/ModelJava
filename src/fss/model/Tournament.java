@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import static fss.model.StageType.NOTHING;
 
-class Tournament extends BaseTournament {
+public class Tournament extends BaseTournament {
     private Scheme scheme = null;
     private Ratingable rating = null;
     private ArrayList<StagePool> stages = new ArrayList<>();

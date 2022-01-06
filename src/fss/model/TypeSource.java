@@ -1,6 +1,6 @@
 package fss.model;
 
-enum TypeSource {
+public enum TypeSource {
     NO,
     WINNERS,
     LOSERS,

@@ -1,7 +1,7 @@
 package fss.model;
 import java.io.Serializable;
 
-abstract class SimpleTeam implements Serializable {
+public abstract class SimpleTeam implements Serializable {
     private int id;
     private Country country;
     private int power;
@@ -36,46 +36,6 @@ abstract class SimpleTeam implements Serializable {
     @Override
     public String toString() {
         return Integer.toString(getID());
-    }
-}
-
-class NationalTeam extends SimpleTeam implements Serializable {
-    public NationalTeam(int id, Country country, int power, int minPower, int maxPower) {
-        super(id, country, power, minPower, maxPower);
-    }
-
-    @Override
-    public String getName() {
-        return getCountry().getName();
-    }
-
-    @Override
-    public String toString() {
-        return getName();
-    }
-}
-
-class ClubTeam extends SimpleTeam implements Serializable {
-    private String name;
-
-    public ClubTeam(int id, String name, Country country, int power, int minPower, int maxPower) {
-        super(id, country, power, minPower, maxPower);
-        this.name = name;
-    }
-
-    public ClubTeam(int id, String name, Country country, int power) {
-        super(id, country, power, power, power);
-        this.name = name;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String toString() {
-        return getName();
     }
 }
 
