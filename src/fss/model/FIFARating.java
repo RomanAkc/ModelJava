@@ -125,9 +125,9 @@ public class FIFARating implements Ratingable {
         NationalTeam teamAway = (NationalTeam) meet.getTeamAway();
 
         if(!ratingByNational.containsKey(teamHome))
-            ratingByNational.put(teamAway, 0.0);
+            ratingByNational.put(teamHome, 0.0);
 
-        if(!ratingByNational.containsKey(teamHome))
+        if(!ratingByNational.containsKey(teamAway))
             ratingByNational.put(teamAway, 0.0);
 
         double P_beforeHome = ratingByNational.get(teamHome);

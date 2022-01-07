@@ -1,7 +1,6 @@
 package fss.model.tests;
 
 import fss.model.*;
-import fss.model.tests.BaseTest;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -16,8 +15,10 @@ import java.util.HashMap;
 import java.util.TreeMap;
 
 public class FIFARatingTest extends BaseTest {
+    static final double ratingChange = 8.0;
+
     @Test
-    public void FIFARatingTestCalculation() {
+    public void FIFARatingCalculation() {
         ArrayList<NationalTeam> nationals = genereateNational(2);
         HashMap<NationalTeam, Double> ratingByNational = getRatingByNational(nationals);
         FIFARating rating = new FIFARating(ratingByNational);
@@ -31,10 +32,13 @@ public class FIFARatingTest extends BaseTest {
     }
 
     private HashMap<NationalTeam, Double> getRatingByNational(ArrayList<NationalTeam> nationals) {
-        return new HashMap<>() {{
-            put(nationals.get(0), 457.0);
-            put(nationals.get(1), 465.0);
-        }};
+        double curValue = 457.0;
+        HashMap<NationalTeam, Double> result = new HashMap<>();
+        for(int i = 0; i < nationals.size(); ++i) {
+            result.put(nationals.get(i), curValue);
+            curValue += ratingChange;
+        }
+        return result;
     }
 
     @Override
@@ -50,7 +54,7 @@ public class FIFARatingTest extends BaseTest {
     }
 
     @Test
-    public void SaveReadFile() {
+    public void saveReadFile() {
         ArrayList<NationalTeam> nationals = genereateNational(2);
         HashMap<NationalTeam, Double> ratingByNational = getRatingByNational(nationals);
         FIFARating rating = new FIFARating(ratingByNational);
@@ -92,4 +96,16 @@ public class FIFARatingTest extends BaseTest {
         return true;
     }
 
+    @Test
+    public void checkRatingPosition() {
+        ArrayList<NationalTeam> nationals = genereateNational(170);
+        HashMap<NationalTeam, Double> ratingByNational = getRatingByNational(nationals);
+        FIFARating rating = new FIFARating(ratingByNational);
+
+        for(int i = 1; i < nationals.size(); ++i) {
+            int posI = rating.getTeamPosition(nationals.get(i));
+            int posI1 = rating.getTeamPosition(nationals.get(i - 1));
+            Assert.assertTrue(posI < posI1);
+        }
+    }
 }
