@@ -154,6 +154,29 @@ public class BaseTest {
             this.secondTeam = secondTeam;
         }
 
+        public WinMeetTest(SimpleTeam firstTeam, SimpleTeam secondTeam, int goalHome, int goalAway) {
+            this.firstTeam = firstTeam;
+            this.secondTeam = secondTeam;
+            this.mainTime = new Result(goalHome, goalAway);
+        }
+
+        public WinMeetTest(SimpleTeam firstTeam, SimpleTeam secondTeam, int goalHome, int goalAway
+                , int goalHomeAdd, int goalAwayAdd) {
+            this.firstTeam = firstTeam;
+            this.secondTeam = secondTeam;
+            this.mainTime = new Result(goalHome, goalAway);
+            this.addTime = new Result(goalHomeAdd, goalAwayAdd);
+        }
+
+        public WinMeetTest(SimpleTeam firstTeam, SimpleTeam secondTeam, int goalHome, int goalAway
+                , int goalHomeAdd, int goalAwayAdd, int goalHomePen, int goalAwayPen) {
+            this.firstTeam = firstTeam;
+            this.secondTeam = secondTeam;
+            this.mainTime = new Result(goalHome, goalAway);
+            this.addTime = new Result(goalHomeAdd, goalAwayAdd);
+            this.pen = new Result(goalHomePen, goalAwayPen);
+        }
+
         public void SetMeetResult(int goalHome, int goalAway) {
             mainTime = new Result(goalHome, goalAway);
         }
@@ -171,8 +194,8 @@ public class BaseTest {
             var goalsAway = mainTime.getGoalAway();
 
             if(addTime != null) {
-                goalsFor += addTime.getGoalAway();
-                goalsAway += addTime.getGoalHome();
+                goalsFor += addTime.getGoalHome();
+                goalsAway += addTime.getGoalAway();
             }
 
             return new Result(goalsFor, goalsAway);
@@ -215,10 +238,10 @@ public class BaseTest {
             }
 
             if(!addTime.isDraw()) {
-                return addTime.getGoalAway() > addTime.getGoalHome();
+                return addTime.getGoalHome() > addTime.getGoalAway();
             }
 
-            return pen.getGoalAway() > pen.getGoalHome();
+            return pen.getGoalHome() > pen.getGoalAway();
         }
 
         @Override

@@ -17,25 +17,74 @@ import java.util.TreeMap;
 public class FIFARatingTest extends BaseTest {
     static final double ratingChange = 8.0;
 
+    private static final class RatingGeneratedData {
+        ArrayList<NationalTeam> nationals = null;
+        HashMap<NationalTeam, Double> ratingByNational = null;
+        FIFARating rating = null;
+    }
+
     @Test
     public void FIFARatingCalculation() {
-        ArrayList<NationalTeam> nationals = genereateNational(2);
-        HashMap<NationalTeam, Double> ratingByNational = getRatingByNational(nationals);
-        FIFARating rating = new FIFARating(ratingByNational);
+        RatingGeneratedData genData = generateData(2);
 
-        rating.addMeet(new MeetTest(nationals.get(0), nationals.get(1), 1, 0), FIFAMeetImportance.WORLD_UNDER14);
+        //Gameable
+        genData.rating.addMeet(new MeetTest(genData.nationals.get(0), genData.nationals.get(1), 1, 0)
+                , FIFAMeetImportance.WORLD_UNDER14);
+        checkCalculatedValue(genData, 482.0, 440.0);
 
-        ratingByNational = rating.getRawData();
+        genData.rating.addMeet(new MeetTest(genData.nationals.get(0), genData.nationals.get(1), 0, 0)
+                , FIFAMeetImportance.WORLD_UNDER14);
+        checkCalculatedValue(genData, 480.0, 442.0);
 
-        Assert.assertEquals(ratingByNational.get(nationals.get(0)), 482.0, 0);
-        Assert.assertEquals(ratingByNational.get(nationals.get(1)), 440.0, 0);
+        genData.rating.addMeet(new MeetTest(genData.nationals.get(0), genData.nationals.get(1), 0, 1)
+                , FIFAMeetImportance.WORLD_UNDER14);
+        checkCalculatedValue(genData, 453.0, 469.0);
+
+        //WinGameable
+        genData.rating.addMeet(new WinMeetTest(genData.nationals.get(0), genData.nationals.get(1), 1, 0)
+                , FIFAMeetImportance.WORLD_BEGINFROM14);
+        checkCalculatedValue(genData, 484.0, 438.0);
+
+        genData.rating.addMeet(new WinMeetTest(genData.nationals.get(0), genData.nationals.get(1), 0, 0, 1, 0)
+                , FIFAMeetImportance.CONFEDERATION_UNDER14);
+        checkCalculatedValue(genData, 500.0, 422.0);
+
+        genData.rating.addMeet(new WinMeetTest(genData.nationals.get(0), genData.nationals.get(1), 0, 0, 0, 0, 6, 5)
+                , FIFAMeetImportance.CONFEDERATION_BEGINFROM14);
+        checkCalculatedValue(genData, 507.0, 425.0);
+
+        genData.rating.addMeet(new WinMeetTest(genData.nationals.get(0), genData.nationals.get(1), 0, 1)
+                , FIFAMeetImportance.WORLD_BEGINFROM14);
+        checkCalculatedValue(genData, 472.0, 460.0);
+
+        genData.rating.addMeet(new WinMeetTest(genData.nationals.get(0), genData.nationals.get(1), 0, 0, 0, 1)
+                , FIFAMeetImportance.FRIENDLY_IN);
+        checkCalculatedValue(genData, 467.0, 465.0);
+
+        genData.rating.addMeet(new WinMeetTest(genData.nationals.get(0), genData.nationals.get(1), 0, 0, 0, 0, 5, 6)
+                , FIFAMeetImportance.FRIENDLY_OUT);
+        checkCalculatedValue(genData, 467.0, 466.0);
+    }
+
+    private void checkCalculatedValue(RatingGeneratedData genData, double actual0, double actual1) {
+        genData.ratingByNational = genData.rating.getRawData();
+        Assert.assertEquals(genData.ratingByNational.get(genData.nationals.get(0)), actual0, 0);
+        Assert.assertEquals(genData.ratingByNational.get(genData.nationals.get(1)), actual1, 0);
+    }
+
+    private RatingGeneratedData generateData(int cntNationals) {
+        RatingGeneratedData data = new RatingGeneratedData();
+        data.nationals = genereateNational(cntNationals);
+        data.ratingByNational = getRatingByNational(data.nationals);
+        data.rating = new FIFARating(data.ratingByNational);
+        return data;
     }
 
     private HashMap<NationalTeam, Double> getRatingByNational(ArrayList<NationalTeam> nationals) {
         double curValue = 457.0;
         HashMap<NationalTeam, Double> result = new HashMap<>();
-        for(int i = 0; i < nationals.size(); ++i) {
-            result.put(nationals.get(i), curValue);
+        for (NationalTeam national : nationals) {
+            result.put(national, curValue);
             curValue += ratingChange;
         }
         return result;
@@ -55,19 +104,15 @@ public class FIFARatingTest extends BaseTest {
 
     @Test
     public void saveReadFile() {
-        ArrayList<NationalTeam> nationals = genereateNational(2);
-        HashMap<NationalTeam, Double> ratingByNational = getRatingByNational(nationals);
-        FIFARating rating = new FIFARating(ratingByNational);
-
+        RatingGeneratedData genData = generateData(170);
         String fileName = "FIFARatingTestSaveReadFile.dat";
 
-        writeRatingToFile(rating, fileName);
-
+        writeRatingToFile(genData.rating, fileName);
         Assert.assertTrue(Files.exists(Paths.get(fileName)));
 
         FIFARating readRating = (FIFARating) readRatingFromFile(fileName);
         if(readRating != null) {
-            Assert.assertTrue(compareRatingData(rating.getRawData(), readRating.getRawData()));
+            Assert.assertTrue(compareRatingData(genData.rating.getRawData(), readRating.getRawData()));
         } else {
             Assert.fail();
         }
@@ -98,13 +143,11 @@ public class FIFARatingTest extends BaseTest {
 
     @Test
     public void checkRatingPosition() {
-        ArrayList<NationalTeam> nationals = genereateNational(170);
-        HashMap<NationalTeam, Double> ratingByNational = getRatingByNational(nationals);
-        FIFARating rating = new FIFARating(ratingByNational);
+        RatingGeneratedData genData = generateData(170);
 
-        for(int i = 1; i < nationals.size(); ++i) {
-            int posI = rating.getTeamPosition(nationals.get(i));
-            int posI1 = rating.getTeamPosition(nationals.get(i - 1));
+        for(int i = 1; i < genData.nationals.size(); ++i) {
+            int posI = genData.rating.getTeamPosition(genData.nationals.get(i));
+            int posI1 = genData.rating.getTeamPosition(genData.nationals.get(i - 1));
             Assert.assertTrue(posI < posI1);
         }
     }
