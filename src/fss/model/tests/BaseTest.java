@@ -25,20 +25,24 @@ public class BaseTest {
             this.secondTeam = secondTeam;
         }
 
-        public void SetFirstMeetResult(int goalHome, int goalAway) {
+        public WinTwoMeetTest SetFirstMeetResult(int goalHome, int goalAway) {
             firstMeet = new Result(goalHome, goalAway);
+            return this;
         }
 
-        public void SetSecondMeetResult(int goalHome, int goalAway) {
+        public WinTwoMeetTest SetSecondMeetResult(int goalHome, int goalAway) {
             secondMeet = new Result(goalHome, goalAway);
+            return this;
         }
 
-        public void SetAddTimeMeetResult(int goalHome, int goalAway) {
+        public WinTwoMeetTest SetAddTimeMeetResult(int goalHome, int goalAway) {
             addTime = new Result(goalHome, goalAway);
+            return this;
         }
 
-        public void SetPenMeetResult(int goalHome, int goalAway) {
+        public WinTwoMeetTest SetPenMeetResult(int goalHome, int goalAway) {
             pen = new Result(goalHome, goalAway);
+            return this;
         }
 
         @Override
@@ -177,16 +181,19 @@ public class BaseTest {
             this.pen = new Result(goalHomePen, goalAwayPen);
         }
 
-        public void SetMeetResult(int goalHome, int goalAway) {
+        public WinMeetTest SetMeetResult(int goalHome, int goalAway) {
             mainTime = new Result(goalHome, goalAway);
+            return this;
         }
 
-        public void SetAddTimeMeetResult(int goalHome, int goalAway) {
+        public WinMeetTest SetAddTimeMeetResult(int goalHome, int goalAway) {
             addTime = new Result(goalHome, goalAway);
+            return this;
         }
 
-        public void SetPenMeetResult(int goalHome, int goalAway) {
+        public WinMeetTest SetPenMeetResult(int goalHome, int goalAway) {
             pen = new Result(goalHome, goalAway);
+            return this;
         }
 
         private Result getResultMeetWOPen() {
@@ -276,8 +283,9 @@ public class BaseTest {
             SetMeetResult(goalHome, goalAway);
         }
 
-        public void SetMeetResult(int goalHome, int goalAway) {
+        public MeetTest SetMeetResult(int goalHome, int goalAway) {
             result = new Result(goalHome, goalAway);
+            return this;
         }
 
         @Override

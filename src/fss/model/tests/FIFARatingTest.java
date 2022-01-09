@@ -64,12 +64,58 @@ public class FIFARatingTest extends BaseTest {
         genData.rating.addMeet(new WinMeetTest(genData.nationals.get(0), genData.nationals.get(1), 0, 0, 0, 0, 5, 6)
                 , FIFAMeetImportance.FRIENDLY_OUT);
         checkCalculatedValue(genData, 467.0, 466.0);
+
+        //WinTwoGameable
+        WinTwoMeetTest meet = new WinTwoMeetTest(genData.nationals.get(0), genData.nationals.get(1))
+                .SetFirstMeetResult(1, 0).SetSecondMeetResult(0, 1);
+        genData.rating.addMeet(meet, FIFAMeetImportance.NATION_LEAGUE_PLAYOFF);
+        checkCalculatedValue(genData, 491.0, 442.0);
+
+        meet = new WinTwoMeetTest(genData.nationals.get(0), genData.nationals.get(1))
+                .SetFirstMeetResult(1, 0).SetSecondMeetResult(0, 0);
+        genData.rating.addMeet(meet, FIFAMeetImportance.NATION_LEAGUE_PLAYOFF);
+        checkCalculatedValue(genData, 500.0, 433.0);
+
+        meet = new WinTwoMeetTest(genData.nationals.get(0), genData.nationals.get(1))
+                .SetFirstMeetResult(1, 0).SetSecondMeetResult(2, 0);
+        genData.rating.addMeet(meet, FIFAMeetImportance.NATION_LEAGUE_PLAYOFF);
+        checkCalculatedValue(genData, 496.0, 437.0);
+
+        meet = new WinTwoMeetTest(genData.nationals.get(0), genData.nationals.get(1))
+                .SetFirstMeetResult(0, 0).SetSecondMeetResult(1, 0);
+        genData.rating.addMeet(meet, FIFAMeetImportance.QUALIFYING);
+        checkCalculatedValue(genData, 481.0, 452.0);
+
+        meet = new WinTwoMeetTest(genData.nationals.get(0), genData.nationals.get(1))
+                .SetFirstMeetResult(0, 0).SetSecondMeetResult(1, 1).SetAddTimeMeetResult(1, 0);
+        genData.rating.addMeet(meet, FIFAMeetImportance.QUALIFYING);
+        checkCalculatedValue(genData, 479.0, 454.0);
+
+        meet = new WinTwoMeetTest(genData.nationals.get(0), genData.nationals.get(1))
+                .SetFirstMeetResult(0, 0).SetSecondMeetResult(0, 1);
+        genData.rating.addMeet(meet, FIFAMeetImportance.QUALIFYING);
+        checkCalculatedValue(genData, 490.0, 443.0);
+
+        meet = new WinTwoMeetTest(genData.nationals.get(0), genData.nationals.get(1))
+                .SetFirstMeetResult(0, 1).SetSecondMeetResult(0, 2);
+        genData.rating.addMeet(meet, FIFAMeetImportance.QUALIFYING);
+        checkCalculatedValue(genData, 488.0, 445.0);
+
+        meet = new WinTwoMeetTest(genData.nationals.get(0), genData.nationals.get(1))
+                .SetFirstMeetResult(0, 1).SetSecondMeetResult(0, 0);
+        genData.rating.addMeet(meet, FIFAMeetImportance.QUALIFYING);
+        checkCalculatedValue(genData, 474.0, 459.0);
+
+        meet = new WinTwoMeetTest(genData.nationals.get(0), genData.nationals.get(1))
+                .SetFirstMeetResult(0, 1).SetSecondMeetResult(1, 0);
+        genData.rating.addMeet(meet, FIFAMeetImportance.QUALIFYING);
+        checkCalculatedValue(genData, 449.0, 484.0);
     }
 
     private void checkCalculatedValue(RatingGeneratedData genData, double actual0, double actual1) {
         genData.ratingByNational = genData.rating.getRawData();
-        Assert.assertEquals(genData.ratingByNational.get(genData.nationals.get(0)), actual0, 0);
-        Assert.assertEquals(genData.ratingByNational.get(genData.nationals.get(1)), actual1, 0);
+        Assert.assertEquals(actual0, genData.ratingByNational.get(genData.nationals.get(0)), 0);
+        Assert.assertEquals(actual1, genData.ratingByNational.get(genData.nationals.get(1)), 0);
     }
 
     private RatingGeneratedData generateData(int cntNationals) {

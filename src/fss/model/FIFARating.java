@@ -130,13 +130,29 @@ public class FIFARating implements Ratingable {
         if(!ratingByNational.containsKey(teamAway))
             ratingByNational.put(teamAway, 0.0);
 
+        if(meet instanceof WinTwoGameable) {
+            updateRatingByMeet(meet, importance, true);
+            updateRatingByMeet(meet, importance, false);
+        } else {
+            updateRatingByMeet(meet, importance);
+        }
+    }
+
+    private void updateRatingByMeet(Gameable meet, FIFAMeetImportance importance) {
+        updateRatingByMeet(meet, importance, true);
+    }
+
+    private void updateRatingByMeet(Gameable meet, FIFAMeetImportance importance, boolean firstMeet) {
+        NationalTeam teamHome = (NationalTeam) meet.getTeamHome();
+        NationalTeam teamAway = (NationalTeam) meet.getTeamAway();
+
         double P_beforeHome = ratingByNational.get(teamHome);
         double P_beforeAway = ratingByNational.get(teamAway);
 
         double I = meetCoeff.get(importance);
 
         DoublePair W_e = calcWe(P_beforeHome, P_beforeAway);
-        DoublePair W = calcW(meet);
+        DoublePair W = calcW(meet, firstMeet);
 
         double PHome = Math.round(P_beforeHome + I * (W.valHome - W_e.valHome));
         double PAway = Math.round(P_beforeAway + I * (W.valAway - W_e.valAway));
@@ -157,9 +173,9 @@ public class FIFARating implements Ratingable {
         return 1 / (Math.pow(10.0, -(ratingHome - ratingAway) / 600.0) + 1);
     }
 
-    private DoublePair calcW(Gameable meet) {
+    private DoublePair calcW(Gameable meet, boolean firstMeet) {
         if(meet instanceof WinTwoGameable) {
-            return calcWForWinTwoMeet((WinTwoGameable) meet);
+            return calcWForWinTwoMeet((WinTwoGameable) meet, firstMeet);
         } else if(meet instanceof WinGameable) {
             return calcWForWinMeet((WinGameable) meet);
         }
@@ -189,28 +205,24 @@ public class FIFARating implements Ratingable {
         return new DoublePair(0.0, 1.0);
     }
 
-    private DoublePair calcWForWinTwoMeet(WinTwoGameable meet) {
-        DoublePair result = new DoublePair();
-
-        if(meet.isWinnerHomeTeamFirstMeet()) {
-            result.valHome += 1.0;
-        } else if(meet.isDrawFirstMeet()) {
-            result.valHome += 0.5;
-            result.valAway += 0.5;
+    private DoublePair calcWForWinTwoMeet(WinTwoGameable meet, boolean firstMeet) {
+        if(firstMeet) {
+            if(meet.isWinnerHomeTeamFirstMeet()) {
+                return new DoublePair(1.0, 0.0);
+            } else if(meet.isDrawFirstMeet()) {
+                return new DoublePair(0.5, 0.5);
+            } else {
+                return new DoublePair(0.0, 1.0);
+            }
         } else {
-            result.valAway += 1.0;
+            if(meet.isWinnerHomeTeamSecondMeet()) {
+                return new DoublePair(1.0, 0.0);
+            } else if(meet.isDrawSecondMeet()) {
+                return new DoublePair(0.5, 0.5);
+            } else {
+                return new DoublePair(0.0, 1.0);
+            }
         }
-
-        if(meet.isWinnerHomeTeamSecondMeet()) {
-            result.valAway += 1.0;
-        } else if(meet.isDrawSecondMeet()) {
-            result.valHome += 0.5;
-            result.valAway += 0.5;
-        } else {
-            result.valHome += 1.0;
-        }
-
-        return result;
     }
 
     private void updateRatingData(NationalTeam team, double rating) {
