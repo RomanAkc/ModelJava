@@ -27,7 +27,7 @@ public class FIFARatingTest extends BaseTest {
     public void FIFARatingCalculation() {
         RatingGeneratedData genData = generateData(2);
 
-        //Gameable
+        //Simple meet
         genData.rating.addMeet(new MeetTest(genData.nationals.get(0), genData.nationals.get(1), 1, 0)
                 , FIFAMeetImportance.WORLD_UNDER14);
         checkCalculatedValue(genData, 482.0, 440.0);
@@ -40,7 +40,7 @@ public class FIFARatingTest extends BaseTest {
                 , FIFAMeetImportance.WORLD_UNDER14);
         checkCalculatedValue(genData, 453.0, 469.0);
 
-        //WinGameable
+        //Meet with winner
         genData.rating.addMeet(new WinMeetTest(genData.nationals.get(0), genData.nationals.get(1), 1, 0)
                 , FIFAMeetImportance.WORLD_BEGINFROM14);
         checkCalculatedValue(genData, 484.0, 438.0);
@@ -65,7 +65,7 @@ public class FIFARatingTest extends BaseTest {
                 , FIFAMeetImportance.FRIENDLY_OUT);
         checkCalculatedValue(genData, 467.0, 466.0);
 
-        //WinTwoGameable
+        //Two meets with winner
         WinTwoMeetTest meet = new WinTwoMeetTest(genData.nationals.get(0), genData.nationals.get(1))
                 .SetFirstMeetResult(1, 0).SetSecondMeetResult(0, 1);
         genData.rating.addMeet(meet, FIFAMeetImportance.NATION_LEAGUE_PLAYOFF);
