@@ -14,7 +14,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.TreeMap;
 
-public class FIFARatingTest extends BaseTest {
+public class FIFARatingTest extends RatingTest {
     static final double ratingChange = 8.0;
 
     private static final class RatingGeneratedData {
@@ -28,85 +28,85 @@ public class FIFARatingTest extends BaseTest {
         RatingGeneratedData genData = generateData(2);
 
         //Simple meet
-        genData.rating.addMeet(new MeetTest(genData.nationals.get(0), genData.nationals.get(1), 1, 0)
+        genData.rating.addMeet(new MeetMock(genData.nationals.get(0), genData.nationals.get(1), 1, 0)
                 , FIFAMeetImportance.WORLD_UNDER14);
         checkCalculatedValue(genData, 482.0, 440.0);
 
-        genData.rating.addMeet(new MeetTest(genData.nationals.get(0), genData.nationals.get(1), 0, 0)
+        genData.rating.addMeet(new MeetMock(genData.nationals.get(0), genData.nationals.get(1), 0, 0)
                 , FIFAMeetImportance.WORLD_UNDER14);
         checkCalculatedValue(genData, 480.0, 442.0);
 
-        genData.rating.addMeet(new MeetTest(genData.nationals.get(0), genData.nationals.get(1), 0, 1)
+        genData.rating.addMeet(new MeetMock(genData.nationals.get(0), genData.nationals.get(1), 0, 1)
                 , FIFAMeetImportance.WORLD_UNDER14);
         checkCalculatedValue(genData, 453.0, 469.0);
 
         //Meet with winner
-        genData.rating.addMeet(new WinMeetTest(genData.nationals.get(0), genData.nationals.get(1), 1, 0)
+        genData.rating.addMeet(new WinMeetMock(genData.nationals.get(0), genData.nationals.get(1), 1, 0)
                 , FIFAMeetImportance.WORLD_BEGINFROM14);
         checkCalculatedValue(genData, 484.0, 438.0);
 
-        genData.rating.addMeet(new WinMeetTest(genData.nationals.get(0), genData.nationals.get(1), 0, 0, 1, 0)
+        genData.rating.addMeet(new WinMeetMock(genData.nationals.get(0), genData.nationals.get(1), 0, 0, 1, 0)
                 , FIFAMeetImportance.CONFEDERATION_UNDER14);
         checkCalculatedValue(genData, 500.0, 422.0);
 
-        genData.rating.addMeet(new WinMeetTest(genData.nationals.get(0), genData.nationals.get(1), 0, 0, 0, 0, 6, 5)
+        genData.rating.addMeet(new WinMeetMock(genData.nationals.get(0), genData.nationals.get(1), 0, 0, 0, 0, 6, 5)
                 , FIFAMeetImportance.CONFEDERATION_BEGINFROM14);
         checkCalculatedValue(genData, 507.0, 425.0);
 
-        genData.rating.addMeet(new WinMeetTest(genData.nationals.get(0), genData.nationals.get(1), 0, 1)
+        genData.rating.addMeet(new WinMeetMock(genData.nationals.get(0), genData.nationals.get(1), 0, 1)
                 , FIFAMeetImportance.WORLD_BEGINFROM14);
         checkCalculatedValue(genData, 472.0, 460.0);
 
-        genData.rating.addMeet(new WinMeetTest(genData.nationals.get(0), genData.nationals.get(1), 0, 0, 0, 1)
+        genData.rating.addMeet(new WinMeetMock(genData.nationals.get(0), genData.nationals.get(1), 0, 0, 0, 1)
                 , FIFAMeetImportance.FRIENDLY_IN);
         checkCalculatedValue(genData, 467.0, 465.0);
 
-        genData.rating.addMeet(new WinMeetTest(genData.nationals.get(0), genData.nationals.get(1), 0, 0, 0, 0, 5, 6)
+        genData.rating.addMeet(new WinMeetMock(genData.nationals.get(0), genData.nationals.get(1), 0, 0, 0, 0, 5, 6)
                 , FIFAMeetImportance.FRIENDLY_OUT);
         checkCalculatedValue(genData, 467.0, 466.0);
 
         //Two meets with winner
-        WinTwoMeetTest meet = new WinTwoMeetTest(genData.nationals.get(0), genData.nationals.get(1))
+        WinTwoMeetMock meet = new WinTwoMeetMock(genData.nationals.get(0), genData.nationals.get(1))
                 .SetFirstMeetResult(1, 0).SetSecondMeetResult(0, 1);
         genData.rating.addMeet(meet, FIFAMeetImportance.NATION_LEAGUE_PLAYOFF);
         checkCalculatedValue(genData, 491.0, 442.0);
 
-        meet = new WinTwoMeetTest(genData.nationals.get(0), genData.nationals.get(1))
+        meet = new WinTwoMeetMock(genData.nationals.get(0), genData.nationals.get(1))
                 .SetFirstMeetResult(1, 0).SetSecondMeetResult(0, 0);
         genData.rating.addMeet(meet, FIFAMeetImportance.NATION_LEAGUE_PLAYOFF);
         checkCalculatedValue(genData, 500.0, 433.0);
 
-        meet = new WinTwoMeetTest(genData.nationals.get(0), genData.nationals.get(1))
+        meet = new WinTwoMeetMock(genData.nationals.get(0), genData.nationals.get(1))
                 .SetFirstMeetResult(1, 0).SetSecondMeetResult(2, 0);
         genData.rating.addMeet(meet, FIFAMeetImportance.NATION_LEAGUE_PLAYOFF);
         checkCalculatedValue(genData, 496.0, 437.0);
 
-        meet = new WinTwoMeetTest(genData.nationals.get(0), genData.nationals.get(1))
+        meet = new WinTwoMeetMock(genData.nationals.get(0), genData.nationals.get(1))
                 .SetFirstMeetResult(0, 0).SetSecondMeetResult(1, 0);
         genData.rating.addMeet(meet, FIFAMeetImportance.QUALIFYING);
         checkCalculatedValue(genData, 481.0, 452.0);
 
-        meet = new WinTwoMeetTest(genData.nationals.get(0), genData.nationals.get(1))
+        meet = new WinTwoMeetMock(genData.nationals.get(0), genData.nationals.get(1))
                 .SetFirstMeetResult(0, 0).SetSecondMeetResult(1, 1).SetAddTimeMeetResult(1, 0);
         genData.rating.addMeet(meet, FIFAMeetImportance.QUALIFYING);
         checkCalculatedValue(genData, 479.0, 454.0);
 
-        meet = new WinTwoMeetTest(genData.nationals.get(0), genData.nationals.get(1))
+        meet = new WinTwoMeetMock(genData.nationals.get(0), genData.nationals.get(1))
                 .SetFirstMeetResult(0, 0).SetSecondMeetResult(0, 1);
         genData.rating.addMeet(meet, FIFAMeetImportance.QUALIFYING);
         checkCalculatedValue(genData, 490.0, 443.0);
 
-        meet = new WinTwoMeetTest(genData.nationals.get(0), genData.nationals.get(1))
+        meet = new WinTwoMeetMock(genData.nationals.get(0), genData.nationals.get(1))
                 .SetFirstMeetResult(0, 1).SetSecondMeetResult(0, 2);
         genData.rating.addMeet(meet, FIFAMeetImportance.QUALIFYING);
         checkCalculatedValue(genData, 488.0, 445.0);
 
-        meet = new WinTwoMeetTest(genData.nationals.get(0), genData.nationals.get(1))
+        meet = new WinTwoMeetMock(genData.nationals.get(0), genData.nationals.get(1))
                 .SetFirstMeetResult(0, 1).SetSecondMeetResult(0, 0);
         genData.rating.addMeet(meet, FIFAMeetImportance.QUALIFYING);
         checkCalculatedValue(genData, 474.0, 459.0);
 
-        meet = new WinTwoMeetTest(genData.nationals.get(0), genData.nationals.get(1))
+        meet = new WinTwoMeetMock(genData.nationals.get(0), genData.nationals.get(1))
                 .SetFirstMeetResult(0, 1).SetSecondMeetResult(1, 0);
         genData.rating.addMeet(meet, FIFAMeetImportance.QUALIFYING);
         checkCalculatedValue(genData, 449.0, 484.0);
@@ -120,7 +120,7 @@ public class FIFARatingTest extends BaseTest {
 
     private RatingGeneratedData generateData(int cntNationals) {
         RatingGeneratedData data = new RatingGeneratedData();
-        data.nationals = genereateNational(cntNationals);
+        data.nationals = generateNational(cntNationals);
         data.ratingByNational = getRatingByNational(data.nationals);
         data.rating = new FIFARating(data.ratingByNational);
         return data;

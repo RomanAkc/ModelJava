@@ -184,13 +184,13 @@ public class UEFARatingCalculatorTest extends BaseTest {
 
 
     private void addMeetToStagePool(SimpleTeam teamHome, SimpleTeam teamAway, int goalHome, int goalAway, UEFAStagePoolTest stagePool) {
-        MeetTest meet = new MeetTest(teamHome, teamAway);
+        MeetMock meet = new MeetMock(teamHome, teamAway);
         meet.SetMeetResult(goalHome, goalAway);
         stagePool.meets.add(meet);
     }
 
     private void addWinMeetToStagePool(SimpleTeam teamHome, SimpleTeam teamAway, int goalHome, int goalAway, UEFAStagePoolTest stagePool) {
-        WinMeetTest meet = new WinMeetTest(teamHome, teamAway);
+        WinMeetMock meet = new WinMeetMock(teamHome, teamAway);
         meet.SetMeetResult(goalHome, goalAway);
         stagePool.meets.add(meet);
     }
@@ -200,7 +200,7 @@ public class UEFARatingCalculatorTest extends BaseTest {
             , boolean addTime, int goalHomeSecondMeetAddTime, int goalAwaySecondMeetAddTime
             , boolean pen, int goalHomeSecondMeetPen, int goalAwaySecondMeetPen
             , UEFAStagePoolTest stagePool) {
-        WinTwoMeetTest meet = new WinTwoMeetTest(teamHome, teamAway);
+        WinTwoMeetMock meet = new WinTwoMeetMock(teamHome, teamAway);
         meet.SetFirstMeetResult(goalHomeFirstMeet, goalAwayFirstMeet);
         meet.SetSecondMeetResult(goalHomeSecondMeet, goalAwaySecondMeet);
         if(addTime) {

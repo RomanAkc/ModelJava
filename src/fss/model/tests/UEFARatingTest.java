@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.util.*;
 
-public class UEFARatingTest extends BaseTest {
+public class UEFARatingTest extends RatingTest {
     @Test
     public void UEFARatingTestFiveYears() {
         HashMap<ClubTeam, Country> teamsWithCountries = generateClubTeamsWithCountries(8, 3);
