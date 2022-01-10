@@ -1,4 +1,4 @@
-package fss.model.tests;
+package fss.model.tests.mocks;
 
 import fss.model.Gameable;
 import fss.model.Result;

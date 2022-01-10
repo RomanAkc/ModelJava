@@ -1,6 +1,9 @@
 package fss.model.tests;
 
 import fss.model.*;
+import fss.model.tests.mocks.MeetMock;
+import fss.model.tests.mocks.WinMeetMock;
+import fss.model.tests.mocks.WinTwoMeetMock;
 import org.junit.Assert;
 import org.junit.Test;
 
