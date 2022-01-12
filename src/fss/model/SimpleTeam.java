@@ -2,11 +2,11 @@ package fss.model;
 import java.io.Serializable;
 
 public abstract class SimpleTeam implements Serializable {
-    private int id;
-    private Country country;
+    private final int id;
+    private final Country country;
     private int power;
-    private int minPower;
-    private int maxPower;
+    private final int minPower;
+    private final int maxPower;
 
     public SimpleTeam(int id, Country country, int power, int minPower, int maxPower) {
         this.id = id;
@@ -24,7 +24,7 @@ public abstract class SimpleTeam implements Serializable {
         return country;
     }
 
-    public void setNewPower() {
+    public void calcNewPower() {
         power += RandomWrapper.getRandom(-2, 2);
         if(power > maxPower)
             power = maxPower;
