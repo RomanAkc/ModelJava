@@ -3,7 +3,7 @@ package fss.model;
 import java.io.Serializable;
 
 public class ClubTeam extends SimpleTeam implements Serializable {
-    private String name;
+    private final String name;
 
     public ClubTeam(int id, String name, Country country, int power, int minPower, int maxPower) {
         super(id, country, power, minPower, maxPower);
