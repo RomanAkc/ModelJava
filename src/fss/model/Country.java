@@ -3,9 +3,9 @@ package fss.model;
 import java.io.Serializable;
 
 public class Country implements Serializable {
-    private int id;
-    private String name;
-    private WorldPart worldPart;
+    private final int id;
+    private final String name;
+    private final WorldPart worldPart;
 
     public Country(int id, String name, WorldPart worldPart) {
         this.id = id;
