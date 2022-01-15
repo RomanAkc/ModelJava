@@ -1,8 +1,8 @@
 package fss.model;
 
 public class WinTwoMeet implements WinTwoGameable {
-    private Meet firstMeet = null;
-    private Meet secondMeet = null;
+    private final Meet firstMeet;
+    private final Meet secondMeet;
     private Result resultAdd = null;
     private Result resultPen = null;
 
@@ -30,11 +30,7 @@ public class WinTwoMeet implements WinTwoGameable {
     }
 
     private boolean checkIsDraw() {
-        if(getGoalsFirstTeamMainTime() != getGoalsSecondTeamMain()) {
-            return false;
-        }
-
-        return true;
+        return getGoalsFirstTeamMainTime() == getGoalsSecondTeamMain();
     }
 
     @Override
@@ -140,19 +136,19 @@ public class WinTwoMeet implements WinTwoGameable {
 
     @Override
     public String toString() {
-        var res = new StringBuffer();
-        res.append(firstMeet.toString());
+        StringBuilder res = new StringBuilder();
+        res.append(firstMeet);
         res.append(System.lineSeparator());
-        res.append(secondMeet.toString());
+        res.append(secondMeet);
 
         if(resultAdd != null) {
             res.append(", add ");
-            res.append(resultAdd.toString());
+            res.append(resultAdd);
         }
 
         if(resultPen != null) {
             res.append(", pen ");
-            res.append(resultPen.toString());
+            res.append(resultPen);
         }
 
         return res.toString();
