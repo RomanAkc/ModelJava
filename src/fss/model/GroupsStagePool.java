@@ -1,6 +1,7 @@
 package fss.model;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class GroupsStagePool extends BaseGroupsStagePool {
     private ArrayList<CircleStage> stages = null;
@@ -20,8 +21,8 @@ public class GroupsStagePool extends BaseGroupsStagePool {
     private void createStages() {
         stages = new ArrayList<>();
         var groups = Sortition.groupSort(getTeams(), cntGroups, getRating());
-        for (int i = 0; i < groups.size(); ++i) {
-            var stage = new CircleStage(getName() + ". Group " + Integer.toString(i + 1), getCntRounds());
+        for (int i = 0; i < Objects.requireNonNull(groups, "GroupsStagePool.createStages").size(); ++i) {
+            var stage = new CircleStage(getName() + ". Group " + (i + 1), getCntRounds());
             stage.addWinRules(rules);
             stage.addTeams(groups.get(i));
             stages.add(stage);
@@ -78,7 +79,7 @@ public class GroupsStagePool extends BaseGroupsStagePool {
     @Override
     public String toString() {
         var sb = new StringBuilder();
-        sb.append("Group stage: " + getName());
+        sb.append("Group stage: ").append(getName());
         for (var stage : stages) {
             sb.append(System.lineSeparator());
             sb.append(stage.toString());
