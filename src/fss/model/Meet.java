@@ -1,8 +1,8 @@
 package fss.model;
 
 public class Meet implements Gameable {
-    private SimpleTeam teamHome = null;
-    private SimpleTeam teamAway = null;
+    private final SimpleTeam teamHome;
+    private final SimpleTeam teamAway;
     private Result result = null;
 
     public Meet(SimpleTeam teamHome, SimpleTeam teamAway) {
@@ -28,13 +28,13 @@ public class Meet implements Gameable {
 
     @Override
     public String toString() {
-        var res = new StringBuffer();
+        StringBuilder res = new StringBuilder();
         res.append(teamHome.getName());
         res.append(" - ");
         res.append(teamAway.getName());
         res.append(" ");
         if(result != null) {
-            res.append(result.toString());
+            res.append(result);
         }
         return  res.toString();
     }
