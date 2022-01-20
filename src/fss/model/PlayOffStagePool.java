@@ -34,11 +34,11 @@ public class PlayOffStagePool extends BasePlayOffStagePool {
 
     @Override
     public String toString() {
-        var sb = new StringBuilder();
-        sb.append("Play off stage: " + getName());
-        sb.append(System.lineSeparator());
-        sb.append(stage.toString());
-        sb.append(System.lineSeparator());
-        return sb.toString();
+        String res = "Play off stage: ";
+        res += getName();
+        res += System.lineSeparator();
+        res += stage.toString();
+        res += System.lineSeparator();
+        return res;
     }
 }
