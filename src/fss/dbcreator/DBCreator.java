@@ -9,20 +9,19 @@ public class DBCreator {
 
     public static void main(String[] args) {
         try {
-            Class.forName(DB_Driver); //Проверяем наличие JDBC драйвера для работы с БД
+            Class.forName(DB_Driver);
             Properties props = new Properties();
+            //TODO: read username, pswd from args
             props.setProperty("user", "");
             props.setProperty("password","");
             Connection connection = DriverManager.getConnection(DB_URL, props);//соединениесБД
-            System.out.println("Соединение с СУБД выполнено.");
-            connection.close();       // отключение от БД
-            System.out.println("Отключение от СУБД выполнено.");
+            connection.close();
         } catch (ClassNotFoundException e) {
-            e.printStackTrace(); // обработка ошибки  Class.forName
-            System.out.println("JDBC драйвер для СУБД не найден!");
+            e.printStackTrace();
+            System.out.println("JDBC driver doesn't found");
         } catch (SQLException e) {
-            e.printStackTrace(); // обработка ошибок  DriverManager.getConnection
-            System.out.println("Ошибка SQL !");
+            e.printStackTrace();
+            System.out.println("SQL Error!");
         }
     }
 }
