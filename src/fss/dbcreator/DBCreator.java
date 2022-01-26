@@ -1,5 +1,6 @@
 package fss.dbcreator;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Properties;
 
 public class DBCreator {
@@ -23,5 +24,9 @@ public class DBCreator {
             e.printStackTrace();
             System.out.println("SQL Error!");
         }
+    }
+
+    private void createTable(Connection dbConnection, String name, ArrayList<FieldType> fields) {
+        //TODO: create db
     }
 }
