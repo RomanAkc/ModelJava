@@ -1,6 +1,9 @@
 package fss.dbcreator;
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Properties;
 
 public class DBCreator {
@@ -16,6 +19,13 @@ public class DBCreator {
             props.setProperty("user", "");
             props.setProperty("password","");
             Connection connection = DriverManager.getConnection(DB_URL, props);//соединениесБД
+
+            ArrayList<TableField> fields = new ArrayList<>();
+            fields.add(new TableField("id", FieldType.INTEGER));
+            fields.add(new TableField("data", FieldType.STRING));
+
+            createTable(connection, "Test", fields);
+
             connection.close();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -26,7 +36,44 @@ public class DBCreator {
         }
     }
 
-    private void createTable(Connection dbConnection, String name, ArrayList<FieldType> fields) {
-        //TODO: create db
+    private static String getStringByType(FieldType type) {
+        if(type == FieldType.INTEGER) {
+            return "INT";
+        } else if(type == FieldType.STRING) {
+            return "VARCHAR(64)";
+        }
+
+        return "";
+    }
+
+    private static void createTable(Connection dbConnection, String name, ArrayList<TableField> fields) {
+        try {
+            Statement stmt = dbConnection.createStatement();
+
+            String sql = "CREATE TABLE " + name + "(";
+
+            boolean first = true;
+            for(var field : fields) {
+                if(!first) {
+                    sql += ", ";
+                } else {
+                    first = false;
+                }
+
+                sql += field.getName();
+                sql += " ";
+                sql += getStringByType(field.getType());
+                sql += " not NULL";
+            }
+
+            sql += ", PRIMARY KEY ( id ))";
+            //sql += ")";
+
+            stmt.executeUpdate(sql);
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

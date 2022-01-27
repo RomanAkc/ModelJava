@@ -1,6 +1,6 @@
 package fss.dbcreator;
 
-public abstract class TableField {
+public class TableField {
     private String name;
     private FieldType type;
 
