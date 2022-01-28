@@ -15,16 +15,15 @@ public class DBCreator {
         try {
             Class.forName(DB_Driver);
             Properties props = new Properties();
-            //TODO: read username, pswd from args
-            props.setProperty("user", "");
-            props.setProperty("password","");
+            props.setProperty("user", args[0]);
+            props.setProperty("password", args[1]);
             Connection connection = DriverManager.getConnection(DB_URL, props);//соединениесБД
 
-            ArrayList<TableField> fields = new ArrayList<>();
-            fields.add(new TableField("id", FieldType.INTEGER));
-            fields.add(new TableField("data", FieldType.STRING));
+            Table test = new Table("test");
+            test.addField(new Table.IntegerField("id", 0));
+            test.addField(new Table.StringField("data"));
 
-            createTable(connection, "Test", fields);
+            createTable(connection, test);
 
             connection.close();
         } catch (ClassNotFoundException e) {
@@ -46,14 +45,14 @@ public class DBCreator {
         return "";
     }
 
-    private static void createTable(Connection dbConnection, String name, ArrayList<TableField> fields) {
+    private static void createTable(Connection dbConnection, Table table) {
         try {
             Statement stmt = dbConnection.createStatement();
 
-            String sql = "CREATE TABLE " + name + "(";
+            String sql = "CREATE TABLE " + table.getName() + "(";
 
             boolean first = true;
-            for(var field : fields) {
+            for(var field : table.getFields()) {
                 if(!first) {
                     sql += ", ";
                 } else {
