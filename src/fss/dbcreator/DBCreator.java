@@ -20,7 +20,6 @@ public class DBCreator {
             Connection connection = DriverManager.getConnection(DB_URL, props);//соединениесБД
 
             Table test = new Table("test");
-            test.addField(new Table.IntegerField("id", 0));
             test.addField(new Table.StringField("data"));
 
             createTable(connection, test);
@@ -49,16 +48,10 @@ public class DBCreator {
         try {
             Statement stmt = dbConnection.createStatement();
 
-            String sql = "CREATE TABLE " + table.getName() + "(";
+            String sql = "CREATE TABLE " + table.getName() + "(id INT not NULL";
 
-            boolean first = true;
             for(var field : table.getFields()) {
-                if(!first) {
-                    sql += ", ";
-                } else {
-                    first = false;
-                }
-
+                sql += ", ";
                 sql += field.getName();
                 sql += " ";
                 sql += getStringByType(field.getType());
@@ -66,11 +59,8 @@ public class DBCreator {
             }
 
             sql += ", PRIMARY KEY ( id ))";
-            //sql += ")";
 
             stmt.executeUpdate(sql);
-
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
