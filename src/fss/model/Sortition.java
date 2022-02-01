@@ -27,7 +27,7 @@ public class Sortition {
 
             int index = 0;
             for(var team : basket) {
-                ArrayList<SimpleTeam> group = null;
+                ArrayList<SimpleTeam> group;
                 if(firstBasket) {
                     group = new ArrayList<>();
                     res.add(group);

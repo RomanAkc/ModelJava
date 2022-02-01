@@ -1,8 +1,8 @@
 package fss.model;
 
 public class Result {
-    private int goalHome;
-    private int goalAway;
+    private final int goalHome;
+    private final int goalAway;
 
     public Result(int goalHome, int goalAway) {
         this.goalHome = goalHome;
@@ -17,10 +17,9 @@ public class Result {
     public Result reverse() { return new Result(goalAway, goalHome); }
     @Override
     public String toString() {
-        var res = new StringBuffer();
-        res.append(Integer.toString(goalHome));
-        res.append(" - ");
-        res.append(Integer.toString(goalAway));
-        return  res.toString();
+        String res = Integer.toString(goalHome);
+        res += " - ";
+        res += goalAway;
+        return  res;
     }
 }
