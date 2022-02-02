@@ -9,10 +9,10 @@ public class SchemePart {
         PREV_STAGE
     }
 
-    public int ID = 0;
-    public String name = null;
-    public int cntRound = 0;
-    public StageType stageType;
+    public final int ID;
+    public final String name;
+    public final int cntRound;
+    public final StageType stageType;
     public ArrayList<TeamsSource> teamSources = new ArrayList<>();
     public int cntGroups = 0;
     public RatingType ratingType = RatingType.STANDART;
