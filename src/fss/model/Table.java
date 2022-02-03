@@ -13,14 +13,14 @@ public class Table {
         BY_GOAL_AWAY_MEET,
     }
 
-    private class MeetData {
+    private static class MeetData {
         public boolean win = false;
         public boolean draw = false;
         public int goalFor = 0;
         public int goalAgainst = 0;
     }
 
-    private class PairTeam {
+    private static class PairTeam {
         public SimpleTeam teamHome = null;
         public SimpleTeam teamAway = null;
         public PairTeam(SimpleTeam teamHome, SimpleTeam teamAway) {
@@ -52,7 +52,7 @@ public class Table {
         }
     }
 
-    public class Row {
+    public static class Row {
         public SimpleTeam team = null;
         public int meet = 0;
         public int win = 0;
