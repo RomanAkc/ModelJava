@@ -14,8 +14,8 @@ public class Table {
     }
 
     private static class PairTeam {
-        public SimpleTeam teamHome = null;
-        public SimpleTeam teamAway = null;
+        public SimpleTeam teamHome;
+        public SimpleTeam teamAway;
         public PairTeam(SimpleTeam teamHome, SimpleTeam teamAway) {
             this.teamHome = teamHome;
             this.teamAway = teamAway;
