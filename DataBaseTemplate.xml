@@ -6,7 +6,7 @@
     </WorldPart>
     <Country>
         <Name Type="String"/>
-        <WorldPartID Type="Integer" Link="WorldPart">
+        <WorldPartID Type="Integer" Link="WorldPart"/>
     </Country>
     <Team>
         <Name Type="String"/>
