@@ -21,13 +21,11 @@ public class DBCreator {
 
     public static void main(String[] args) {
         try {
-            ReadXML();
+            Document xmlDoc = ReadDataBaseTemplate("DataBaseTemplate.xml");
+            Connection connection = getDBConnection(args);
 
-            Class.forName(DB_Driver);
-            Properties props = new Properties();
-            props.setProperty("user", args[0]);
-            props.setProperty("password", args[1]);
-            Connection connection = DriverManager.getConnection(DB_URL, props);//соединениесБД
+            //Читаем таблицы из файла xmlDoc и создаем таблицы в БД
+
 
             Table test = new Table("test");
             test.addField(new Table.StringField("data"));
@@ -42,6 +40,32 @@ public class DBCreator {
             e.printStackTrace();
             System.out.println("SQL Error!");
         }
+    }
+
+    private static Connection getDBConnection(String[] args) throws ClassNotFoundException, SQLException {
+        Class.forName(DB_Driver);
+        Properties props = new Properties();
+        props.setProperty("user", args[0]);
+        props.setProperty("password", args[1]);
+        Connection connection = DriverManager.getConnection(DB_URL, props); //соединениесБД
+        return connection;
+    }
+
+    private static Document ReadDataBaseTemplate(String path) {
+        try {
+            // Создается построитель документа
+            DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            // Создается дерево DOM документа из файла
+            return documentBuilder.parse(path);
+        } catch (ParserConfigurationException ex) {
+            ex.printStackTrace(System.out);
+        } catch (SAXException ex) {
+            ex.printStackTrace(System.out);
+        } catch (IOException ex) {
+            ex.printStackTrace(System.out);
+        }
+
+        return null;
     }
 
     private static void ReadXML() {
