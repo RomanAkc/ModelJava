@@ -1,6 +1,7 @@
 package fss.dbcreator;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -39,6 +40,14 @@ public class DBCreator {
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("SQL Error!");
+        }
+    }
+
+    private static void CreateTablesFromXML(Document xml, Connection connection) {
+        NodeList tables = xml.getChildNodes();
+        for(int i = 0; i < tables.getLength(); ++i) {
+            Node table = tables.item(i);
+
         }
     }
 
