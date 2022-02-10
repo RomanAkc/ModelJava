@@ -79,8 +79,8 @@ public class Table {
         public ArrayList<Row> rows = new ArrayList<>();
     }
 
-    private HashMap<Integer, Boolean> isUsed = new HashMap<>();
-    private HashMap<Integer, SimpleTeam> teamByID = new HashMap<>();
+    private final HashMap<Integer, Boolean> isUsed = new HashMap<>();
+    private final HashMap<Integer, SimpleTeam> teamByID = new HashMap<>();
     private ArrayList<WinRules> rules = null;
     private ArrayList<RoundSystem.Day> days = null;
     private ArrayList<TableDay> tables = null;
