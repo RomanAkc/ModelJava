@@ -187,7 +187,7 @@ public class Table {
                 int goalTeam1 = 0;
                 SimpleTeam team2 = null;
                 int goalTeam2 = 0;
-            };
+            }
 
             var nestedPair = new NestedPair();
 
