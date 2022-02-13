@@ -46,7 +46,7 @@ public class Table {
     }
 
     public static class Row {
-        public SimpleTeam team;
+        public final SimpleTeam team;
         public int meet = 0;
         public int win = 0;
         public int draw = 0;
