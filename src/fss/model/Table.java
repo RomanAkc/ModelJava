@@ -76,7 +76,7 @@ public class Table {
     private class TableDay {
         public RoundSystem.Day day = null;
         public final HashMap<SimpleTeam, Row> rowsByTeam = new HashMap<>();
-        public ArrayList<Row> rows = new ArrayList<>();
+        public final ArrayList<Row> rows = new ArrayList<>();
     }
 
     private final HashMap<Integer, Boolean> isUsed = new HashMap<>();
