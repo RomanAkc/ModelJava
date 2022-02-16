@@ -344,7 +344,7 @@ public class Table {
 
     @Override
     public String toString() {
-        var result = new StringBuffer();
+        var result = new StringBuilder();
 
         for(var t : tables) {
             result.append(t.day.toString());
