@@ -73,7 +73,7 @@ public class Table {
         }
     }
 
-    private class TableDay {
+    private static class TableDay {
         public RoundSystem.Day day = null;
         public final HashMap<SimpleTeam, Row> rowsByTeam = new HashMap<>();
         public final ArrayList<Row> rows = new ArrayList<>();
