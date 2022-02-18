@@ -81,8 +81,8 @@ public class Table {
 
     private final HashMap<Integer, Boolean> isUsed = new HashMap<>();
     private final HashMap<Integer, SimpleTeam> teamByID = new HashMap<>();
-    private ArrayList<WinRules> rules = null;
-    private ArrayList<RoundSystem.Day> days = null;
+    private ArrayList<WinRules> rules;
+    private ArrayList<RoundSystem.Day> days;
     private ArrayList<TableDay> tables = null;
 
     private Table() {
