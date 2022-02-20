@@ -1,6 +1,7 @@
 package fss.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 
@@ -131,12 +132,8 @@ public class Table {
 
     private void addMeetToPair(Meet meet, HashMap<PairTeam, ArrayList<Meet>> meetByPairTeam) {
         var key = new PairTeam(meet.getTeamHome(), meet.getTeamAway());
-        var val = meetByPairTeam.get(key);
-        if(val == null) {
-            val = new ArrayList<>();
-            meetByPairTeam.put(key, val);
-        }
-        val.add(meet);
+        meetByPairTeam.putIfAbsent(key, new ArrayList<>());
+        meetByPairTeam.get(key).add(meet);
     }
 
     private Row getRowByTeam(SimpleTeam team) {
