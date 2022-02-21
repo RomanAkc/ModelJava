@@ -219,7 +219,7 @@ public class Table {
     }
 
     private void sortTableDay(TableDay td, HashMap<PairTeam, ArrayList<Meet>> meetByPairTeam) {
-        Collections.sort(td.rows, (r1, r2) -> {
+        td.rows.sort((r1, r2) -> {
             if(r1.point != r2.point) {
                 return r2.point - r1.point;
             } else {
