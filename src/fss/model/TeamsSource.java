@@ -23,7 +23,7 @@ public class TeamsSource {
 
 
 
-    public SchemePart.Source source = SchemePart.Source.NO;
+    public SchemePart.Source source;
     public int sourcePrevID = -1;
     public TypeSource typeSource = TypeSource.NO;
     public int cntTeam = 0;
